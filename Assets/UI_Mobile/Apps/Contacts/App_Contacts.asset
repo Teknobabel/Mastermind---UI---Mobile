@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e165b3dc8de1b4fceb2f23eed3590bcb, type: 3}
+  m_Name: App_Contacts
+  m_EditorClassIdentifier: 
+  m_name: CONTACTS
+  m_icon: {fileID: 21300000, guid: 1c20193703a4c46b3b262dd419d85dd4, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: 7213a9a21b3814f559bc3ff6da0ffdea, type: 3}
+  m_wantsSystemNavBar: 1
+  m_menuBank:
+  - {fileID: 1915136520063420, guid: f0e486ddda8bd426294ebc8233e803c7, type: 2}
+  - {fileID: 1100664353530416, guid: 8b997fc6fbfce4a3599cb72186c2b466, type: 2}

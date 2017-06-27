@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe4a967377d748b7abda6fcd7932739, type: 3}
+  m_Name: App_Hire
+  m_EditorClassIdentifier: 
+  m_name: HIRE
+  m_icon: {fileID: 21300000, guid: 44b04a25be6ce48edb2aa9885c3e37e4, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: 331401f0f164c47b19b3fd233889f84b, type: 3}
+  m_wantsSystemNavBar: 1
+  m_menuBank:
+  - {fileID: 1972533259094518, guid: 95df8be43d5c5493aabd23be96a32099, type: 2}
+  - {fileID: 1471589447094610, guid: 96011857265b243b9a0b05acf1086508, type: 2}

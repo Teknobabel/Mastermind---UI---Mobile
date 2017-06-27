@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb287864032f429dae71a77f9a29a2d, type: 3}
+  m_Name: OmegaPlan01
+  m_EditorClassIdentifier: 
+  m_name: New World Order
+  m_phases:
+  - m_phaseNumber: 1
+    m_goals:
+    - {fileID: 11400000, guid: 6c232ecd0cfb74d3981d4472c50b9d3f, type: 2}
+    - {fileID: 11400000, guid: df2a02e3ba79b4a2da35efcfb3e1535a, type: 2}
+    - {fileID: 11400000, guid: f24486575dbd94890b5b9d8f5a0c9bd5, type: 2}
+  - m_phaseNumber: 2
+    m_goals:
+    - {fileID: 11400000, guid: 84c2bdcdb3a534b7f8e5771031613f98, type: 2}
+    - {fileID: 11400000, guid: 219b19dcd4e3c40a1b1b416c3a6da475, type: 2}
+    - {fileID: 11400000, guid: 5351f3762aef94097834da6b5ff8ea8e, type: 2}
+  - m_phaseNumber: 3
+    m_goals:
+    - {fileID: 11400000, guid: 8212e3828ca014b6ba9bec4a4feb55ef, type: 2}
+    - {fileID: 11400000, guid: 4d96b041eaa8548ceaf3bba35b67a946, type: 2}
+    - {fileID: 11400000, guid: 2638ef346c6ff43cf959b76290ee7c90, type: 2}

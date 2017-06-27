@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5b283fd3a654f818bbf73ec7393af3, type: 3}
+  m_Name: Henchmen2
+  m_EditorClassIdentifier: 
+  m_name: Mitsuko
+  m_status: Active
+  m_location: USA
+  m_id: 1
+  m_cost: 1
+  m_portrait_Small: {fileID: 2800000, guid: 4ce895aceb0f947228a6a4b2f683cc57, type: 3}
+  m_portrait_Large: {fileID: 2800000, guid: df723b8ca7172428a8a4213999575b8c, type: 3}
+  m_traits:
+  - {fileID: 11400000, guid: 13d5b3d1e2ec24e12b55268d004122ec, type: 2}
+  - {fileID: 11400000, guid: b2befb3aaf6fd44878bf91f17bceda49, type: 2}

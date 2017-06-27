@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe05d1c904ba484a9ee887d8e738211, type: 3}
+  m_Name: App_HomeScreen
+  m_EditorClassIdentifier: 
+  m_name: HOME
+  m_icon: {fileID: 0}
+  m_icon_Pressed: {fileID: 0}
+  m_wantsSystemNavBar: 0
+  m_menuBank: []
+  m_homeScreen: {fileID: 1357965692608042, guid: 3f3855f4cc424458eaa1893bc4ebdbe8,
+    type: 2}
+  m_activityCenter: {fileID: 1402771108206296, guid: 345abfeddb8cf4a77944325c8a492131,
+    type: 2}
+  m_appScreen: {fileID: 1402771108206296, guid: ab290fa385d0849ffab6295606a0d6ea,
+    type: 2}
+  m_appIcon: {fileID: 1803322123867824, guid: ecfe7488e693e41bcb9185184a4d531d, type: 2}

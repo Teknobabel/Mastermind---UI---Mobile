@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d4204716cc0400e8f8575b989327ea, type: 3}
+  m_Name: App_OmegaPlan
+  m_EditorClassIdentifier: 
+  m_name: OMEGA PLAN
+  m_icon: {fileID: 21300000, guid: 186146199693041f6ad5d4dad865ea30, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: 51c736faae7cc41acab0a07c4a47e971, type: 3}
+  m_wantsSystemNavBar: 1
+  m_menuBank:
+  - {fileID: 1453390341724254, guid: f6d381d3aa732459c899d305ac0c722d, type: 2}
+  - {fileID: 1859290154259388, guid: 92a8ad550237a440fa579df867329ed1, type: 2}
+  - {fileID: 1810411765805630, guid: f7b3356be1f9843ba9ac6696994eda38, type: 2}
