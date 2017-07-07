@@ -31,11 +31,11 @@ public class MissionsApp : BaseApp {
 		base.EnterApp ();
 	}
 
-	//	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	//	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	//	{
-	//		switch (thisGameEvent)
+	//		switch (thisUIEvent)
 	//		{
-	//		case GameEvent.UI_BackButtonPressed:
+	//		case UIEvent.UI_BackButtonPressed:
 	//
 	//			PopMenu ();
 	//			break;

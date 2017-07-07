@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameEvent {
+public enum UIEvent {
 
 	None,
 	UI_PageChanged,

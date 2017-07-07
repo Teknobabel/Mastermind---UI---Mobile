@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class HireApp : BaseApp, IObserver {
+public class HireApp : BaseApp, IUIObserver {
 
 	private Hire_HomeMenu m_homeMenu;
 	private Hire_HenchmenDetailMenu m_henchmenDetailMenu;
@@ -43,11 +43,11 @@ public class HireApp : BaseApp, IObserver {
 		base.EnterApp ();
 	}
 
-	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
-		switch (thisGameEvent)
+		switch (thisUIEvent)
 		{
-		case GameEvent.UI_BackButtonPressed:
+		case UIEvent.UI_BackButtonPressed:
 
 			PopMenu ();
 			break;

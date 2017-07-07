@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class ContactsDetailViewMenu : MonoBehaviour, ISubject, IObserver, IMenu {
+public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IMenu {
 
 	public enum InfoPanelType
 	{
@@ -29,8 +29,8 @@ public class ContactsDetailViewMenu : MonoBehaviour, ISubject, IObserver, IMenu 
 
 	public Transform[] m_panels;
 
-	private List<IObserver>
-	m_observers = new List<IObserver> ();
+	private List<IUIObserver>
+	m_observers = new List<IUIObserver> ();
 
 	private List<UICell>
 	m_traitCells = new List<UICell>();
@@ -178,15 +178,15 @@ public class ContactsDetailViewMenu : MonoBehaviour, ISubject, IObserver, IMenu 
 
 	public void BackButtonPressed ()
 	{
-		Notify (this, GameEvent.UI_BackButtonPressed);
+		Notify (this, UIEvent.UI_BackButtonPressed);
 	}
 
-	public void AddObserver (IObserver observer)	
+	public void AddObserver (IUIObserver observer)	
 	{
 		m_observers.Add (observer);
 	}
 
-	public void RemoveObserver (IObserver observer)
+	public void RemoveObserver (IUIObserver observer)
 	{
 		if (m_observers.Contains(observer))
 		{
@@ -194,19 +194,19 @@ public class ContactsDetailViewMenu : MonoBehaviour, ISubject, IObserver, IMenu 
 		}
 	}
 
-	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	public void Notify (IUISubject subject, UIEvent thisUIEvent)
 	{
 		for (int i=0; i < m_observers.Count; i++)
 		{
-			m_observers[i].OnNotify(subject, thisGameEvent);
+			m_observers[i].OnNotify(subject, thisUIEvent);
 		}
 	}
 
-	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
-		switch (thisGameEvent)
+		switch (thisUIEvent)
 		{
-		case GameEvent.UI_ToggleButtonPressed:
+		case UIEvent.UI_ToggleButtonPressed:
 
 			switch (m_infoPanelToggle.activeButton) {
 			case 0:

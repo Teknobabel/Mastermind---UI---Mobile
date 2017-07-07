@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 [CreateAssetMenu]
-public class HenchmenApp : BaseApp, IObserver {
+public class HenchmenApp : BaseApp, IUIObserver {
 
 	private ContactsMenu m_homeMenu;
 	private ContactsDetailViewMenu m_henchmenDetailMenu;
@@ -46,11 +46,11 @@ public class HenchmenApp : BaseApp, IObserver {
 		base.EnterApp ();
 	}
 
-	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
-		switch (thisGameEvent)
+		switch (thisUIEvent)
 		{
-		case GameEvent.UI_BackButtonPressed:
+		case UIEvent.UI_BackButtonPressed:
 
 			PopMenu ();
 			break;

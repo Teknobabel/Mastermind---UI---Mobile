@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomeScreenMenu : MonoBehaviour, IObserver {
+public class HomeScreenMenu : MonoBehaviour, IUIObserver {
 
 	public Transform
 	m_contentParent;
@@ -15,11 +15,11 @@ public class HomeScreenMenu : MonoBehaviour, IObserver {
 		
 	}
 	
-	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
-		switch (thisGameEvent)
+		switch (thisUIEvent)
 		{
-		case GameEvent.UI_PageChanged:
+		case UIEvent.UI_PageChanged:
 
 			m_pageIndicator.SetPage (((ScrollRectSnap)subject).target);
 			break;

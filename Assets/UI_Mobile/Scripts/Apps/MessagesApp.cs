@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class MessagesApp : BaseApp, IObserver {
+public class MessagesApp : BaseApp, IUIObserver {
 
 	private Messages_HomeMenu m_homeMenu;
 	private Messages_DetailMenu m_detailMenu;
@@ -50,11 +50,11 @@ public class MessagesApp : BaseApp, IObserver {
 		base.EnterApp ();
 	}
 
-	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
-		switch (thisGameEvent)
+		switch (thisUIEvent)
 		{
-		case GameEvent.UI_BackButtonPressed:
+		case UIEvent.UI_BackButtonPressed:
 
 			PopMenu ();
 			break;

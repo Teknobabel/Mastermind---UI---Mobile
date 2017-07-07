@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class Messages_HomeMenu : MonoBehaviour, IMenu, IObserver {
+public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public Text
 	m_appNameText;
@@ -105,11 +105,11 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IObserver {
 
 	}
 
-	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
-//		switch (thisGameEvent)
+//		switch (thisUIEvent)
 //		{
-//		case GameEvent.UI_ToggleButtonPressed:
+//		case UIEvent.UI_ToggleButtonPressed:
 //
 //
 //			switch (m_infoPanelToggle.activeButton) {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SegmentedToggle : MonoBehaviour, ISubject {
+public class SegmentedToggle : MonoBehaviour, IUISubject {
 
 	public Button[] m_buttons;
 
@@ -16,8 +16,8 @@ public class SegmentedToggle : MonoBehaviour, ISubject {
 	private int
 	m_activeButton = -1;
 
-	private List<IObserver>
-	m_observers = new List<IObserver> ();
+	private List<IUIObserver>
+	m_observers = new List<IUIObserver> ();
 
 	// Use this for initialization
 	void Start () {
@@ -29,7 +29,7 @@ public class SegmentedToggle : MonoBehaviour, ISubject {
 		if (buttonNum != m_activeButton) {
 			SetButtonActiveState (buttonNum);
 			m_activeButton = buttonNum;
-			Notify (this, GameEvent.UI_ToggleButtonPressed);
+			Notify (this, UIEvent.UI_ToggleButtonPressed);
 		}
 	}
 
@@ -63,12 +63,12 @@ public class SegmentedToggle : MonoBehaviour, ISubject {
 
 	}
 
-	public void AddObserver (IObserver observer)	
+	public void AddObserver (IUIObserver observer)	
 	{
 		m_observers.Add (observer);
 	}
 
-	public void RemoveObserver (IObserver observer)
+	public void RemoveObserver (IUIObserver observer)
 	{
 		if (m_observers.Contains(observer))
 		{
@@ -76,11 +76,11 @@ public class SegmentedToggle : MonoBehaviour, ISubject {
 		}
 	}
 
-	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	public void Notify (IUISubject subject, UIEvent thisUIEvent)
 	{
 		for (int i=0; i < m_observers.Count; i++)
 		{
-			m_observers[i].OnNotify(subject, thisGameEvent);
+			m_observers[i].OnNotify(subject, thisUIEvent);
 		}
 	}
 

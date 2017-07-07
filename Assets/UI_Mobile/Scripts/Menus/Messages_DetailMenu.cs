@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class Messages_DetailMenu : MonoBehaviour, IMenu, ISubject {
+public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 
 	public GameObject
 	m_messageCellGO;
@@ -19,8 +19,8 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, ISubject {
 
 	protected int m_henchmenID = -1;
 
-	private List<IObserver>
-	m_observers = new List<IObserver> ();
+	private List<IUIObserver>
+	m_observers = new List<IUIObserver> ();
 
 	private List<UICell> m_cells = new List<UICell>();
 
@@ -164,15 +164,15 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, ISubject {
 
 	public void BackButtonPressed ()
 	{
-		Notify (this, GameEvent.UI_BackButtonPressed);
+		Notify (this, UIEvent.UI_BackButtonPressed);
 	}
 
-	public void AddObserver (IObserver observer)	
+	public void AddObserver (IUIObserver observer)	
 	{
 		m_observers.Add (observer);
 	}
 
-	public void RemoveObserver (IObserver observer)
+	public void RemoveObserver (IUIObserver observer)
 	{
 		if (m_observers.Contains(observer))
 		{
@@ -180,11 +180,11 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, ISubject {
 		}
 	}
 
-	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	public void Notify (IUISubject subject, UIEvent thisUIEvent)
 	{
 		for (int i=0; i < m_observers.Count; i++)
 		{
-			m_observers[i].OnNotify(subject, thisGameEvent);
+			m_observers[i].OnNotify(subject, thisUIEvent);
 		}
 	}
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScrollRectSnap : MonoBehaviour, ISubject {
+public class ScrollRectSnap : MonoBehaviour, IUISubject {
 
 	float[] points;
 	[Tooltip("how many screens or pages are there within the content (steps)")]
@@ -27,8 +27,8 @@ public class ScrollRectSnap : MonoBehaviour, ISubject {
 	bool dragInit = true;
 	int dragStartNearest;
 
-	private List<IObserver>
-	m_observers = new List<IObserver> ();
+	private List<IUIObserver>
+	m_observers = new List<IUIObserver> ();
 
 	private int m_target = 0;
 
@@ -97,7 +97,7 @@ public class ScrollRectSnap : MonoBehaviour, ISubject {
 		}
 
 		m_target = target;
-		Notify (this, GameEvent.UI_PageChanged);
+		Notify (this, UIEvent.UI_PageChanged);
 
 		dragInit = true;
 	}
@@ -129,12 +129,12 @@ public class ScrollRectSnap : MonoBehaviour, ISubject {
 		return output;
 	}
 
-	public void AddObserver (IObserver observer)	
+	public void AddObserver (IUIObserver observer)	
 	{
 		m_observers.Add (observer);
 	}
 
-	public void RemoveObserver (IObserver observer)
+	public void RemoveObserver (IUIObserver observer)
 	{
 		if (m_observers.Contains(observer))
 		{
@@ -142,11 +142,11 @@ public class ScrollRectSnap : MonoBehaviour, ISubject {
 		}
 	}
 
-	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	public void Notify (IUISubject subject, UIEvent thisUIEvent)
 	{
 		for (int i=0; i < m_observers.Count; i++)
 		{
-			m_observers[i].OnNotify(subject, thisGameEvent);
+			m_observers[i].OnNotify(subject, thisUIEvent);
 		}
 	}
 
