@@ -120,7 +120,7 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 //				m_displayType = DisplayType.Alpha;
 //				break;
 //			case 2:
-//				m_displayType = DisplayType.Trait;
+//				m_displayType = DisplayType.DummyTrait;
 //				break;
 //
 //			}
@@ -167,32 +167,32 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 			}
 //			break;
 //
-//		case DisplayType.Trait:
+//		case DisplayType.DummyTrait:
 //
-//			Dictionary<string, List<Henchmen>> hListByTrait = new Dictionary<string, List<Henchmen>> ();
+//			Dictionary<string, List<Henchmen>> hListByDummyTrait = new Dictionary<string, List<Henchmen>> ();
 //
 //			foreach (Henchmen h in hList) {
 //
-//				foreach (Trait t in h.m_traits) {
+//				foreach (DummyTrait t in h.m_traits) {
 //
-//					if (hListByTrait.ContainsKey (t.m_name)) {
+//					if (hListByDummyTrait.ContainsKey (t.m_name)) {
 //
-//						List<Henchmen> l = hListByTrait [t.m_name];
+//						List<Henchmen> l = hListByDummyTrait [t.m_name];
 //						l.Add (h);
-//						hListByTrait [t.m_name] = l;
+//						hListByDummyTrait [t.m_name] = l;
 //
 //					} else {
 //
 //						List<Henchmen> newList = new List<Henchmen> ();
 //						newList.Add (h);
-//						hListByTrait.Add (t.m_name, newList);
+//						hListByDummyTrait.Add (t.m_name, newList);
 //					}
 //				}
 //			}
 //
-//			if (hListByTrait.Count > 0) {
+//			if (hListByDummyTrait.Count > 0) {
 //
-//				foreach(KeyValuePair<string, List<Henchmen>> entry in hListByTrait)
+//				foreach(KeyValuePair<string, List<Henchmen>> entry in hListByDummyTrait)
 //				{
 //					GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
 //					UICell headerCell = (UICell)header.GetComponent<UICell> ();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Linq;
 
 public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IMenu {
 
@@ -21,7 +22,9 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 	m_name;
 
 	public GameObject
-	m_traitCellGO;
+	m_traitCellGO,
+	m_activityHeader,
+	m_activityCell;
 
 	public SegmentedToggle m_infoPanelToggle;
 
@@ -33,7 +36,7 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 	m_observers = new List<IUIObserver> ();
 
 	private List<UICell>
-	m_traitCells = new List<UICell>();
+	m_cells = new List<UICell>();
 
 	private InfoPanelType 
 	m_currentPanel = InfoPanelType.None;
@@ -61,12 +64,14 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 
 	public virtual void OnEnter (bool animate)
 	{
-		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
+//		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
+
+		Actor h = GameController.instance.GetActor (m_henchmenID);
 
 		if (h != null) {
 
 //			ContactsDetailViewMenu cMenu = (ContactsDetailViewMenu)m_menuParent.GetComponent<ContactsDetailViewMenu> ();
-			m_name.text = h.m_name;
+			m_name.text = h.m_actorName;
 			m_portrait.texture = h.m_portrait_Large;
 		}
 		this.gameObject.SetActive (true);
@@ -152,9 +157,9 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 		RectTransform rt = gameObject.GetComponent<RectTransform> ();
 		rt.anchoredPosition = Vector2.zero;
 
-		while (m_traitCells.Count > 0) {
-			UICell c = m_traitCells [0];
-			m_traitCells.RemoveAt (0);
+		while (m_cells.Count > 0) {
+			UICell c = m_cells [0];
+			m_cells.RemoveAt (0);
 			Destroy (c.gameObject);
 		}
 
@@ -246,31 +251,73 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 
 			// remove old trait cells
 
-			while (m_traitCells.Count > 0) {
-				UICell c = m_traitCells [0];
-				m_traitCells.RemoveAt (0);
+			while (m_cells.Count > 0) {
+				UICell c = m_cells [0];
+				m_cells.RemoveAt (0);
 				Destroy (c.gameObject);
 			}
 
 			// create new trait cells
 
-			Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
+//			Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
+			Actor h = GameController.instance.GetActor (m_henchmenID);
 
 			if (h != null) {
 
-				foreach (Trait t in h.m_traits) {
+				foreach (Trait t in h.traits) {
 
 					GameObject traitCellGO = (GameObject)Instantiate (m_traitCellGO, m_panels[3]);
 					UICell tCell = (UICell)traitCellGO.GetComponent<UICell> ();
 					tCell.m_headerText.text = t.m_name;
-					m_traitCells.Add (tCell);
+					m_cells.Add (tCell);
 				}
 			}
 
 			break;
 		case InfoPanelType.History:
+
 			m_infoPanels [1].gameObject.SetActive (true);
+
+			// get history for this henchmen
+
+			Dictionary<int, List<NotificationCenter.Notification>> notifications = GameController.instance.GetHenchmenNotifications (m_henchmenID);
+
+			// display history
+
+			while (m_cells.Count > 0) {
+
+				UICell go = m_cells [0];
+				m_cells.RemoveAt (0);
+				Destroy (go.gameObject);
+			}
+
+			foreach(KeyValuePair<int, List<NotificationCenter.Notification>> entry in notifications.Reverse())
+			{
+				GameObject header = (GameObject)Instantiate (m_activityHeader, m_panels[4]);
+				UICell headerCell = (UICell)header.GetComponent<UICell> ();
+				headerCell.m_headerText.text = "Turn " + entry.Key.ToString ();
+				m_cells.Add (headerCell);
+
+				List<NotificationCenter.Notification> sList = entry.Value;
+
+				for (int i = 0; i < sList.Count; i++) {
+
+					NotificationCenter.Notification s = sList[i];
+					GameObject cellGO = (GameObject)Instantiate (m_activityCell, m_panels[4]);
+					UICell cell = (UICell)cellGO.GetComponent<UICell> ();
+					cell.m_bodyText.text = s.m_title + "\n";
+					cell.m_bodyText.text += s.m_message;
+					m_cells.Add (cell);
+
+					if (entry.Key == notifications.Count-1) {
+
+						cell.m_rectTransforms [0].anchoredPosition = new Vector2(MobileUIEngine.instance.m_mainCanvas.sizeDelta.x, 0);
+					}
+				}
+			}
+
 			break;
+
 		case InfoPanelType.Info:
 			m_infoPanels [2].gameObject.SetActive (true);
 			break;

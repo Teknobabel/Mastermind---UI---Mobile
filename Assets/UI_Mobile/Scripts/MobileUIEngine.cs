@@ -18,11 +18,15 @@ public class MobileUIEngine : MonoBehaviour {
 
 	public ScriptableObject m_tutorial;
 
+	public ScriptableObject m_turnProcessing;
+
 	public ScriptableObject[] m_apps;
 
 	private List<IApp> m_appStack = new List<IApp>();
 
 	private SystemNavBar m_systemNavBar;
+
+	private IApp m_turnProcessingApp;
 
 	public bool m_doTutorial = false;
 
@@ -60,15 +64,28 @@ public class MobileUIEngine : MonoBehaviour {
 		if (playTutorial == 1) {
 
 			startApp = (IApp)ScriptableObject.Instantiate(m_tutorial);
+			startApp.InitializeApp ();
 
 		} else {
+
+			Action_StartNewGame newGameAction = new Action_StartNewGame ();
+			GameController.instance.ProcessAction (newGameAction);
+
+			Action_EndPhase progressPhaseAction = new Action_EndPhase ();
+			GameController.instance.ProcessAction (progressPhaseAction);
 			
 			// instantiate home screen
 			startApp = (IApp)ScriptableObject.Instantiate(m_homeScreen);
+			startApp.InitializeApp ();
+
+			// instantitae turn processing screen
+
+			m_turnProcessingApp = (IApp)ScriptableObject.Instantiate(m_turnProcessing);
+			m_turnProcessingApp.InitializeApp ();
 
 		}
 			
-		startApp.InitializeApp ();
+
 
 		PushApp (startApp);
 	}
@@ -112,10 +129,17 @@ public class MobileUIEngine : MonoBehaviour {
 		}
 	}
 
+	void Update ()
+	{
+		if (m_appStack.Count > 0) {
+
+			IApp currentApp = m_appStack [m_appStack.Count - 1];
+			currentApp.UpdateApp ();
+		}
+	}
+
 	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
-	
-	// Update is called once per frame
-//	void Update () {
-//		
-//	}
+
+	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
+
 }

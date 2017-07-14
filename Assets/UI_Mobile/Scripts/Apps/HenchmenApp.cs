@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 [CreateAssetMenu]
-public class HenchmenApp : BaseApp, IUIObserver {
+public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 
 	private ContactsMenu m_homeMenu;
 	private ContactsDetailViewMenu m_henchmenDetailMenu;
@@ -23,6 +23,8 @@ public class HenchmenApp : BaseApp, IUIObserver {
 		m_henchmenDetailMenu = (ContactsDetailViewMenu)detailScreenGO.GetComponent<ContactsDetailViewMenu>();
 		m_henchmenDetailMenu.Initialize (this);
 		m_henchmenDetailMenu.AddObserver (this);
+
+		GameController.instance.AddObserver (this);
 
 		base.InitializeApp ();
 	}
@@ -46,6 +48,23 @@ public class HenchmenApp : BaseApp, IUIObserver {
 		base.EnterApp ();
 	}
 
+	public override void SetAlerts ()
+	{
+		List<Player.ActorSlot> hp = GameController.instance.GetHiredHenchmen (0);
+
+		int alerts = 0;
+
+		foreach (Player.ActorSlot aSlot in hp) {
+
+			if (aSlot.m_new && aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+
+				alerts++;
+			}
+		}
+
+		m_appIconInstance.SetAlerts (alerts);
+	}
+
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
 		switch (thisUIEvent)
@@ -53,6 +72,18 @@ public class HenchmenApp : BaseApp, IUIObserver {
 		case UIEvent.UI_BackButtonPressed:
 
 			PopMenu ();
+			break;
+		}
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisEvent)
+	{
+		switch (thisEvent)
+		{
+		case GameEvent.Player_HenchmenPoolChanged:
+
+			SetAlerts ();
+
 			break;
 		}
 	}

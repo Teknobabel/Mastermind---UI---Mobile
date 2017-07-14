@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Lair_HomeMenu : MonoBehaviour, IMenu {
+public class DummyLair_HomeMenu : MonoBehaviour, IMenu {
 
 	public Text
 	m_appNameText;

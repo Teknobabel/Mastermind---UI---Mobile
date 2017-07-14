@@ -10,6 +10,7 @@ public interface IApp {
 	Sprite Icon_Pressed { get; set; }
 	List<GameObject> MenuBank { get;}
 	bool WantsSystemNavBar { get; }
+	AppIcon AppIconInstance { set;}
 
 	void InitializeApp ();
 
@@ -26,4 +27,6 @@ public interface IApp {
 	void PushMenu (IMenu menu);
 
 	void PopMenu ();
+
+	void SetAlerts ();
 }

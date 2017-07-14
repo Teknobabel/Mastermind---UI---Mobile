@@ -32,7 +32,9 @@ public class OmegaPlansApp : BaseApp {
 		hsle.preferredWidth = screenWidth;
 		hsle.preferredHeight = screenHeight;
 
-		OmegaPlan op = GetDummyData.instance.GetOmegaPlan ();
+//		DummyOmegaPlan op = GetDummyData.instance.GetDummyOmegaPlan ();
+
+		OmegaPlan op = GameController.instance.GetOmegaPlan (0);
 
 		int numPages = op.m_phases.Length;
 
@@ -45,6 +47,7 @@ public class OmegaPlansApp : BaseApp {
 
 			OmegaPlanHomeMenu screen = go.GetComponent<OmegaPlanHomeMenu> ();
 			screen.phaseGoals = op.m_phases [i];
+			screen.phaseNumber = i + 1;
 			screen.Initialize (this);
 
 		}

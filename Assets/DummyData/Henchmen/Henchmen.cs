@@ -18,6 +18,6 @@ public class Henchmen : ScriptableObject {
 	m_portrait_Small,
 	m_portrait_Large;
 
-	public Trait[]
+	public DummyTrait[]
 	m_traits;
 }

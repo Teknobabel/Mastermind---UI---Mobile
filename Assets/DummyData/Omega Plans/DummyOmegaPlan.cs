@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class OmegaPlan : ScriptableObject {
+public class DummyOmegaPlan : ScriptableObject {
 
 	[System.Serializable]
 	public struct Phase
 	{
 		public int m_phaseNumber;
-		public OmegaPlan_Goal[] m_goals;
+		public DummyOmegaPlan_Goal[] m_goals;
 	}
 
 

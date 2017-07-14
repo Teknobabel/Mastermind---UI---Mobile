@@ -156,52 +156,94 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 			Destroy (c.gameObject);
 		}
 
-		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
+		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
+
+		bool newStateChanged = false;
+
+		List<Actor> hList = new List<Actor> ();
+
+		foreach (Player.ActorSlot aSlot in hiringPool) {
+
+			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+
+				hList.Add (aSlot.m_actor);
+
+				if (aSlot.m_new) {
+
+					Action_SetActorNewState newState = new Action_SetActorNewState ();
+					newState.m_actorSlot = aSlot;
+					GameController.instance.ProcessAction (newState);
+					newStateChanged = true;
+				}
+			}
+		}
+
+		int emptySlots = hiringPool.Count - hList.Count;
+
+		if (newStateChanged) {
+
+			m_parentApp.SetAlerts ();
+		}
 
 		switch (m_displayType)
 		{
 		case DisplayType.Alpha:
 
-			hList.Sort (delegate(Henchmen a, Henchmen b) {
-				return a.m_name.CompareTo (b.m_name);
+			hList.Sort (delegate(Actor a, Actor b) {
+				return a.m_actorName.CompareTo (b.m_actorName);
 			});
 
-			foreach (Henchmen h in hList) {
+			foreach (Actor h in hList) {
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 				UICell c = (UICell)hCell.GetComponent<UICell> ();
 				m_cells.Add (c);
 
-				string nameString = h.m_name;
+				string nameString = h.m_actorName;
 				string statusString = "Active";
 
 				c.m_headerText.text = nameString;
 				c.m_bodyText.text = statusString;
-				c.m_image.texture = h.m_portrait_Small;
+				c.m_image.texture = h.m_portrait_Compact;
 
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-					((HenchmenApp)m_parentApp).HenchmenCellClicked (h.m_id);
+					((HenchmenApp)m_parentApp).HenchmenCellClicked (h.id);
 				});
 			}
+
+			for (int i = 0; i < emptySlots; i++) {
+
+				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+				UICell c = (UICell)hCell.GetComponent<UICell> ();
+				m_cells.Add (c);
+
+				string nameString = "EMPTY";
+				string statusString = "";
+
+				c.m_headerText.text = nameString;
+				c.m_headerText.color = Color.gray;
+				c.m_bodyText.text = statusString;
+			}
+
 			break;
 
 		case DisplayType.Trait:
 
-			Dictionary<string, List<Henchmen>> hListByTrait = new Dictionary<string, List<Henchmen>> ();
+			Dictionary<string, List<Actor>> hListByTrait = new Dictionary<string, List<Actor>> ();
 
-			foreach (Henchmen h in hList) {
+			foreach (Actor h in hList) {
 
-				foreach (Trait t in h.m_traits) {
+				foreach (Trait t in h.traits) {
 
 					if (hListByTrait.ContainsKey (t.m_name)) {
 
-						List<Henchmen> l = hListByTrait [t.m_name];
+						List<Actor> l = hListByTrait [t.m_name];
 						l.Add (h);
 						hListByTrait [t.m_name] = l;
 
 					} else {
 
-						List<Henchmen> newList = new List<Henchmen> ();
+						List<Actor> newList = new List<Actor> ();
 						newList.Add (h);
 						hListByTrait.Add (t.m_name, newList);
 					}
@@ -210,34 +252,34 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 			if (hListByTrait.Count > 0) {
 
-				foreach(KeyValuePair<string, List<Henchmen>> entry in hListByTrait)
+				foreach(KeyValuePair<string, List<Actor>> entry in hListByTrait)
 				{
 					GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
 					UICell headerCell = (UICell)header.GetComponent<UICell> ();
 					headerCell.m_headerText.text = entry.Key.ToString ();
 					m_cells.Add (headerCell);
 
-					List<Henchmen> sortedList = entry.Value;
+					List<Actor> sortedList = entry.Value;
 
-					sortedList.Sort (delegate(Henchmen a, Henchmen b) {
-						return a.m_name.CompareTo (b.m_name);
+					sortedList.Sort (delegate(Actor a, Actor b) {
+						return a.m_actorName.CompareTo (b.m_actorName);
 					});
 
-					foreach (Henchmen h in sortedList) {
+					foreach (Actor h in sortedList) {
 
 						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 						UICell c = (UICell)hCell.GetComponent<UICell> ();
 						m_cells.Add (c);
 
-						string nameString = h.m_name;
+						string nameString = h.m_actorName;
 						string statusString = "Active";
 
 						c.m_headerText.text = nameString;
 						c.m_bodyText.text = statusString;
-						c.m_image.texture = h.m_portrait_Small;
+						c.m_image.texture = h.m_portrait_Compact;
 
 						hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-							((HenchmenApp)m_parentApp).HenchmenCellClicked (h.m_id);
+							((HenchmenApp)m_parentApp).HenchmenCellClicked (h.id);
 						});
 					}
 				}

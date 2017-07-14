@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15b05c39993464cb5afb25473e6bf903, type: 3}
+  m_Name: App_TurnProcessing
+  m_EditorClassIdentifier: 
+  m_name: 
+  m_icon: {fileID: 0}
+  m_icon_Pressed: {fileID: 0}
+  m_wantsSystemNavBar: 0
+  m_menuBank:
+  - {fileID: 1359907691858566, guid: e2fe40a39d3d7494d9625a5cbf8dd7d8, type: 2}

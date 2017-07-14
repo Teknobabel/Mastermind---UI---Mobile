@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Region : ScriptableObject {
+public class DummyRegion : ScriptableObject {
 
-	public enum RegionType {
+	public enum DummyRegionType {
 		None,
 		Politics,
 		Military,
@@ -15,8 +15,8 @@ public class Region : ScriptableObject {
 
 	public string m_name = "Null";
 
-	public RegionType m_type = RegionType.None;
+	public DummyRegionType m_type = DummyRegionType.None;
 
-	public Asset[] m_assets;
+	public DummyAsset[] m_assets;
 
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Floor : ScriptableObject {
+public class DummyLair : ScriptableObject {
 
 
 }

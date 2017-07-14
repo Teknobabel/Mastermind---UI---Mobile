@@ -50,6 +50,11 @@ public class CackleApp : ScriptableObject, IApp {
 
 	}
 
+	public void SetAlerts ()
+	{
+
+	}
+
 	public string Name 
 	{
 		get
@@ -91,4 +96,6 @@ public class CackleApp : ScriptableObject, IApp {
 
 	public bool WantsSystemNavBar 
 	{ get{ return true; } }
+
+	public AppIcon AppIconInstance {set{}}
 }

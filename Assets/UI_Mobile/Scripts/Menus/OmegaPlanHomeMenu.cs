@@ -22,6 +22,8 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 
 	private OmegaPlan.Phase m_phaseGoals;
 
+	private int m_phaseNumber = -1;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -31,21 +33,20 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 	{
 		m_parentApp = parentApp;
 
-		OmegaPlan op = GetDummyData.instance.GetOmegaPlan ();
+		OmegaPlan omegaPlan = GameController.instance.GetOmegaPlan (0);
 
-//		m_phaseText.text = "Phase " + op.m_phases.Length.ToString();
-		m_phaseText.text = "Phase " + m_phaseGoals.m_phaseNumber.ToString();
-			
 		string s = parentApp.Name + ":\n";
-		s += op.m_name;
+		s += omegaPlan.m_name;
 		m_appNameText.text = s;
-//		this.gameObject.SetActive (false);
+
+
+		DummyOmegaPlan op = GetDummyData.instance.GetDummyOmegaPlan ();
+
+		m_phaseText.text = "Phase " + m_phaseNumber.ToString();
 
 		// populate with goals
 
-//		OmegaPlan.Phase thisPhaseGoals = op.m_phases [0];
-
-		foreach (OmegaPlan_Goal opGoal in m_phaseGoals.m_goals) {
+		foreach (OPGoal opGoal in m_phaseGoals.m_goals) {
 
 			GameObject gCell = (GameObject)Instantiate (m_opGoalCell, m_opGoalListParent);
 			UICell c = (UICell)gCell.GetComponent<UICell> ();
@@ -53,7 +54,7 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 
 			gCell.GetComponent<Button>().onClick.AddListener(delegate { ((OmegaPlansApp)m_parentApp).GoalButtonClicked(); });
 
-			c.m_headerText.text = opGoal.m_name;
+			c.m_headerText.text = opGoal.name;
 			c.m_bodyText.text = "Inactive";
 		}
 	}
@@ -154,6 +155,7 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 	{ get{ return m_parentApp; }}
 
 	public OmegaPlan.Phase phaseGoals {get{ return m_phaseGoals;}set{m_phaseGoals = value; }}
+	public int phaseNumber {set{ m_phaseNumber = value; }}
 	
 	// Update is called once per frame
 //	void Update () {

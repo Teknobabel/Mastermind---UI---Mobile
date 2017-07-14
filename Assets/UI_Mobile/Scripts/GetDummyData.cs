@@ -19,13 +19,13 @@ public class GetDummyData : MonoBehaviour {
 
 	public List<ScriptableObject> m_henchmenBank;
 
-	public OmegaPlan m_omegaPlan;
+	public DummyOmegaPlan m_omegaPlan;
 
-	public Lair m_lair;
+	public DummyLair m_lair;
 
 	public MessageCenter m_messageCenter;
 
-	public Region[] m_regions;
+	public DummyRegion[] m_regions;
 
 //	private List<Henchmen> m_henchmenList = new List<Henchmen>();
 
@@ -145,7 +145,7 @@ public class GetDummyData : MonoBehaviour {
 		return henchmenList;
 	}
 
-	public OmegaPlan GetOmegaPlan ()
+	public DummyOmegaPlan GetDummyOmegaPlan ()
 	{
 		return m_omegaPlan;
 	}

@@ -12,6 +12,7 @@ public class BaseApp : ScriptableObject, IApp {
 	public List<GameObject> m_menuBank;
 
 	protected List<IMenu> m_menuStack = new List<IMenu>();
+	protected AppIcon m_appIconInstance;
 
 	public virtual void InitializeApp ()
 	{
@@ -115,6 +116,11 @@ public class BaseApp : ScriptableObject, IApp {
 		}
 	}
 
+	public virtual void SetAlerts ()
+	{
+
+	}
+
 	public string Name 
 	{
 		get
@@ -158,4 +164,5 @@ public class BaseApp : ScriptableObject, IApp {
 	{ get{ return m_wantsSystemNavBar; } }
 
 	public int menuStackSize {get{ return m_menuStack.Count; }}
+	public AppIcon AppIconInstance {set{ m_appIconInstance = value; }}
 }
