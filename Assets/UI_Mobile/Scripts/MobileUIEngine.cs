@@ -26,7 +26,9 @@ public class MobileUIEngine : MonoBehaviour {
 
 	private SystemNavBar m_systemNavBar;
 
-	private IApp m_turnProcessingApp;
+	private IApp 
+	m_turnProcessingApp,
+	m_homeScreenApp;
 
 	public bool m_doTutorial = false;
 
@@ -77,6 +79,7 @@ public class MobileUIEngine : MonoBehaviour {
 			// instantiate home screen
 			startApp = (IApp)ScriptableObject.Instantiate(m_homeScreen);
 			startApp.InitializeApp ();
+			m_homeScreenApp = startApp;
 
 			// instantitae turn processing screen
 
@@ -141,5 +144,6 @@ public class MobileUIEngine : MonoBehaviour {
 	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
 
 	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
+	public IApp homeScreenApp {get{ return m_homeScreenApp; }}
 
 }

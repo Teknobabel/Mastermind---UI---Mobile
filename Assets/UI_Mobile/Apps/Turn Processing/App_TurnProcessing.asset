@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b05c39993464cb5afb25473e6bf903, type: 3}
   m_Name: App_TurnProcessing
   m_EditorClassIdentifier: 
-  m_name: 
+  m_name: TURN PROCESSING
   m_icon: {fileID: 0}
   m_icon_Pressed: {fileID: 0}
   m_wantsSystemNavBar: 0

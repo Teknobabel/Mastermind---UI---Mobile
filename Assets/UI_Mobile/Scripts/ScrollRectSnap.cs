@@ -102,6 +102,39 @@ public class ScrollRectSnap : MonoBehaviour, IUISubject {
 		dragInit = true;
 	}
 
+	public void GoToPage (int target)
+	{
+		if (target == dragStartNearest && scroll.velocity.sqrMagnitude > inertiaCutoffMagnitude * inertiaCutoffMagnitude)
+		{
+			if (scroll.velocity.x < 0)
+			{
+				target = dragStartNearest + 1;
+			}
+			else if (scroll.velocity.x > 1)
+			{
+				target = dragStartNearest - 1;
+			}
+			target = Mathf.Clamp(target, 0, points.Length - 1);
+		}
+
+		if (scroll.horizontal && snapInH && scroll.horizontalNormalizedPosition > 0f && scroll.horizontalNormalizedPosition < 1f)
+		{
+			targetH = points[target];
+			LerpH = true;
+		}
+		if (scroll.vertical && snapInV && scroll.verticalNormalizedPosition > 0f && scroll.verticalNormalizedPosition < 1f)
+		{
+			targetV = points[target];
+			LerpH = true;
+		}
+
+		m_target = target;
+		Notify (this, UIEvent.UI_PageChanged);
+
+		dragInit = true;
+
+	}
+
 	public void OnDrag()
 	{
 		if (dragInit)

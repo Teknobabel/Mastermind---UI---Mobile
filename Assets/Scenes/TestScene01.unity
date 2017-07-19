@@ -219,13 +219,13 @@ Prefab:
         type: 2}
       propertyPath: m_apps.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 7663523d6de554ec2ba3af5ffb779499,
+      objectReference: {fileID: 11400000, guid: 592aec014e8d64a34872d89b24bc709f,
         type: 2}
     - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}
       propertyPath: m_apps.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 592aec014e8d64a34872d89b24bc709f,
+      objectReference: {fileID: 11400000, guid: 7663523d6de554ec2ba3af5ffb779499,
         type: 2}
     - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}

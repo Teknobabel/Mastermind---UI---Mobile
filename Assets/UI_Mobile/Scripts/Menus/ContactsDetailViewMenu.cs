@@ -186,6 +186,17 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 		Notify (this, UIEvent.UI_BackButtonPressed);
 	}
 
+	public void FireButtonPressed()
+	{
+		Action_FireAgent fireAgent = new Action_FireAgent ();
+		fireAgent.m_playerNumber = (0);
+		fireAgent.m_henchmenID = m_henchmenID;
+		GameController.instance.ProcessAction (fireAgent);
+
+		((HenchmenApp)ParentApp).homeMenu.isDirty = true;
+		ParentApp.PopMenu ();
+	}
+
 	public void AddObserver (IUIObserver observer)	
 	{
 		m_observers.Add (observer);

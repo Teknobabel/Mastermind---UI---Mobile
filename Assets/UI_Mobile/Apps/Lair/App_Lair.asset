@@ -15,4 +15,9 @@ MonoBehaviour:
   m_icon: {fileID: 21300000, guid: 1a8529cdb159649ff879a99146e871ad, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 7d37bf7ed957d42c18fc97ab746b613c, type: 3}
   m_wantsSystemNavBar: 1
-  m_menuBank: []
+  m_menuBank:
+  - {fileID: 1117226361454164, guid: bdd737a49283e463baa75e99b43af0ed, type: 2}
+  - {fileID: 1355405323940118, guid: ca2da824ede524778996c14781946b1d, type: 2}
+  - {fileID: 1355405323940118, guid: 83ea128e5f6a149d7952bf8e0c9e49bd, type: 2}
+  - {fileID: 1355405323940118, guid: cde0eb426296f42a0b06985986c9c77c, type: 2}
+  - {fileID: 1355405323940118, guid: 08e6db27d3bd445b1b197caf8cba424d, type: 2}

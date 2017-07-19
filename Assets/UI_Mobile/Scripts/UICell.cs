@@ -14,6 +14,8 @@ public class UICell : MonoBehaviour {
 
 	public RectTransform[] m_rectTransforms;
 
+	public Button[] m_buttons;
+
 	// Use this for initialization
 	void Start () {
 		

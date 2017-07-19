@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class AppScreen : MonoBehaviour, IObserver {
 
 	public RectTransform m_gridView;
-	public Text m_currentCommandPoolText;
+	public Text 
+	m_currentCommandPoolText,
+	m_CommandPoolUpkeepText;
 
 	// Use this for initialization
 	void Start () {
@@ -31,6 +33,8 @@ public class AppScreen : MonoBehaviour, IObserver {
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 		m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
 
+		UpdateUpkeep ();
+
 		foreach (IApp app in apps) {
 
 			GameObject go = (GameObject)GameObject.Instantiate (appIcon, m_gridView);
@@ -52,6 +56,34 @@ public class AppScreen : MonoBehaviour, IObserver {
 		Action_EndPhase endTurn = new Action_EndPhase ();
 		GameController.instance.ProcessAction (endTurn);
 	}
+
+	private void UpdateUpkeep ()
+	{
+		string upkeep = "-";
+
+		int upkeepCost = 0;
+
+		List<Player.ActorSlot> henchmen = GameController.instance.GetHiredHenchmen (0);
+
+		foreach (Player.ActorSlot aSlot in henchmen) {
+
+			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+
+				upkeepCost += aSlot.m_actor.m_turnCost;
+			}
+		}
+
+		if (upkeepCost > 0) {
+
+			upkeep += upkeepCost.ToString () + "/TURN";
+
+		} else {
+
+			upkeep = "";
+		}
+
+		m_CommandPoolUpkeepText.text = upkeep;
+	}
 	
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
@@ -61,6 +93,12 @@ public class AppScreen : MonoBehaviour, IObserver {
 
 			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 			m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+
+			break;
+
+		case GameEvent.Player_HenchmenPoolChanged:
+
+			UpdateUpkeep ();
 
 			break;
 		}

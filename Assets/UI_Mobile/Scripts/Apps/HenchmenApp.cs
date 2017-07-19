@@ -87,4 +87,6 @@ public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 			break;
 		}
 	}
+
+	public ContactsMenu homeMenu {get{ return m_homeMenu; }}
 }

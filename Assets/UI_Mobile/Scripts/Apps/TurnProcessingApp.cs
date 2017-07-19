@@ -53,7 +53,9 @@ public class TurnProcessingApp : BaseApp, IObserver {
 
 		if (m_timer == m_durationTime && m_finishedProcessingTurn) {
 
+			((HomeScreenApp)MobileUIEngine.instance.homeScreenApp).NewTurnStarted ();
 			MobileUIEngine.instance.PopApp ();
+
 		}
 
 	}

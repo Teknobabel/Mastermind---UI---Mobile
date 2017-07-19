@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 114051379547081632}
   - component: {fileID: 114692172495392168}
   m_Layer: 5
-  m_Name: World_RegionAlertLevelCell
+  m_Name: World_SiteAlertLevelCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -482,6 +482,7 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_rectTransforms:
   - {fileID: 224009256503146474}
+  m_buttons: []
 --- !u!114 &114678443781499210
 MonoBehaviour:
   m_ObjectHideFlags: 1

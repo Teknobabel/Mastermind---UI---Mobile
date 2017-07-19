@@ -14,6 +14,14 @@ public class HomeScreenMenu : MonoBehaviour, IUIObserver {
 	void Start () {
 		
 	}
+
+//	void Update ()
+//	{
+//		if (Input.GetKeyUp (KeyCode.Space)) {
+//
+//			((HomeScreenApp)MobileUIEngine.instance.homeScreenApp).
+//		}
+//	}
 	
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{

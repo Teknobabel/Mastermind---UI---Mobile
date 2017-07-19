@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 114979808479259956}
   - component: {fileID: 114411063028069414}
   m_Layer: 5
-  m_Name: World_RegionAssetCell
+  m_Name: World_SiteAssetCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,6 +128,7 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_rectTransforms:
   - {fileID: 224695011781514918}
+  m_buttons: []
 --- !u!114 &114722604187116230
 MonoBehaviour:
   m_ObjectHideFlags: 1

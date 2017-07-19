@@ -14,6 +14,9 @@ public class HomeScreenApp : BaseApp {
 
 	private Transform m_menuParent = null;
 
+	private HomeScreenMenu m_homeScreenMenu = null;
+	private bool m_isDirty = false;
+
 	public override void InitializeApp ()
 	{
 		// set canvas size
@@ -28,6 +31,7 @@ public class HomeScreenApp : BaseApp {
 		homeScreenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 
 		HomeScreenMenu homeScreenMenu = (HomeScreenMenu)homeScreenGO.GetComponent<HomeScreenMenu> ();
+		m_homeScreenMenu = homeScreenMenu;
 
 		int numPages = 0;
 
@@ -124,6 +128,25 @@ public class HomeScreenApp : BaseApp {
 		sysNavGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		MobileUIEngine.instance.systemNavBar = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
 		MobileUIEngine.instance.systemNavBar.SetActiveState (false);
+	}
+
+	public void NewTurnStarted ()
+	{
+		m_isDirty = true;
+	}
+
+	public override void AppReturn ()
+	{
+		if (m_isDirty) {
+			
+			m_isDirty = false;
+
+			// reset to activity center page
+//			ScrollRectSnap srt = (ScrollRectSnap) m_homeScreenMenu.GetComponent<ScrollRectSnap> ();
+//			srt.GoToPage (0);
+		} 
+
+		base.AppReturn ();
 	}
 
 	public override void EnterApp ()

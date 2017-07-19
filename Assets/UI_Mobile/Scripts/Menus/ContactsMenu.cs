@@ -30,6 +30,8 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	private DisplayType m_displayType = DisplayType.Alpha;
 
+	private bool m_isDirty = false;
+
 //	private Transform m_menuParent;
 
 	// Use this for initialization
@@ -120,7 +122,11 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnReturn ()
 	{
+		if (m_isDirty) {
 
+			m_isDirty = false;
+			DisplayHenchmen ();
+		}
 	}
 
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
@@ -218,11 +224,12 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 				m_cells.Add (c);
 
 				string nameString = "EMPTY";
-				string statusString = "";
+				string statusString = "Recruit henchmen in the Hire app";
 
 				c.m_headerText.text = nameString;
 				c.m_headerText.color = Color.gray;
 				c.m_bodyText.text = statusString;
+				c.m_bodyText.color = Color.gray;
 			}
 
 			break;
@@ -291,4 +298,6 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 	
 	public IApp ParentApp 
 	{ get{ return m_parentApp; }}
+
+	public bool isDirty {set{ m_isDirty = value; }}
 }

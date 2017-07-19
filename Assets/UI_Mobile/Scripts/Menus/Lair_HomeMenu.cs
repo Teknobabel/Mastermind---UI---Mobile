@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DummyLair_HomeMenu : MonoBehaviour, IMenu {
+public class Lair_HomeMenu : MonoBehaviour, IMenu {
 
 	public Text
 	m_appNameText;
 
 	public GameObject
-	m_missionCellGO,
 	m_floorCellGO;
+
+	public Transform
+		m_contentParent;
 
 	private IApp m_parentApp;
 
 	private List<UICell> m_cells = new List<UICell>();
+
+	private bool m_isDirty = false;
 
 	// Use this for initialization
 	void Start () {
@@ -33,9 +37,9 @@ public class DummyLair_HomeMenu : MonoBehaviour, IMenu {
 	public void OnEnter (bool animate)
 	{
 		this.gameObject.SetActive (true);
-//
-//		DisplayHenchmen ();
-//
+
+		DisplayFloors ();
+
 //		// slide in animation
 //		if (animate) {
 //
@@ -76,7 +80,7 @@ public class DummyLair_HomeMenu : MonoBehaviour, IMenu {
 //
 //		} else {
 //
-//			OnExitComplete ();
+			OnExitComplete ();
 //		}
 
 	}
@@ -95,6 +99,7 @@ public class DummyLair_HomeMenu : MonoBehaviour, IMenu {
 		rt.anchoredPosition = Vector2.zero;
 
 		this.gameObject.SetActive (false);
+		m_isDirty = false;
 	}
 
 	public void OnHold ()
@@ -104,9 +109,48 @@ public class DummyLair_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnReturn ()
 	{
+		if (m_isDirty) {
 
+			m_isDirty = false;
+
+			DisplayFloors ();
+		}
+	}
+
+	private void DisplayFloors ()
+	{
+		while (m_cells.Count > 0) {
+
+			UICell c = m_cells [0];
+			m_cells.RemoveAt (0);
+			Destroy (c.gameObject);
+		}
+
+		Lair l = GameController.instance.GetLair (0);
+
+		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
+
+			GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);
+			UICell floorCell = (UICell)floorGO.GetComponent<UICell> ();
+			floorCell.m_headerText.text = fSlot.m_floor.m_name;
+			m_cells.Add (floorCell);
+
+			Button b = floorCell.m_buttons [0];
+
+			if (fSlot.m_state == Lair.FloorSlot.FloorState.MissionInProgress) {
+
+				Text t = b.GetComponentInChildren<Text> ();
+				t.text = "Mission In Progress";
+			}
+
+			b.onClick.AddListener (delegate {
+				((LairApp)m_parentApp).IdleFloorButtonClicked (fSlot.m_id);
+			});
+		}
 	}
 
 	public IApp ParentApp 
 	{ get{ return m_parentApp; }}
+
+	public bool isDirty {set{ m_isDirty = value;}}
 }
