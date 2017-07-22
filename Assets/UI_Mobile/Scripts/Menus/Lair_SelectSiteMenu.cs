@@ -73,7 +73,7 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 			headerCell.m_headerText.color = Color.black;
 			m_cells.Add (headerCell);
 
-			foreach (Site s in r.m_sites) {
+			foreach (Site s in r.sites) {
 
 				// create site info cell
 
@@ -83,16 +83,30 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 				siteInfoCell.m_bodyText.text = s.m_type.ToString ();
 				m_cells.Add (siteInfoCell);
 
-				Button b = siteInfoCell.m_buttons [0];
-				b.onClick.AddListener (delegate {
-					SiteSelected (s);
-				});
+				if (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site) {
+					
+					Button b = siteInfoCell.m_buttons [0];
+					b.onClick.AddListener (delegate {
+						SiteSelected (s);
+					});
+				}
 
 				// create site alert cell
 
 				GameObject siteAlert = (GameObject)Instantiate (m_siteAlertCellGO, m_contentParent);
 				UICell siteAlertCell = (UICell)siteAlert.GetComponent<UICell> ();
 				m_cells.Add (siteAlertCell);
+
+				for (int i = 0; i < siteAlertCell.m_rawImages.Length; i++) {
+
+					if (i >= s.m_maxAlertLevel) {
+
+						siteAlertCell.m_rawImages [i].gameObject.SetActive (false);
+					} else if (i < s.currentAlertLevel) {
+
+						siteAlertCell.m_rawImages [i].texture = siteAlertCell.m_sprites [0].texture;
+					}
+				}
 
 				// create site trait cells
 
@@ -110,7 +124,24 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 
 					GameObject siteAsset = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
 					UICell siteAssetCell = (UICell)siteAsset.GetComponent<UICell> ();
-					siteAssetCell.m_headerText.text = "Asset: " + aSlot.m_asset.m_name;
+
+					if (aSlot.m_state == Site.AssetSlot.State.Hidden) {
+
+						siteAssetCell.m_headerText.text = "Asset: ?????";
+					} else {
+						siteAssetCell.m_headerText.text = "Asset: " + aSlot.m_asset.m_name;
+
+					}
+
+					if (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
+
+						Button b = siteAssetCell.m_buttons [0];
+						b.interactable = true;
+						b.onClick.AddListener (delegate {
+							AssetSelected (aSlot,s);
+						});
+					}
+
 					m_cells.Add (siteAssetCell);
 				}
 			}
@@ -126,6 +157,21 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 		((LairApp)m_parentApp).planMissionMenu.isDirty = true;
 
 		ParentApp.PopMenu ();
+	}
+
+	public void AssetSelected (Site.AssetSlot aSlot, Site s)
+	{
+		Debug.Log (aSlot + " / " + s);
+
+		if (aSlot.m_state == Site.AssetSlot.State.Revealed) {
+			
+			m_floorSlot.m_missionPlan.m_missionSite = s;
+			m_floorSlot.m_missionPlan.m_currentAsset = aSlot;
+
+			((LairApp)m_parentApp).planMissionMenu.isDirty = true;
+
+			ParentApp.PopMenu ();
+		}
 	}
 
 	public IApp ParentApp 

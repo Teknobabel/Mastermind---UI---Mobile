@@ -126,7 +126,9 @@ public class HomeScreenApp : BaseApp {
 
 		GameObject sysNavGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_systemNavBarGO, Vector3.zero, Quaternion.identity);
 		sysNavGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		MobileUIEngine.instance.systemNavBar = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
+		SystemNavBar sysNavBar  = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
+		sysNavBar.Initialize ();
+		MobileUIEngine.instance.systemNavBar = sysNavBar;
 		MobileUIEngine.instance.systemNavBar.SetActiveState (false);
 	}
 

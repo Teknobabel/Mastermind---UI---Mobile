@@ -1,15 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SystemNavBar : MonoBehaviour {
+public class SystemNavBar : MonoBehaviour, IObserver {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+	public Text m_currentCommandPoolText;
 
 	private bool m_isActive = false;
+
+	public void Initialize ()
+	{
+		GameController.instance.AddObserver (this);
+
+		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
+		m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+	}
 
 	public void SetActiveState (bool isActive)
 	{
@@ -31,8 +37,16 @@ public class SystemNavBar : MonoBehaviour {
 		
 	public bool isActive {get{ return m_isActive; }}
 	
-	// Update is called once per frame
-//	void Update () {
-//		
-//	}
+	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	{
+		switch (thisGameEvent) {
+
+		case GameEvent.Player_CommandPoolChanged:
+
+			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
+			m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+
+			break;
+		}
+	}
 }

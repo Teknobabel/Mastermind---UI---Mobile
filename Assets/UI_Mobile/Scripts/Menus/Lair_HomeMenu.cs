@@ -137,15 +137,31 @@ public class Lair_HomeMenu : MonoBehaviour, IMenu {
 
 			Button b = floorCell.m_buttons [0];
 
-			if (fSlot.m_state == Lair.FloorSlot.FloorState.MissionInProgress) {
+			if (fSlot.m_floor.m_missions.Count == 0) {
 
-				Text t = b.GetComponentInChildren<Text> ();
-				t.text = "Mission In Progress";
+				b.interactable = false;
+				b.gameObject.SetActive (false);
+
+			} else {
+
+				if (fSlot.m_state == Lair.FloorSlot.FloorState.MissionInProgress) {
+
+					Text t = b.GetComponentInChildren<Text> ();
+					t.text = "Mission In Progress";
+				}
+
+				b.onClick.AddListener (delegate {
+					((LairApp)m_parentApp).IdleFloorButtonClicked (fSlot.m_id);
+				});
 			}
 
-			b.onClick.AddListener (delegate {
-				((LairApp)m_parentApp).IdleFloorButtonClicked (fSlot.m_id);
-			});
+			if (fSlot.m_new && fSlot.m_state != Lair.FloorSlot.FloorState.Empty) {
+
+				Action_SetFloorNewState newState = new Action_SetFloorNewState ();
+				newState.m_floorSlot = fSlot;
+				newState.m_newState = false;
+				GameController.instance.ProcessAction (newState);
+			}
 		}
 	}
 

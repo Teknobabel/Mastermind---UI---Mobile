@@ -33,14 +33,14 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 	{
 		m_parentApp = parentApp;
 
-		OmegaPlan omegaPlan = GameController.instance.GetOmegaPlan (0);
+		Player.OmegaPlanSlot omegaPlan = GameController.instance.GetOmegaPlan (0);
 
 		string s = parentApp.Name + ":\n";
-		s += omegaPlan.m_name;
+		s += omegaPlan.m_omegaPlan.m_name;
 		m_appNameText.text = s;
 
 
-		DummyOmegaPlan op = GetDummyData.instance.GetDummyOmegaPlan ();
+//		DummyOmegaPlan op = GetDummyData.instance.GetDummyOmegaPlan ();
 
 		m_phaseText.text = "Phase " + m_phaseNumber.ToString();
 

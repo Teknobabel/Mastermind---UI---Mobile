@@ -128,6 +128,14 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 			missionCell.m_bodyText.text = mp.m_turnNumber.ToString () + " / " + mp.m_currentMission.m_duration.ToString () + " Turns";
 			m_cells.Add (missionCell);
 
+			if (mp.m_new) {
+
+				Action_SetMissionNewState newState = new Action_SetMissionNewState ();
+				newState.m_plan = mp;
+				newState.m_newState = false;
+				GameController.instance.ProcessAction (newState);
+			}
+
 //			Button b = floorCell.m_buttons [0];
 //			b.onClick.AddListener (delegate {
 //				((LairApp)m_parentApp).IdleFloorButtonClicked (fSlot.m_id);

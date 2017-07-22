@@ -44,7 +44,7 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 		m_parentApp = parentApp;
 		m_appNameText.text = parentApp.Name;
 		m_infoPanelToggle.AddObserver (this);
-		m_infoPanelToggle.ToggleButtonClicked (0);
+//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 

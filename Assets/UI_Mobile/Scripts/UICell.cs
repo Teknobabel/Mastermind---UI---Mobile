@@ -16,6 +16,12 @@ public class UICell : MonoBehaviour {
 
 	public Button[] m_buttons;
 
+	public RawImage[] m_rawImages;
+
+	public Image[] m_images;
+
+	public Sprite[] m_sprites;
+
 	// Use this for initialization
 	void Start () {
 		

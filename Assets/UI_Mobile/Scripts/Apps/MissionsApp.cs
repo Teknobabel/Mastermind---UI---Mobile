@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class MissionsApp : BaseApp {
+public class MissionsApp : BaseApp, IObserver {
 
 	private Missions_HomeMenu m_homeMenu;
 
@@ -20,6 +20,8 @@ public class MissionsApp : BaseApp {
 		//		m_henchmenDetailMenu.Initialize (this);
 		//		m_henchmenDetailMenu.AddObserver (this);
 
+		GameController.instance.AddObserver (this);
+
 		base.InitializeApp ();
 	}
 
@@ -31,6 +33,36 @@ public class MissionsApp : BaseApp {
 		}
 
 		base.EnterApp ();
+	}
+
+	public override void SetAlerts ()
+	{
+		List<MissionPlan> mp = GameController.instance.GetMissions (0);
+
+		int alerts = 0;
+
+		foreach (MissionPlan m in mp) {
+
+			if (m.m_new) {
+
+				alerts++;
+			}
+		}
+
+		m_appIconInstance.SetAlerts (alerts);
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisEvent)
+	{
+		switch (thisEvent)
+		{
+		case GameEvent.Player_MissionCompleted:
+		case GameEvent.Player_NewMissionStarted:
+
+			SetAlerts ();
+
+			break;
+		}
 	}
 
 	//	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)

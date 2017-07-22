@@ -483,6 +483,17 @@ MonoBehaviour:
   m_rectTransforms:
   - {fileID: 224009256503146474}
   m_buttons: []
+  m_rawImages:
+  - {fileID: 114036216642350084}
+  - {fileID: 114015699443114378}
+  - {fileID: 114980013685592348}
+  - {fileID: 114821545168560500}
+  - {fileID: 114177959550282510}
+  - {fileID: 114539352286058042}
+  m_images: []
+  m_sprites:
+  - {fileID: 21300000, guid: 84ac235f5528b4333941b0ed25892c43, type: 3}
+  - {fileID: 21300000, guid: b548370a3c0e34fac8c3ce3ca480e880, type: 3}
 --- !u!114 &114678443781499210
 MonoBehaviour:
   m_ObjectHideFlags: 1

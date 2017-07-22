@@ -121,21 +121,37 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 			SelectMissionButtonPressed ();
 		});
 
+
+
 		// display current state of site selection
 
-		GameObject selectSiteCellGO = (GameObject)Instantiate (m_selectSiteCellGO, m_contentParent);
-		UICell selectSiteCell = (UICell)selectSiteCellGO.GetComponent<UICell> ();
-		m_cells.Add (selectSiteCell);
+		if (m_floorSlot.m_missionPlan.m_currentMission == null || (m_floorSlot.m_missionPlan.m_currentMission != null
+		    && m_floorSlot.m_missionPlan.m_currentMission.m_targetType != Mission.TargetType.Lair)) {
 
-		if (m_floorSlot.m_missionPlan.m_missionSite != null) {
+			GameObject selectSiteCellGO = (GameObject)Instantiate (m_selectSiteCellGO, m_contentParent);
+			UICell selectSiteCell = (UICell)selectSiteCellGO.GetComponent<UICell> ();
+			m_cells.Add (selectSiteCell);
 
-			selectSiteCell.m_headerText.text = "Current Site: " + m_floorSlot.m_missionPlan.m_missionSite.m_siteName;
+			if (m_floorSlot.m_missionPlan.m_missionSite != null) {
+
+				string s = "Current Site: " + m_floorSlot.m_missionPlan.m_missionSite.m_siteName;
+
+				if (m_floorSlot.m_missionPlan.m_currentMission != null && m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
+
+					s += ", Asset: " + m_floorSlot.m_missionPlan.m_currentAsset.m_asset.m_name;
+				}
+
+				selectSiteCell.m_headerText.text = s;
+			}
+
+			Button b2 = selectSiteCell.m_buttons [0];
+			b2.onClick.AddListener (delegate {
+				SelectSiteButtonPressed ();
+			});
+
 		}
 
-		Button b2 = selectSiteCell.m_buttons [0];
-		b2.onClick.AddListener (delegate {
-			SelectSiteButtonPressed ();
-		});
+
 
 		// display current state of henchmen selection
 
@@ -169,7 +185,10 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 
-		if (m_floorSlot.m_missionPlan.m_successChance > 0 && m_floorSlot.m_missionPlan.m_currentMission.m_cost <= cp.m_currentPool) {
+		if (m_floorSlot.m_missionPlan.m_successChance > 0 && m_floorSlot.m_missionPlan.m_currentMission.m_cost <= cp.m_currentPool &&
+			((m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_floorSlot.m_missionPlan.m_currentAsset != null) ||  
+				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site && m_floorSlot.m_missionPlan.m_missionSite != null) ||
+				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Lair))) {
 
 			startMissionCell.m_buttons [0].interactable = true;
 

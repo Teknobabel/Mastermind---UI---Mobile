@@ -71,7 +71,7 @@ public class World_HomeMenu : MonoBehaviour, IMenu {
 			headerCell.m_headerText.color = Color.black;
 			m_cells.Add (headerCell);
 
-			foreach (Site s in r.m_sites) {
+			foreach (Site s in r.sites) {
 
 				// create site info cell
 
@@ -87,6 +87,17 @@ public class World_HomeMenu : MonoBehaviour, IMenu {
 				GameObject siteAlert = (GameObject)Instantiate (m_siteAlertCellGO, m_worldListParent);
 				UICell siteAlertCell = (UICell)siteAlert.GetComponent<UICell> ();
 				m_cells.Add (siteAlertCell);
+
+				for (int i = 0; i < siteAlertCell.m_rawImages.Length; i++) {
+
+					if (i >= s.m_maxAlertLevel) {
+
+						siteAlertCell.m_rawImages [i].gameObject.SetActive (false);
+					} else if (i < s.currentAlertLevel) {
+
+						siteAlertCell.m_rawImages [i].texture = siteAlertCell.m_sprites [0].texture;
+					}
+				}
 
 				// create site trait cells
 
@@ -104,7 +115,16 @@ public class World_HomeMenu : MonoBehaviour, IMenu {
 
 					GameObject siteAsset = (GameObject)Instantiate (m_siteAssetCellGO, m_worldListParent);
 					UICell siteAssetCell = (UICell)siteAsset.GetComponent<UICell> ();
-					siteAssetCell.m_headerText.text = "Asset: " + aSlot.m_asset.m_name;
+
+					if (aSlot.m_state == Site.AssetSlot.State.Hidden) {
+
+						siteAssetCell.m_headerText.text = "Asset: ?????";
+					} else {
+
+						siteAssetCell.m_headerText.text = "Asset: " + aSlot.m_asset.m_name;
+
+					}
+
 					m_cells.Add (siteAssetCell);
 				}
 			}

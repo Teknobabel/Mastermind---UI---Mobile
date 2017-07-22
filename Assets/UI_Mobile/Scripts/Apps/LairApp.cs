@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class LairApp : BaseApp {
+public class LairApp : BaseApp, IObserver {
 
 	private Lair_HomeMenu m_homeMenu;
 	private Lair_PlanMissionMenu m_planMissionMenu;
@@ -38,6 +38,8 @@ public class LairApp : BaseApp {
 		m_selectSiteMenu = (Lair_SelectSiteMenu)selectSiteGO.GetComponent<Lair_SelectSiteMenu>();
 		m_selectSiteMenu.Initialize (this);
 
+		GameController.instance.AddObserver (this);
+
 		base.InitializeApp ();
 	}
 
@@ -65,6 +67,35 @@ public class LairApp : BaseApp {
 				PushMenu (m_planMissionMenu);
 				break;
 			}
+		}
+	}
+
+	public override void SetAlerts ()
+	{
+		Lair l = GameController.instance.GetLair (0);
+
+		int alerts = 0;
+
+		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
+
+			if (fSlot.m_new && fSlot.m_state != Lair.FloorSlot.FloorState.Empty) {
+
+				alerts++;
+			}
+		}
+
+		m_appIconInstance.SetAlerts (alerts);
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisEvent)
+	{
+		switch (thisEvent)
+		{
+		case GameEvent.Player_LairChanged:
+
+			SetAlerts ();
+
+			break;
 		}
 	}
 
