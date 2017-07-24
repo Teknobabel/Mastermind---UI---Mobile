@@ -125,7 +125,25 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 
 		// display current state of site selection
 
-		if (m_floorSlot.m_missionPlan.m_currentMission == null || (m_floorSlot.m_missionPlan.m_currentMission != null
+		if (m_floorSlot.m_missionPlan.m_currentMission != null && m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Actor) {
+
+			GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_selectHenchmenCellGO, m_contentParent);
+			UICell selectHenchmenCell = (UICell)selectHenchmenCellGO.GetComponent<UICell> ();
+			m_cells.Add (selectHenchmenCell);
+
+			if (m_floorSlot.m_missionPlan.m_targetActor != null) {
+
+				selectHenchmenCell.m_headerText.text = "Target Henchmen: " + m_floorSlot.m_missionPlan.m_targetActor.m_actor.m_actorName;
+			} else {
+				selectHenchmenCell.m_headerText.text = "Select Target Henchmen: ";
+			}
+
+			Button b2 = selectHenchmenCell.m_buttons [0];
+			b2.onClick.AddListener (delegate {
+				SelectTargetActorButtonPressed ();
+			});
+		}
+		else if (m_floorSlot.m_missionPlan.m_currentMission == null || (m_floorSlot.m_missionPlan.m_currentMission != null
 		    && m_floorSlot.m_missionPlan.m_currentMission.m_targetType != Mission.TargetType.Lair)) {
 
 			GameObject selectSiteCellGO = (GameObject)Instantiate (m_selectSiteCellGO, m_contentParent);
@@ -186,7 +204,8 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 
 		if (m_floorSlot.m_missionPlan.m_successChance > 0 && m_floorSlot.m_missionPlan.m_currentMission.m_cost <= cp.m_currentPool &&
-			((m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_floorSlot.m_missionPlan.m_currentAsset != null) ||  
+			(	(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Actor && m_floorSlot.m_missionPlan.m_targetActor != null) ||  
+				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_floorSlot.m_missionPlan.m_currentAsset != null) ||  
 				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site && m_floorSlot.m_missionPlan.m_missionSite != null) ||
 				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Lair))) {
 
@@ -230,6 +249,12 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 	{
 		((LairApp)m_parentApp).selectSiteMenu.floorSlot = m_floorSlot;
 		ParentApp.PushMenu (((LairApp)m_parentApp).selectSiteMenu);
+	}
+
+	public void SelectTargetActorButtonPressed ()
+	{
+		((LairApp)m_parentApp).selectTargetActorMenu.floorSlot = m_floorSlot;
+		ParentApp.PushMenu (((LairApp)m_parentApp).selectTargetActorMenu);
 	}
 
 	public void SelectHenchmenButtonPressed (Player.ActorSlot slot)

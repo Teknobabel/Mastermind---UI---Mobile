@@ -101,7 +101,7 @@ Prefab:
     - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}
       propertyPath: m_apps.Array.size
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 224877463431776308, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}
@@ -267,13 +267,13 @@ Prefab:
         type: 2}
       propertyPath: m_apps.Array.data[7]
       value: 
-      objectReference: {fileID: 11400000, guid: f06196a561d3a4d31ac46faf21bb6015,
+      objectReference: {fileID: 11400000, guid: 3f3c315fd795d4ddab76724df2df4a84,
         type: 2}
     - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}
       propertyPath: m_apps.Array.data[8]
       value: 
-      objectReference: {fileID: 11400000, guid: 2f98f0c31c20548d192026c9f8af129e,
+      objectReference: {fileID: 11400000, guid: f06196a561d3a4d31ac46faf21bb6015,
         type: 2}
     - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}
@@ -563,6 +563,11 @@ Prefab:
     - target: {fileID: 4475001197571728, guid: 72f3970979da64721bf74469cc353f1a, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114628395769980032, guid: 72f3970979da64721bf74469cc353f1a,
+        type: 2}
+      propertyPath: m_forceMissionSuccess
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 72f3970979da64721bf74469cc353f1a, type: 2}

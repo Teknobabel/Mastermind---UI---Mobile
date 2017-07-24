@@ -10,6 +10,7 @@ public class LairApp : BaseApp, IObserver {
 	private Lair_SelectMissionMenu m_selectMissionMenu;
 	private Lair_SelectSiteMenu m_selectSiteMenu;
 	private Lair_SelectHenchmenMenu m_selectHenchmenMenu;
+	private Lair_SelectTargetActorMenu m_selectTargetActorMenu;
 
 	public override void InitializeApp ()
 	{
@@ -37,6 +38,11 @@ public class LairApp : BaseApp, IObserver {
 		selectSiteGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		m_selectSiteMenu = (Lair_SelectSiteMenu)selectSiteGO.GetComponent<Lair_SelectSiteMenu>();
 		m_selectSiteMenu.Initialize (this);
+
+		GameObject selectTargetActorGO = (GameObject)GameObject.Instantiate (m_menuBank[5], Vector3.zero, Quaternion.identity);
+		selectTargetActorGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_selectTargetActorMenu = (Lair_SelectTargetActorMenu)selectTargetActorGO.GetComponent<Lair_SelectTargetActorMenu>();
+		m_selectTargetActorMenu.Initialize (this);
 
 		GameController.instance.AddObserver (this);
 
@@ -114,4 +120,5 @@ public class LairApp : BaseApp, IObserver {
 	public Lair_SelectMissionMenu selectMissionMenu {get{ return m_selectMissionMenu; }}
 	public Lair_SelectSiteMenu selectSiteMenu {get{ return m_selectSiteMenu; }}
 	public Lair_SelectHenchmenMenu selectHenchmenMenu {get{ return m_selectHenchmenMenu; }}
+	public Lair_SelectTargetActorMenu selectTargetActorMenu {get{ return m_selectTargetActorMenu;}}
 }

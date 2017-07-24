@@ -29,8 +29,25 @@ public class Hire_HenchmenDetailMenu : ContactsDetailViewMenu {
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 		Actor h = GameController.instance.GetActor (m_henchmenID);
 
-		if (cp.m_currentPool >= h.m_startingCost) {
-			
+		// check for open henchmen slot
+
+		bool vacancy = false;
+
+		List<Player.ActorSlot> pool = GameController.instance.GetHiredHenchmen (0);
+
+		foreach (Player.ActorSlot aSlot in pool) {
+
+			if (aSlot.m_state == Player.ActorSlot.ActorSlotState.Empty) {
+
+				vacancy = true;
+				break;
+			}
+		}
+
+		// can player afford the actor
+
+		if (cp.m_currentPool >= h.m_startingCost && vacancy) {
+
 			Action_HireAgent hireAction = new Action_HireAgent ();
 			hireAction.m_playerNumber = 0;
 			hireAction.m_henchmenID = m_henchmenID;
