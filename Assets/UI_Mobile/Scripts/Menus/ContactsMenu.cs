@@ -85,6 +85,29 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnExit (bool animate)
 	{
+		// clear any remaining new flags
+
+		bool newStateChanged = false;
+
+		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
+
+		foreach (Player.ActorSlot aSlot in hiringPool) {
+
+			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_new) {
+
+				Action_SetActorNewState newState = new Action_SetActorNewState ();
+				newState.m_newState = false;
+				newState.m_actorSlot = aSlot;
+				GameController.instance.ProcessAction (newState);
+				newStateChanged = true;
+			}
+		}
+
+		if (newStateChanged) {
+
+			m_parentApp.SetAlerts ();
+		}
+
 		if (animate) {
 			// slide out animation
 			RectTransform rt = gameObject.GetComponent<RectTransform> ();
@@ -153,6 +176,16 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 		}
 	}
 
+	public void HenchmenCellClicked (Player.ActorSlot aSlot)
+	{
+//		Debug.Log("Henchmen Cell w id: " + henchmenID + " clicked");
+//
+//		m_henchmenDetailMenu.SetHenchmen (henchmenID);
+//
+		((HenchmenApp)(m_parentApp)).detailMenu.SetHenchmen(aSlot.m_actor.id);
+		m_parentApp.PushMenu (((HenchmenApp)(m_parentApp)).detailMenu);
+	}
+
 	private void DisplayHenchmen ()
 	{
 		while (m_cells.Count > 0) {
@@ -164,56 +197,60 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
 
-		bool newStateChanged = false;
+//		bool newStateChanged = false;
 
-		List<Actor> hList = new List<Actor> ();
+		List<Player.ActorSlot> hList = new List<Player.ActorSlot> ();
 
 		foreach (Player.ActorSlot aSlot in hiringPool) {
 
 			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
 
-				hList.Add (aSlot.m_actor);
+				hList.Add (aSlot);
 
-				if (aSlot.m_new) {
-
-					Action_SetActorNewState newState = new Action_SetActorNewState ();
-					newState.m_actorSlot = aSlot;
-					GameController.instance.ProcessAction (newState);
-					newStateChanged = true;
-				}
+//				if (aSlot.m_new) {
+//
+//					Action_SetActorNewState newState = new Action_SetActorNewState ();
+//					newState.m_actorSlot = aSlot;
+//					GameController.instance.ProcessAction (newState);
+//					newStateChanged = true;
+//				}
 			}
 		}
 
 		int emptySlots = hiringPool.Count - hList.Count;
 
-		if (newStateChanged) {
-
-			m_parentApp.SetAlerts ();
-		}
+//		if (newStateChanged) {
+//
+//			m_parentApp.SetAlerts ();
+//		}
 
 		switch (m_displayType)
 		{
 		case DisplayType.Alpha:
 
-			hList.Sort (delegate(Actor a, Actor b) {
-				return a.m_actorName.CompareTo (b.m_actorName);
+				hList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+					return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 			});
 
-			foreach (Actor h in hList) {
+				foreach (Player.ActorSlot h in hList) {
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 				UICell c = (UICell)hCell.GetComponent<UICell> ();
 				m_cells.Add (c);
 
-				string nameString = h.m_actorName;
+					string nameString = h.m_actor.m_actorName;
 				string statusString = "Active";
 
 				c.m_headerText.text = nameString;
 				c.m_bodyText.text = statusString;
-				c.m_image.texture = h.m_portrait_Compact;
+					c.m_image.texture = h.m_actor.m_portrait_Compact;
+
+				if (h.m_new) {
+					c.m_rectTransforms [1].gameObject.SetActive (true);
+				}
 
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-					((HenchmenApp)m_parentApp).HenchmenCellClicked (h.id);
+						HenchmenCellClicked (h);
 				});
 			}
 
@@ -236,21 +273,21 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 		case DisplayType.Trait:
 
-			Dictionary<string, List<Actor>> hListByTrait = new Dictionary<string, List<Actor>> ();
+			Dictionary<string, List<Player.ActorSlot>> hListByTrait = new Dictionary<string, List<Player.ActorSlot>> ();
 
-			foreach (Actor h in hList) {
+			foreach (Player.ActorSlot h in hList) {
 
-				foreach (Trait t in h.traits) {
+				foreach (Trait t in h.m_actor.traits) {
 
 					if (hListByTrait.ContainsKey (t.m_name)) {
 
-						List<Actor> l = hListByTrait [t.m_name];
+						List<Player.ActorSlot> l = hListByTrait [t.m_name];
 						l.Add (h);
 						hListByTrait [t.m_name] = l;
 
 					} else {
 
-						List<Actor> newList = new List<Actor> ();
+						List<Player.ActorSlot> newList = new List<Player.ActorSlot> ();
 						newList.Add (h);
 						hListByTrait.Add (t.m_name, newList);
 					}
@@ -259,34 +296,38 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 			if (hListByTrait.Count > 0) {
 
-				foreach(KeyValuePair<string, List<Actor>> entry in hListByTrait)
+				foreach(KeyValuePair<string, List<Player.ActorSlot>> entry in hListByTrait)
 				{
 					GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
 					UICell headerCell = (UICell)header.GetComponent<UICell> ();
 					headerCell.m_headerText.text = entry.Key.ToString ();
 					m_cells.Add (headerCell);
 
-					List<Actor> sortedList = entry.Value;
+					List<Player.ActorSlot> sortedList = entry.Value;
 
-					sortedList.Sort (delegate(Actor a, Actor b) {
-						return a.m_actorName.CompareTo (b.m_actorName);
+					sortedList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+						return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 					});
 
-					foreach (Actor h in sortedList) {
+					foreach (Player.ActorSlot h in sortedList) {
 
 						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 						UICell c = (UICell)hCell.GetComponent<UICell> ();
 						m_cells.Add (c);
 
-						string nameString = h.m_actorName;
+						string nameString = h.m_actor.m_actorName;
 						string statusString = "Active";
 
 						c.m_headerText.text = nameString;
 						c.m_bodyText.text = statusString;
-						c.m_image.texture = h.m_portrait_Compact;
+						c.m_image.texture = h.m_actor.m_portrait_Compact;
+
+						if (h.m_new) {
+							c.m_rectTransforms [1].gameObject.SetActive (true);
+						}
 
 						hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-							((HenchmenApp)m_parentApp).HenchmenCellClicked (h.id);
+							HenchmenCellClicked (h);
 						});
 					}
 				}

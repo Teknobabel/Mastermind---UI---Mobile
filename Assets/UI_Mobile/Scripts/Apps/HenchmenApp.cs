@@ -29,14 +29,14 @@ public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 		base.InitializeApp ();
 	}
 
-	public void HenchmenCellClicked (int henchmenID)
-	{
-		Debug.Log("Henchmen Cell w id: " + henchmenID + " clicked");
-
-		m_henchmenDetailMenu.SetHenchmen (henchmenID);
-
-		PushMenu (m_henchmenDetailMenu);
-	}
+//	public void HenchmenCellClicked (int henchmenID)
+//	{
+//		Debug.Log("Henchmen Cell w id: " + henchmenID + " clicked");
+//
+//		m_henchmenDetailMenu.SetHenchmen (henchmenID);
+//
+//		PushMenu (m_henchmenDetailMenu);
+//	}
 
 	public override void EnterApp ()
 	{
@@ -89,4 +89,5 @@ public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 	}
 
 	public ContactsMenu homeMenu {get{ return m_homeMenu; }}
+	public ContactsDetailViewMenu detailMenu {get{return m_henchmenDetailMenu; }}
 }

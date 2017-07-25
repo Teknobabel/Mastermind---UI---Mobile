@@ -71,6 +71,24 @@ public class Lair_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnExit (bool animate)
 	{
+		// clear out new flags
+
+		Lair l = GameController.instance.GetLair (0);
+
+		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
+
+			if (fSlot.m_new && fSlot.m_state != Lair.FloorSlot.FloorState.Empty) {
+
+				Action_SetFloorNewState newState = new Action_SetFloorNewState ();
+				newState.m_floorSlot = fSlot;
+				newState.m_newState = false;
+				GameController.instance.ProcessAction (newState);
+			}
+		}
+
+
+
+
 //		if (animate) {
 //			// slide out animation
 //			RectTransform rt = gameObject.GetComponent<RectTransform> ();
@@ -117,6 +135,23 @@ public class Lair_HomeMenu : MonoBehaviour, IMenu {
 		}
 	}
 
+	public void IdleFloorButtonClicked (int floorSlotID)
+	{
+		Debug.Log ("Idle floor clicked, start mission planning");
+
+		Lair l = GameController.instance.GetLair (0);
+
+		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
+
+			if (fSlot.m_id == floorSlotID) {
+
+				((LairApp)(m_parentApp)).planMissionMenu.floorSlot = fSlot;
+				m_parentApp.PushMenu (((LairApp)(m_parentApp)).planMissionMenu);
+				break;
+			}
+		}
+	}
+
 	private void DisplayFloors ()
 	{
 		while (m_cells.Count > 0) {
@@ -151,16 +186,12 @@ public class Lair_HomeMenu : MonoBehaviour, IMenu {
 				}
 
 				b.onClick.AddListener (delegate {
-					((LairApp)m_parentApp).IdleFloorButtonClicked (fSlot.m_id);
+					IdleFloorButtonClicked (fSlot.m_id);
 				});
 			}
 
-			if (fSlot.m_new && fSlot.m_state != Lair.FloorSlot.FloorState.Empty) {
-
-				Action_SetFloorNewState newState = new Action_SetFloorNewState ();
-				newState.m_floorSlot = fSlot;
-				newState.m_newState = false;
-				GameController.instance.ProcessAction (newState);
+			if (fSlot.m_new) {
+				floorCell.m_rectTransforms [1].gameObject.SetActive (true);
 			}
 		}
 	}

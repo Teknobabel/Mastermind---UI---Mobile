@@ -85,6 +85,29 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnExit (bool animate)
 	{
+		// clear any remaining new flags
+
+		bool newStateChanged = false;
+
+		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiringPool (0);
+
+		foreach (Player.ActorSlot aSlot in hiringPool) {
+
+			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_new) {
+
+				Action_SetActorNewState newState = new Action_SetActorNewState ();
+				newState.m_newState = false;
+				newState.m_actorSlot = aSlot;
+				GameController.instance.ProcessAction (newState);
+				newStateChanged = true;
+			}
+		}
+
+		if (newStateChanged) {
+			
+			m_parentApp.SetAlerts ();
+		}
+
 		m_isDirty = false;
 
 		if (animate) {
@@ -156,6 +179,28 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 		}
 	}
 
+	public void HenchmenCellClicked (Player.ActorSlot aSlot)
+	{
+//		Debug.Log("Henchmen Cell w id: " + henchmenID + " clicked");
+
+		// clear new state
+//
+//		if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_new) {
+//
+//			Action_SetActorNewState newState = new Action_SetActorNewState ();
+//			newState.m_newState = false;
+//			newState.m_actorSlot = aSlot;
+//			GameController.instance.ProcessAction (newState);
+//			m_parentApp.SetAlerts ();
+//			m_isDirty = true;
+//
+//		}
+
+		((HireApp)(m_parentApp)).detailMenu.SetHenchmen(aSlot.m_actor.id);
+
+		m_parentApp.PushMenu (((HireApp)(m_parentApp)).detailMenu);
+	}
+
 	private void DisplayHenchmen ()
 	{
 		while (m_cells.Count > 0) {
@@ -165,59 +210,44 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 			Destroy (c.gameObject);
 		}
 
-		bool newStateChanged = false;
-
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiringPool (0);
 
-		List<Actor> hList = new List<Actor> ();
+		List<Player.ActorSlot> hList = new List<Player.ActorSlot> ();
 
 		foreach (Player.ActorSlot aSlot in hiringPool) {
 
 			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
 
-				hList.Add (aSlot.m_actor);
-
-				if (aSlot.m_new) {
-
-					Action_SetActorNewState newState = new Action_SetActorNewState ();
-					newState.m_actorSlot = aSlot;
-					GameController.instance.ProcessAction (newState);
-					newStateChanged = true;
-				}
+				hList.Add (aSlot);
 			}
 		}
 
-		if (newStateChanged) {
-			
-			m_parentApp.SetAlerts ();
-		}
-
 		int emptySlots = hiringPool.Count - hList.Count;
-
-//		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
 
 		switch (m_displayType)
 		{
 		case DisplayType.New:
 
-			List<Actor> newHenchmenList = new List<Actor> ();
+			List<Player.ActorSlot> newHenchmenList = new List<Player.ActorSlot> ();
 
 			foreach (Player.ActorSlot aSlot in hiringPool) {
 
 				if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_new) {
 
-					newHenchmenList.Add (aSlot.m_actor);
+					newHenchmenList.Add (aSlot);
 				}
 			}
 
 			if (newHenchmenList.Count > 1) {
 
-				newHenchmenList.Sort (delegate(Actor a, Actor b) {
-					return a.m_actorName.CompareTo (b.m_actorName);
+				newHenchmenList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+					return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 				});
 			}
 
-			foreach (Actor h in newHenchmenList) {
+			foreach (Player.ActorSlot aSlot in newHenchmenList) {
+
+				Actor h = aSlot.m_actor;
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 				UICell c = (UICell)hCell.GetComponent<UICell> ();
@@ -230,8 +260,13 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 				c.m_bodyText.text = statusString;
 				c.m_image.texture = h.m_portrait_Compact;
 
+				if (aSlot.m_new) {
+					c.m_rectTransforms [1].gameObject.SetActive (true);
+				}
+
+
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-					((HireApp)m_parentApp).HenchmenCellClicked (h.id);
+					HenchmenCellClicked (aSlot);
 				});
 			}
 
@@ -252,11 +287,13 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 			break;
 		case DisplayType.Alpha:
 
-			hList.Sort (delegate(Actor a, Actor b) {
-				return a.m_actorName.CompareTo (b.m_actorName);
+			hList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+				return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 			});
 
-			foreach (Actor h in hList) {
+			foreach (Player.ActorSlot aSlot in hList) {
+
+				Actor h = aSlot.m_actor;
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 				UICell c = (UICell)hCell.GetComponent<UICell> ();
@@ -269,8 +306,12 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 				c.m_bodyText.text = statusString;
 				c.m_image.texture = h.m_portrait_Compact;
 
+				if (aSlot.m_new) {
+					c.m_rectTransforms [1].gameObject.SetActive (true);
+				}
+
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-					((HireApp)m_parentApp).HenchmenCellClicked (h.id);
+					HenchmenCellClicked (aSlot);
 				});
 			}
 
@@ -292,21 +333,21 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 		case DisplayType.Trait:
 
-			Dictionary<string, List<Actor>> hListByTrait = new Dictionary<string, List<Actor>> ();
+			Dictionary<string, List<Player.ActorSlot>> hListByTrait = new Dictionary<string, List<Player.ActorSlot>> ();
 
-			foreach (Actor h in hList) {
+			foreach (Player.ActorSlot h in hList) {
 
-				foreach (Trait t in h.traits) {
+				foreach (Trait t in h.m_actor.traits) {
 
 					if (hListByTrait.ContainsKey (t.m_name)) {
 
-						List<Actor> l = hListByTrait [t.m_name];
+						List<Player.ActorSlot> l = hListByTrait [t.m_name];
 						l.Add (h);
 						hListByTrait [t.m_name] = l;
 
 					} else {
 
-						List<Actor> newList = new List<Actor> ();
+						List<Player.ActorSlot> newList = new List<Player.ActorSlot> ();
 						newList.Add (h);
 						hListByTrait.Add (t.m_name, newList);
 					}
@@ -315,21 +356,23 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 			if (hListByTrait.Count > 0) {
 
-				foreach(KeyValuePair<string, List<Actor>> entry in hListByTrait)
+				foreach(KeyValuePair<string, List<Player.ActorSlot>> entry in hListByTrait)
 				{
 					GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
 					UICell headerCell = (UICell)header.GetComponent<UICell> ();
 					headerCell.m_headerText.text = entry.Key.ToString ();
 					m_cells.Add (headerCell);
 
-					List<Actor> sortedList = entry.Value;
+					List<Player.ActorSlot> sortedList = entry.Value;
 
-					sortedList.Sort (delegate(Actor a, Actor b) {
-						return a.m_actorName.CompareTo (b.m_actorName);
+					sortedList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+						return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 					});
 
-					foreach (Actor h in sortedList) {
+					foreach (Player.ActorSlot aSlot in sortedList) {
 
+						Actor h = aSlot.m_actor;
+							
 						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 						UICell c = (UICell)hCell.GetComponent<UICell> ();
 						m_cells.Add (c);
@@ -341,8 +384,12 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 						c.m_bodyText.text = statusString;
 						c.m_image.texture = h.m_portrait_Compact;
 
+						if (aSlot.m_new) {
+							c.m_rectTransforms [1].gameObject.SetActive (true);
+						}
+
 						hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-							((HenchmenApp)m_parentApp).HenchmenCellClicked (h.id);
+							HenchmenCellClicked (aSlot);
 						});
 					}
 				}

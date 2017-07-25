@@ -69,6 +69,21 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnExit (bool animate)
 	{
+		// clear out new flags
+
+		List<MissionPlan> missions = GameController.instance.GetMissions (0);
+
+		foreach (MissionPlan mp in missions) {
+
+			if (mp.m_new) {
+
+				Action_SetMissionNewState newState = new Action_SetMissionNewState ();
+				newState.m_plan = mp;
+				newState.m_newState = false;
+				GameController.instance.ProcessAction (newState);
+			}
+		}
+
 		//		if (animate) {
 		//			// slide out animation
 		//			RectTransform rt = gameObject.GetComponent<RectTransform> ();
@@ -130,10 +145,7 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 			if (mp.m_new) {
 
-				Action_SetMissionNewState newState = new Action_SetMissionNewState ();
-				newState.m_plan = mp;
-				newState.m_newState = false;
-				GameController.instance.ProcessAction (newState);
+				missionCell.m_rectTransforms [1].gameObject.SetActive (true);
 			}
 
 //			Button b = floorCell.m_buttons [0];

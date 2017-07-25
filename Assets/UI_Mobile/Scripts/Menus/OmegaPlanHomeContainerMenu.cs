@@ -63,6 +63,12 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnEnter (bool animate)
 	{
+		this.gameObject.SetActive (true);
+
+	}
+
+	public void OnExit (bool animate)
+	{
 		Player.OmegaPlanSlot op = GameController.instance.GetOmegaPlan (0);
 
 		if (op.m_state == Player.OmegaPlanSlot.State.New) {
@@ -73,12 +79,6 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 			GameController.instance.ProcessAction (opState);
 		}
 
-		this.gameObject.SetActive (true);
-
-	}
-
-	public void OnExit (bool animate)
-	{
 		this.gameObject.SetActive (false);
 	}
 

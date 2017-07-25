@@ -59,23 +59,6 @@ public class LairApp : BaseApp, IObserver {
 		base.EnterApp ();
 	}
 
-	public void IdleFloorButtonClicked (int floorSlotID)
-	{
-		Debug.Log ("Idle floor clicked, start mission planning");
-
-		Lair l = GameController.instance.GetLair (0);
-
-		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
-
-			if (fSlot.m_id == floorSlotID) {
-
-				m_planMissionMenu.floorSlot = fSlot;
-				PushMenu (m_planMissionMenu);
-				break;
-			}
-		}
-	}
-
 	public override void SetAlerts ()
 	{
 		Lair l = GameController.instance.GetLair (0);

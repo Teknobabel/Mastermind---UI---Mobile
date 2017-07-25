@@ -220,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_appNameText: {fileID: 114789692852881526}
   m_contentParent: {fileID: 224915295005075212}
-  m_assetCellGO: {fileID: 1145774830237794, guid: c8e92ef3dfeb742eeb92cc8c495ed757,
+  m_assetCellGO: {fileID: 1145774830237794, guid: 15406cd9bd2f14241bd1371cc1e15f5c,
     type: 2}
 --- !u!114 &114785981093157268
 MonoBehaviour:

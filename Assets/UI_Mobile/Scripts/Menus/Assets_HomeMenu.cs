@@ -36,6 +36,21 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnExit (bool animate)
 	{
+		// clear out new flags
+
+		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
+
+		foreach (Site.AssetSlot aSlot in assets) {
+			
+			if (aSlot.m_new) {
+
+				Action_SetAssetNewState setNewState = new Action_SetAssetNewState ();
+				setNewState.m_assetSlot = aSlot;
+				setNewState.m_newState = false;
+				GameController.instance.ProcessAction (setNewState);
+			}
+		}
+
 		this.gameObject.SetActive (false);
 	}
 
@@ -69,10 +84,7 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 			if (aSlot.m_new) {
 
-				Action_SetAssetNewState setNewState = new Action_SetAssetNewState ();
-				setNewState.m_assetSlot = aSlot;
-				setNewState.m_newState = false;
-				GameController.instance.ProcessAction (setNewState);
+				assetCell.m_rectTransforms [1].gameObject.SetActive (true);
 			}
 		}
 
