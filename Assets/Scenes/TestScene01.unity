@@ -601,7 +601,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 96dca2438ce6741a6ac505077e776435, type: 2}
   m_omegaPlan: {fileID: 11400000, guid: 24b2eb8af28934c3a8226b1fa5725cc4, type: 2}
   m_lair: {fileID: 11400000, guid: 9576f3168abef48ca91d478694654d0d, type: 2}
-  m_messageCenter: {fileID: 11400000, guid: 48858a8257ea84b739a360d48a6bfbe7, type: 2}
   m_regions:
   - {fileID: 0}
   - {fileID: 0}

@@ -65,19 +65,19 @@ public class GetDummyData : MonoBehaviour {
 //		m_henchmenList.Add (h3);
 	}
 
-	public MessageCenter.Conversation GetConversation (int henchmenID)
+	public DummyMessageCenter.Conversation GetConversation (int henchmenID)
 	{
 
 //		MessageCenter.Conversation convo = null;
-		foreach (MessageCenter.Conversation c in m_messageCenter.m_conversations) {
+//		foreach (DummyMessageCenter.Conversation c in m_messageCenter.m_conversations) {
+//
+//			if (c.m_henchmenID == henchmenID) {
+//
+//				return c;
+//			}
+//		}
 
-			if (c.m_henchmenID == henchmenID) {
-
-				return c;
-			}
-		}
-
-		return new MessageCenter.Conversation();
+		return new DummyMessageCenter.Conversation();
 	}
 
 	public Dictionary<int, List<string>> GetActivityFeed ()

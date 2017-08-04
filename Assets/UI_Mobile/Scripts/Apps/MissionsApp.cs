@@ -6,6 +6,7 @@ using UnityEngine;
 public class MissionsApp : BaseApp, IObserver {
 
 	private Missions_HomeMenu m_homeMenu;
+	private Missions_MissionOverviewMenu m_missionOverviewMenu;
 
 	public override void InitializeApp ()
 	{
@@ -14,11 +15,11 @@ public class MissionsApp : BaseApp, IObserver {
 		m_homeMenu = (Missions_HomeMenu)go.GetComponent<Missions_HomeMenu> ();
 		m_homeMenu.Initialize (this);
 	
-		//		GameObject detailScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
-		//		detailScreenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		//		m_henchmenDetailMenu = (Hire_HenchmenDetailMenu)detailScreenGO.GetComponent<Hire_HenchmenDetailMenu>();
-		//		m_henchmenDetailMenu.Initialize (this);
-		//		m_henchmenDetailMenu.AddObserver (this);
+		GameObject missionOverviewGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
+		missionOverviewGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_missionOverviewMenu = (Missions_MissionOverviewMenu)missionOverviewGO.GetComponent<Missions_MissionOverviewMenu>();
+		m_missionOverviewMenu.Initialize (this);
+//		m_henchmenDetailMenu.AddObserver (this);
 
 		GameController.instance.AddObserver (this);
 
@@ -77,4 +78,5 @@ public class MissionsApp : BaseApp, IObserver {
 	//	}
 
 	public Missions_HomeMenu homeMenu {get{ return m_homeMenu; }}
+	public Missions_MissionOverviewMenu missionOverviewMenu {get{ return m_missionOverviewMenu; }}
 }

@@ -13,6 +13,8 @@ public class OmegaPlansApp : BaseApp, IObserver {
 
 	private OmegaPlan_GoalInfoMenu m_opGoalInfoOverlay;
 	private OmegaPlanHomeContainerMenu m_homeMenu;
+	private OmegaPlan_PlanMissionMenu m_missionPlanningMenu;
+	private OmegaPlan_SelectHenchmenMenu m_selectHenchmenMenu;
 
 	public override void InitializeApp ()
 	{
@@ -33,15 +35,25 @@ public class OmegaPlansApp : BaseApp, IObserver {
 		m_opGoalInfoOverlay = (OmegaPlan_GoalInfoMenu) infoScreenGO.GetComponent<OmegaPlan_GoalInfoMenu> ();
 		m_opGoalInfoOverlay.Initialize (this);
 
+		GameObject missionPlanningGO = (GameObject)GameObject.Instantiate (m_menuBank[3], Vector3.zero, Quaternion.identity);
+		missionPlanningGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_missionPlanningMenu = (OmegaPlan_PlanMissionMenu)missionPlanningGO.GetComponent<OmegaPlan_PlanMissionMenu> ();
+		m_missionPlanningMenu.Initialize (this);
+
+		GameObject selectHenchmenGO = (GameObject)GameObject.Instantiate (m_menuBank[4], Vector3.zero, Quaternion.identity);
+		selectHenchmenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_selectHenchmenMenu = (OmegaPlan_SelectHenchmenMenu)selectHenchmenGO.GetComponent<OmegaPlan_SelectHenchmenMenu> ();
+		m_selectHenchmenMenu.Initialize (this);
+
 		m_menuParent.gameObject.SetActive (false);
 
 		base.InitializeApp ();
 	}
 
-	public void GoalButtonClicked ()
-	{
-		PushMenu (m_opGoalInfoOverlay);
-	}
+//	public void GoalButtonClicked ()
+//	{
+//		PushMenu (m_opGoalInfoOverlay);
+//	}
 
 	public override void EnterApp ()
 	{
@@ -66,9 +78,21 @@ public class OmegaPlansApp : BaseApp, IObserver {
 
 		int alerts = 0;
 
-		if (opSlot.m_state == Player.OmegaPlanSlot.State.New) {
+//		if (opSlot.m_state == Player.OmegaPlanSlot.State.New) {
+//
+//			alerts++;
+//		}
+		for (int i = 0; i < opSlot.m_omegaPlan.phases.Count; i++) {
+			
+			OmegaPlan.Phase phase = opSlot.m_omegaPlan.phases [i];
 
-			alerts++;
+			foreach (OmegaPlan.OPGoal goal in phase.m_goals) {
+
+				if (i == opSlot.m_omegaPlan.currentPhase && goal.m_new) {
+
+					alerts++;
+				}
+			}
 		}
 
 		m_appIconInstance.SetAlerts (alerts);
@@ -85,4 +109,8 @@ public class OmegaPlansApp : BaseApp, IObserver {
 			break;
 		}
 	}
+
+	public OmegaPlan_PlanMissionMenu missionPlanningMenu {get{ return m_missionPlanningMenu;}}
+	public OmegaPlan_SelectHenchmenMenu selectHenchmenMenu {get{ return m_selectHenchmenMenu;}}
+	public OmegaPlanHomeContainerMenu homeMenu {get{ return m_homeMenu;}}
 }

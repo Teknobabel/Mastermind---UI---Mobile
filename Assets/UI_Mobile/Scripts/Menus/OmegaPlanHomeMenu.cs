@@ -44,27 +44,58 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 
 		m_phaseText.text = "Phase " + m_phaseNumber.ToString();
 
+
+	}
+
+	private void DisplayGoals ()
+	{
+		while (m_cells.Count > 0) {
+
+			UICell c = m_cells [0];
+			m_cells.RemoveAt (0);
+			Destroy (c.gameObject);
+		}
+
+		Player.OmegaPlanSlot omegaPlan = GameController.instance.GetOmegaPlan (0);
+
 		// populate with goals
 
-		foreach (OPGoal opGoal in m_phaseGoals.m_goals) {
+		foreach (OmegaPlan.OPGoal g in m_phaseGoals.m_goals) {
 
 			GameObject gCell = (GameObject)Instantiate (m_opGoalCell, m_opGoalListParent);
 			UICell c = (UICell)gCell.GetComponent<UICell> ();
 			m_cells.Add (c);
 
-			gCell.GetComponent<Button>().onClick.AddListener(delegate { ((OmegaPlansApp)m_parentApp).GoalButtonClicked(); });
+			if (g.m_state != OmegaPlan.OPGoal.State.Complete) {
+				gCell.GetComponent<Button> ().onClick.AddListener (delegate {
+					GoalButtonClicked (g);
+				});
+			}
 
-			c.m_headerText.text = opGoal.name;
-			c.m_bodyText.text = "Inactive";
+			c.m_headerText.text = g.m_mission.m_name;
+			c.m_bodyText.text = g.m_state.ToString ();
+
+			if (g.m_new && (m_phaseNumber-1) == omegaPlan.m_omegaPlan.currentPhase) {
+
+				c.m_rectTransforms [1].gameObject.SetActive (true);
+			}
 		}
 	}
 
+	private void GoalButtonClicked (OmegaPlan.OPGoal goal)
+	{
+		// push mission planning menu
+
+		((OmegaPlansApp)(m_parentApp)).missionPlanningMenu.goal = goal;
+		ParentApp.PushMenu (((OmegaPlansApp)(m_parentApp)).missionPlanningMenu);
+
+	}
 
 
 	public void OnEnter (bool animate)
 	{
 		this.gameObject.SetActive (true);
-
+		DisplayGoals ();
 
 
 //		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
@@ -148,7 +179,8 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 
 	public void OnReturn ()
 	{
-
+		Debug.Log ("SLDKFSLDKFJ;");
+		DisplayGoals ();
 	}
 
 	public IApp ParentApp 

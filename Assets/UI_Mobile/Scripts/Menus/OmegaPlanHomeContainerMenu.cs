@@ -13,6 +13,10 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	private IApp m_parentApp;
 
+	private List<IMenu> m_childScreens = new List<IMenu> ();
+
+	private bool m_isDirty = false;
+
 	// Use this for initialization
 //	void Start () {
 //
@@ -34,7 +38,7 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 
 		Player.OmegaPlanSlot op = GameController.instance.GetOmegaPlan (0);
 
-		int numPages = op.m_omegaPlan.m_phases.Length;
+		int numPages = op.m_omegaPlan.phases.Count;
 
 		for (int i = 0; i < numPages; i++) {
 
@@ -44,9 +48,10 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 			le.preferredHeight = screenHeight;
 
 			OmegaPlanHomeMenu screen = go.GetComponent<OmegaPlanHomeMenu> ();
-			screen.phaseGoals = op.m_omegaPlan.m_phases [i];
+			screen.phaseGoals = op.m_omegaPlan.phases [i];
 			screen.phaseNumber = i + 1;
 			screen.Initialize (m_parentApp);
+			m_childScreens.Add (screen);
 
 		}
 
@@ -63,21 +68,50 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnEnter (bool animate)
 	{
+		foreach (IMenu menu in m_childScreens) {
+
+			menu.OnEnter (animate);
+		}
+
 		this.gameObject.SetActive (true);
 
 	}
 
 	public void OnExit (bool animate)
 	{
+		foreach (IMenu menu in m_childScreens) {
+
+			menu.OnExit (animate);
+		}
+
 		Player.OmegaPlanSlot op = GameController.instance.GetOmegaPlan (0);
 
-		if (op.m_state == Player.OmegaPlanSlot.State.New) {
+		for (int i = 0; i < op.m_omegaPlan.phases.Count; i++) {
+			
+			OmegaPlan.Phase phase = op.m_omegaPlan.phases [i];
 
-			Action_SetOmegaPlanNewState opState = new Action_SetOmegaPlanNewState ();
-			opState.m_newState = false;
-			opState.m_omegaPlanSlot = op;
-			GameController.instance.ProcessAction (opState);
+			if (i == op.m_omegaPlan.currentPhase) {
+
+				foreach (OmegaPlan.OPGoal goal in phase.m_goals) {
+
+					if (goal.m_new) {
+
+						Action_SetOmegaPlanNewState newState = new Action_SetOmegaPlanNewState ();
+						newState.m_newState = false;
+						newState.m_goal = goal;
+						GameController.instance.ProcessAction (newState);
+					}
+				}
+			}
 		}
+
+//		if (op.m_state == Player.OmegaPlanSlot.State.New) {
+//
+//			Action_SetOmegaPlanNewState opState = new Action_SetOmegaPlanNewState ();
+//			opState.m_newState = false;
+//			opState.m_omegaPlanSlot = op;
+//			GameController.instance.ProcessAction (opState);
+//		}
 
 		this.gameObject.SetActive (false);
 	}
@@ -89,7 +123,17 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnReturn ()
 	{
+		if (m_isDirty) {
 
+			m_isDirty = false;
+
+			// refresh goals screens
+
+			foreach (IMenu menu in m_childScreens) {
+
+				menu.OnReturn ();
+			}
+		}
 	}
 
 	public IApp ParentApp 
@@ -104,6 +148,7 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 			m_pageIndicator.SetPage (((ScrollRectSnap)subject).target);
 			break;
 		}
-
 	}
+
+	public bool isDirty {set{m_isDirty = value;}}
 }

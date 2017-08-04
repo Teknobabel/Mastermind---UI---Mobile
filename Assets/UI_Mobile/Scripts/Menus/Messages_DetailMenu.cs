@@ -40,7 +40,7 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 
 	public void DisplayMessages ()
 	{
-		MessageCenter.Conversation convo = GetDummyData.instance.GetConversation (m_henchmenID);
+		DummyMessageCenter.Conversation convo = GetDummyData.instance.GetConversation (m_henchmenID);
 		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
 
 		m_henchmenInfo.m_image.texture = h.m_portrait_Small;

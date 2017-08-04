@@ -124,6 +124,12 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 	}
 
+	public void MissionButtonPressed (MissionPlan mp)
+	{
+		((MissionsApp)(m_parentApp)).missionOverviewMenu.missionPlan = mp;
+		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).missionOverviewMenu);
+	}
+
 	private void DisplayMissions ()
 	{
 		while (m_cells.Count > 0) {
@@ -148,10 +154,10 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 				missionCell.m_rectTransforms [1].gameObject.SetActive (true);
 			}
 
-//			Button b = floorCell.m_buttons [0];
-//			b.onClick.AddListener (delegate {
-//				((LairApp)m_parentApp).IdleFloorButtonClicked (fSlot.m_id);
-//			});
+			Button b = missionCell.m_buttons [0];
+			b.onClick.AddListener (delegate {
+				MissionButtonPressed (mp);
+			});
 		}
 	}
 

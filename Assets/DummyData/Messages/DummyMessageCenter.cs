@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class MessageCenter : ScriptableObject {
+public class DummyMessageCenter : ScriptableObject {
 
 	[SerializeField]
 	public List<Conversation> m_conversations;

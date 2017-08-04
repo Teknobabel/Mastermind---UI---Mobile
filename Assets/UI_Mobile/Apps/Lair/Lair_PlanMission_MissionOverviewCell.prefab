@@ -340,7 +340,8 @@ MonoBehaviour:
   m_rectTransforms:
   - {fileID: 224658107008442484}
   - {fileID: 224254191035699128}
-  m_buttons: []
+  m_buttons:
+  - {fileID: 114917019699812816}
   m_rawImages: []
   m_images: []
   m_sprites: []
