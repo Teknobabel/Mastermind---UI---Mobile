@@ -73,6 +73,15 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 			headerCell.m_headerText.color = Color.black;
 			m_cells.Add (headerCell);
 
+			if (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region) {
+
+				Button b = headerCell.m_buttons [0];
+				b.interactable = true;
+				b.onClick.AddListener (delegate {
+					RegionSelected(r);
+				});
+			}
+
 			foreach (Site s in r.sites) {
 
 				// create site info cell
@@ -110,12 +119,21 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 
 				// create site trait cells
 
-				foreach (Trait t in s.traits) {
+				foreach (SiteTrait t in s.traits) {
 
 					GameObject siteTrait = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
 					UICell siteTraitCell = (UICell)siteTrait.GetComponent<UICell> ();
 					siteTraitCell.m_headerText.text = "Trait: " + t.m_name;
 					m_cells.Add (siteTraitCell);
+
+					if (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait) {
+
+						Button b = siteTraitCell.m_buttons [0];
+						b.interactable = true;
+						b.onClick.AddListener (delegate {
+							SiteTraitSelected(t, s);
+						});
+					}
 				}
 
 				// create site asset cells
@@ -153,6 +171,28 @@ public class Lair_SelectSiteMenu : MonoBehaviour, IMenu {
 		Debug.Log( "Site: " + s.m_siteName + " selected");
 
 		m_floorSlot.m_missionPlan.m_missionSite = s;
+
+		((LairApp)m_parentApp).planMissionMenu.isDirty = true;
+
+		ParentApp.PopMenu ();
+	}
+
+	public void SiteTraitSelected (SiteTrait trait, Site s)
+	{
+		Debug.Log("Site Trait: " + trait.m_name + " Selected");
+
+		m_floorSlot.m_missionPlan.m_missionSite = s;
+		m_floorSlot.m_missionPlan.m_targetSiteTrait = trait;
+
+		((LairApp)m_parentApp).planMissionMenu.isDirty = true;
+
+		ParentApp.PopMenu ();
+
+	}
+
+	public void RegionSelected (Region r)
+	{
+		m_floorSlot.m_missionPlan.m_targetRegion = r;
 
 		((LairApp)m_parentApp).planMissionMenu.isDirty = true;
 

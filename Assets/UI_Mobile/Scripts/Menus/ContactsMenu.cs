@@ -239,7 +239,7 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 				m_cells.Add (c);
 
 					string nameString = h.m_actor.m_actorName;
-				string statusString = "Active";
+				string statusString = "Status: " + h.m_actor.m_status.m_name;
 
 				c.m_headerText.text = nameString;
 				c.m_bodyText.text = statusString;
@@ -316,7 +316,7 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 						m_cells.Add (c);
 
 						string nameString = h.m_actor.m_actorName;
-						string statusString = "Active";
+						string statusString = "Status: " + h.m_actor.m_status.m_name;
 
 						c.m_headerText.text = nameString;
 						c.m_bodyText.text = statusString;

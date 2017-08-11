@@ -525,7 +525,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &596487922
+--- !u!224 &751462277 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224877463431776308, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
+    type: 2}
+  m_PrefabInternal: {fileID: 324391013}
+--- !u!1001 &765298182
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -564,19 +569,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114628395769980032, guid: 72f3970979da64721bf74469cc353f1a,
-        type: 2}
-      propertyPath: m_forceMissionSuccess
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 72f3970979da64721bf74469cc353f1a, type: 2}
   m_IsPrefabParent: 0
---- !u!224 &751462277 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 224877463431776308, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
-    type: 2}
-  m_PrefabInternal: {fileID: 324391013}
 --- !u!1 &1230241555 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1092769295617594, guid: fe35d3103f8cf4a729e3a7aa03c11f18,

@@ -161,6 +161,39 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 				b2.gameObject.SetActive (false);
 			}
 
+		} else if (m_floorSlot.m_missionPlan.m_currentMission != null && m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region) {
+
+			GameObject selectSiteCellGO = (GameObject)Instantiate (m_selectSiteCellGO, m_contentParent);
+			UICell selectSiteCell = (UICell)selectSiteCellGO.GetComponent<UICell> ();
+			m_cells.Add (selectSiteCell);
+
+			string s = "Current Region: ";
+
+			if (m_floorSlot.m_missionPlan.m_targetRegion != null) {
+
+				s += m_floorSlot.m_missionPlan.m_targetRegion.m_regionName;
+			} else {
+				s += "None";
+			}
+
+			selectSiteCell.m_headerText.text = s;
+
+			Button b2 = selectSiteCell.m_buttons [0];
+
+			if (m_floorSlot.m_missionPlan.m_state == MissionPlan.State.Planning) {
+
+				Text t = b2.GetComponentInChildren<Text> ();
+				t.text = "Select Region";
+
+				b2.onClick.AddListener (delegate {
+					SelectSiteButtonPressed ();
+				});
+
+			} else {
+
+				b2.gameObject.SetActive (false);
+			}
+
 		}
 		else if (m_floorSlot.m_missionPlan.m_currentMission == null || (m_floorSlot.m_missionPlan.m_currentMission != null
 		    && m_floorSlot.m_missionPlan.m_currentMission.m_targetType != Mission.TargetType.Lair)) {
@@ -176,6 +209,9 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 				if (m_floorSlot.m_missionPlan.m_currentMission != null && m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
 
 					s += ", Asset: " + m_floorSlot.m_missionPlan.m_currentAsset.m_asset.m_name;
+				} else if (m_floorSlot.m_missionPlan.m_currentMission != null && m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait) {
+
+					s += ", Trait: " + m_floorSlot.m_missionPlan.m_targetSiteTrait.m_name;
 				}
 
 				selectSiteCell.m_headerText.text = s;
@@ -242,7 +278,9 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 			    ((m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Actor && m_floorSlot.m_missionPlan.m_targetActor != null) ||
 			    (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_floorSlot.m_missionPlan.m_currentAsset != null) ||
 			    (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site && m_floorSlot.m_missionPlan.m_missionSite != null) ||
-			    (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Lair))) {
+			    (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Lair) || 
+				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait && m_floorSlot.m_missionPlan.m_targetSiteTrait != null) ||
+				(m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region && m_floorSlot.m_missionPlan.m_targetRegion != null))) {
 
 				startMissionCell.m_buttons [0].interactable = true;
 

@@ -254,7 +254,31 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 				m_cells.Add (c);
 
 				string nameString = h.m_actorName;
-				string statusString = "Active";
+//				string statusString = "Status: " + h.m_status.m_name;
+
+				string statusString = "";
+
+				switch (aSlot.m_actor.m_rank) {
+
+				case 1:
+					statusString += "Novice ";
+					break;
+				case 2:
+					statusString += "Skilled ";
+					break;
+				case 3:
+					statusString += "Veteran ";
+					break;
+				case 4:
+					statusString += "Master ";
+					break;
+				}
+
+				if (aSlot.m_actor.traits.Count > 0) {
+
+					Trait t = aSlot.m_actor.traits [0];
+					statusString += t.m_name;
+				}
 
 				c.m_headerText.text = nameString;
 				c.m_bodyText.text = statusString;
@@ -300,7 +324,31 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 				m_cells.Add (c);
 
 				string nameString = h.m_actorName;
-				string statusString = "Active";
+//				string statusString = "Status: " + h.m_status.m_name;
+
+				string statusString = "";
+
+				switch (aSlot.m_actor.m_rank) {
+
+				case 1:
+					statusString += "Novice ";
+					break;
+				case 2:
+					statusString += "Skilled ";
+					break;
+				case 3:
+					statusString += "Veteran ";
+					break;
+				case 4:
+					statusString += "Master ";
+					break;
+				}
+
+				if (aSlot.m_actor.traits.Count > 0) {
+
+					Trait t = aSlot.m_actor.traits [0];
+					statusString += t.m_name;
+				}
 
 				c.m_headerText.text = nameString;
 				c.m_bodyText.text = statusString;
@@ -378,7 +426,31 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 						m_cells.Add (c);
 
 						string nameString = h.m_actorName;
-						string statusString = "Active";
+//						string statusString = "Status: " + h.m_status.m_name;
+
+						string statusString = "";
+
+						switch (aSlot.m_actor.m_rank) {
+
+						case 1:
+							statusString += "Novice ";
+							break;
+						case 2:
+							statusString += "Skilled ";
+							break;
+						case 3:
+							statusString += "Veteran ";
+							break;
+						case 4:
+							statusString += "Master ";
+							break;
+						}
+
+						if (aSlot.m_actor.traits.Count > 0) {
+
+							Trait t = aSlot.m_actor.traits [0];
+							statusString += t.m_name;
+						}
 
 						c.m_headerText.text = nameString;
 						c.m_bodyText.text = statusString;

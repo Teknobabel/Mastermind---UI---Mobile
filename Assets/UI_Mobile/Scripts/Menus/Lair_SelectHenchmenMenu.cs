@@ -99,7 +99,7 @@ public class Lair_SelectHenchmenMenu : MonoBehaviour, IMenu {
 			m_cells.Add (c);
 
 			string nameString = h.m_actorName;
-			string statusString = "Active";
+			string statusString = "Status: " + h.m_status.m_name;
 
 			c.m_headerText.text = nameString;
 			c.m_bodyText.text = statusString;

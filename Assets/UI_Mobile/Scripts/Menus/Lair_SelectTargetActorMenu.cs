@@ -66,7 +66,7 @@ public class Lair_SelectTargetActorMenu : MonoBehaviour, IMenu {
 				UICell actorCell = (UICell)actorCellGO.GetComponent<UICell> ();
 
 				string nameString = aSlot.m_actor.m_actorName;
-				string statusString = "Active";
+				string statusString = "Status: " + aSlot.m_actor.m_status.m_name;
 
 				actorCell.m_headerText.text = nameString;
 				actorCell.m_bodyText.text = statusString;
