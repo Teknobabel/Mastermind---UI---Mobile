@@ -80,6 +80,7 @@ public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 	{
 		switch (thisEvent)
 		{
+		case GameEvent.Henchmen_NewStateChanged:
 		case GameEvent.Player_HenchmenPoolChanged:
 
 			SetAlerts ();

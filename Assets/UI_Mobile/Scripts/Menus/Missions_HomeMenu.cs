@@ -9,7 +9,8 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 	m_appNameText;
 
 	public GameObject
-	m_missionCellGO;
+	m_missionCellGO,
+	m_noMissionsCellGO;
 
 	public Transform
 	m_contentParent;
@@ -17,6 +18,8 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 	private IApp m_parentApp;
 
 	private List<UICell> m_cells = new List<UICell>();
+
+	private bool m_isDirty = false;
 
 	// Use this for initialization
 	void Start () {
@@ -110,7 +113,7 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 //		RectTransform rt = gameObject.GetComponent<RectTransform> ();
 //		rt.anchoredPosition = Vector2.zero;
-
+		m_isDirty = false;
 		this.gameObject.SetActive (false);
 	}
 
@@ -121,13 +124,22 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnReturn ()
 	{
+		if (m_isDirty) {
 
+			m_isDirty = false;
+			DisplayMissions ();
+		}
 	}
 
 	public void MissionButtonPressed (MissionPlan mp)
 	{
 		((MissionsApp)(m_parentApp)).missionOverviewMenu.missionPlan = mp;
 		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).missionOverviewMenu);
+	}
+
+	public void NewMissionButtonPressed ()
+	{
+		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).planMissionMenu);
 	}
 
 	private void DisplayMissions ()
@@ -141,26 +153,36 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 		List<MissionPlan> missions = GameController.instance.GetMissions (0);
 
-		foreach (MissionPlan mp in missions) {
+		if (missions.Count == 0) {
 
-			GameObject missionCellGO = (GameObject)Instantiate (m_missionCellGO, m_contentParent);
-			UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
-			missionCell.m_headerText.text = mp.m_currentMission.m_name;
-			missionCell.m_bodyText.text = mp.m_turnNumber.ToString () + " / " + mp.m_currentMission.m_duration.ToString () + " Turns";
-			m_cells.Add (missionCell);
+			GameObject noMissionsCellGO = (GameObject)Instantiate (m_noMissionsCellGO, m_contentParent);
+			UICell noMissionsCell = (UICell)noMissionsCellGO.GetComponent<UICell> ();
+			m_cells.Add (noMissionsCell);
 
-			if (mp.m_new) {
+		} else {
 
-				missionCell.m_rectTransforms [1].gameObject.SetActive (true);
+			foreach (MissionPlan mp in missions) {
+
+				GameObject missionCellGO = (GameObject)Instantiate (m_missionCellGO, m_contentParent);
+				UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
+				missionCell.m_headerText.text = mp.m_currentMission.m_name;
+				missionCell.m_bodyText.text = mp.m_turnNumber.ToString () + " / " + mp.m_currentMission.m_duration.ToString () + " Turns";
+				m_cells.Add (missionCell);
+
+				if (mp.m_new) {
+
+					missionCell.m_rectTransforms [1].gameObject.SetActive (true);
+				}
+
+				Button b = missionCell.m_buttons [0];
+				b.onClick.AddListener (delegate {
+					MissionButtonPressed (mp);
+				});
 			}
-
-			Button b = missionCell.m_buttons [0];
-			b.onClick.AddListener (delegate {
-				MissionButtonPressed (mp);
-			});
 		}
 	}
 
 	public IApp ParentApp 
 	{ get{ return m_parentApp; }}
+	public bool isDirty {get{return m_isDirty;} set{ m_isDirty = value; }}
 }

@@ -138,33 +138,33 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 			Destroy (c.gameObject);
 		}
 
-		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
+//		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
 
 //		switch (m_displayType)
 //		{
 //		case DisplayType.Alpha:
 
-			hList.Sort (delegate(Henchmen a, Henchmen b) {
-				return a.m_name.CompareTo (b.m_name);
-			});
-
-			foreach (Henchmen h in hList) {
-
-				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-				UICell c = (UICell)hCell.GetComponent<UICell> ();
-				m_cells.Add (c);
-
-				string nameString = h.m_name;
-				string statusString = "Active";
-
-				c.m_headerText.text = nameString;
-				c.m_bodyText.text = statusString;
-				c.m_image.texture = h.m_portrait_Small;
-
-				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-				((MessagesApp)m_parentApp).HenchmenCellClicked (h.m_id);
-				});
-			}
+//			hList.Sort (delegate(Henchmen a, Henchmen b) {
+//				return a.m_name.CompareTo (b.m_name);
+//			});
+//
+//			foreach (Henchmen h in hList) {
+//
+//				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+//				UICell c = (UICell)hCell.GetComponent<UICell> ();
+//				m_cells.Add (c);
+//
+//				string nameString = h.m_name;
+//				string statusString = "Active";
+//
+//				c.m_headerText.text = nameString;
+//				c.m_bodyText.text = statusString;
+//				c.m_image.texture = h.m_portrait_Small;
+//
+//				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
+//				((MessagesApp)m_parentApp).HenchmenCellClicked (h.m_id);
+//				});
+//			}
 //			break;
 //
 //		case DisplayType.DummyTrait:

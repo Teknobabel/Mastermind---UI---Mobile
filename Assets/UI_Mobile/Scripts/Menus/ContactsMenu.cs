@@ -87,7 +87,7 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 	{
 		// clear any remaining new flags
 
-		bool newStateChanged = false;
+//		bool newStateChanged = false;
 
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
 
@@ -99,14 +99,14 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 				newState.m_newState = false;
 				newState.m_actorSlot = aSlot;
 				GameController.instance.ProcessAction (newState);
-				newStateChanged = true;
+//				newStateChanged = true;
 			}
 		}
 
-		if (newStateChanged) {
-
-			m_parentApp.SetAlerts ();
-		}
+//		if (newStateChanged) {
+//
+//			m_parentApp.SetAlerts ();
+//		}
 
 		if (animate) {
 			// slide out animation

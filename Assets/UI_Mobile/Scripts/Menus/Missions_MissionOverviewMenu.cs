@@ -259,7 +259,23 @@ public class Missions_MissionOverviewMenu : MonoBehaviour, IMenu {
 			cb.normalColor = Color.red;
 			cb.disabledColor = Color.gray;
 			cancelMissionCell.m_buttons [0].colors = cb;
+
+			Button b3 = cancelMissionCell.m_buttons [0];
+			b3.onClick.AddListener (delegate {
+				CancelMissionButtonPressed (m_missionPlan);
+			});
 		}
+	}
+
+	public void CancelMissionButtonPressed (MissionPlan plan)
+	{
+		Action_CancelMission cancelMission = new Action_CancelMission ();
+		cancelMission.m_missionPlan = plan;
+		cancelMission.m_playerID = 0;
+		GameController.instance.ProcessAction (cancelMission);
+
+		((MissionsApp)ParentApp).homeMenu.isDirty = true;
+		m_parentApp.PopMenu ();
 	}
 
 //	public void StartMissionButtonPressed ()

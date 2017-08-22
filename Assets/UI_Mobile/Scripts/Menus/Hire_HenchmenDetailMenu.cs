@@ -65,4 +65,34 @@ public class Hire_HenchmenDetailMenu : ContactsDetailViewMenu {
 			ParentApp.PopMenu ();
 		}
 	}
+
+	public void DismissButtonPressed ()
+	{
+		Debug.Log ("Dismiss Henchmen Button Pressed");
+
+		Action_RemoveHireable dismissHenchmen = new Action_RemoveHireable ();
+		dismissHenchmen.m_playerID = 0;
+		dismissHenchmen.m_actorID = m_henchmenID;
+		GameController.instance.ProcessAction (dismissHenchmen);
+
+//		Player player = GameEngine.instance.game.playerList [0];
+//
+//		foreach (Player.ActorSlot aSlot in player.hiringPool.m_hireSlots) {
+//
+//			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_actor.id == m_henchmenID) {
+//
+//				Actor a = aSlot.m_actor;
+//
+//				aSlot.RemoveHenchmen ();
+//
+//				player.hiringPool.m_availableHenchmen.Add (a);
+//
+//				break;
+//			}
+//		}
+
+		((HireApp)ParentApp).homeMenu.isDirty = true;
+
+		ParentApp.PopMenu ();
+	}
 }

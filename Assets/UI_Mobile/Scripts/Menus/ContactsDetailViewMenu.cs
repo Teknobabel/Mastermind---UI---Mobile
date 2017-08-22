@@ -19,7 +19,8 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 	m_portrait;
 
 	public Text
-	m_name;
+	m_name,
+	m_upkeepCost;
 
 	public GameObject
 	m_traitCellGO,
@@ -72,6 +73,9 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 
 //			ContactsDetailViewMenu cMenu = (ContactsDetailViewMenu)m_menuParent.GetComponent<ContactsDetailViewMenu> ();
 			m_name.text = h.m_actorName;
+			if (m_upkeepCost != null) {
+				m_upkeepCost.text = "-" + h.m_turnCost.ToString ();
+			}
 			m_portrait.texture = h.m_portrait_Large;
 		}
 		this.gameObject.SetActive (true);

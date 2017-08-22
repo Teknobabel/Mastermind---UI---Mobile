@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
+public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
 
 	public GameObject
 	m_missionOverviewCellGO,
@@ -23,22 +23,20 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 //	private Lair.FloorSlot m_floorSlot;
 
-	private OmegaPlan.OPGoal m_goal;
-
 	private bool m_isDirty = false;
+
+	private MissionPlan m_missionPlan = new MissionPlan ();
 
 	public void Initialize (IApp parentApp)
 	{
 		m_parentApp = parentApp;
-		//		m_appNameText.text = parentApp.Name;
-		//		m_infoPanelToggle.AddObserver (this);
-		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
 	public void OnEnter (bool animate)
 	{
 		this.gameObject.SetActive (true);
+		m_missionPlan = new MissionPlan ();
 		DisplayMissionPlan ();
 
 	}
@@ -61,10 +59,11 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 			m_isDirty = false;
 
+			if (m_missionPlan.m_floorSlot != null) {
+				m_missionPlan.m_actorSlots = m_missionPlan.m_floorSlot.m_actorSlots;
+			}
 
-//			m_floorSlot.m_missionPlan.m_actorSlots = m_floorSlot.m_actorSlots;
-
-			GameController.instance.CompileMission (m_goal.plan);
+			GameController.instance.CompileMission (m_missionPlan);
 
 			DisplayMissionPlan ();
 		}
@@ -80,22 +79,22 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 		}
 
 		// display mission overview cell
-		Debug.Log(m_goal.plan.m_currentMission);
+
 		GameObject missionOverviewCellGO = (GameObject)Instantiate (m_missionOverviewCellGO, m_contentParent);
 		UICell missionOverviewCell = (UICell)missionOverviewCellGO.GetComponent<UICell> ();
 		m_cells.Add (missionOverviewCell);
-		missionOverviewCell.m_bodyText.text = "Success Chance: " + m_goal.plan.m_successChance.ToString () + "%";
+		missionOverviewCell.m_bodyText.text = "Success Chance: " + m_missionPlan.m_successChance.ToString () + "%";
 
 		// if mission has been compiled, display traits
 
-		foreach (Trait t in m_goal.plan.m_requiredTraits) {
+		foreach (Trait t in m_missionPlan.m_requiredTraits) {
 
 			GameObject traitCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
 			UICell traitCell = (UICell)traitCellGO.GetComponent<UICell> ();
 			m_cells.Add (traitCell);
 			traitCell.m_headerText.text = t.m_name;
 
-			if (m_goal.plan.m_matchingTraits.Contains (t)) {
+			if (m_missionPlan.m_matchingTraits.Contains (t)) {
 
 				traitCell.m_headerText.color = Color.green;
 			}
@@ -103,7 +102,7 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 		// if mission has been compiled, display assets
 
-		if (goal.plan.m_requiredAssets.Count > 0) {
+		if (m_missionPlan.m_requiredAssets.Count > 0) {
 
 			Player player = GameEngine.instance.game.playerList [0];
 			List<Asset> assets = new List<Asset> ();
@@ -113,7 +112,7 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 				assets.Add (aSlot.m_asset);
 			}
 
-			foreach (Asset a in goal.plan.m_requiredAssets) {
+			foreach (Asset a in m_missionPlan.m_requiredAssets) {
 
 				GameObject assetCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
 				UICell assetCell = (UICell)assetCellGO.GetComponent<UICell> ();
@@ -134,61 +133,104 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 		UICell selectMissionCell = (UICell)selectMissionCellGO.GetComponent<UICell> ();
 		m_cells.Add (selectMissionCell);
 
-		if (m_goal.plan.m_currentMission != null) {
+		if (m_missionPlan.m_currentMission != null) {
 
-			selectMissionCell.m_headerText.text = "Current Mission: " + m_goal.plan.m_currentMission.m_name;
+			selectMissionCell.m_headerText.text = "Current Mission: " + m_missionPlan.m_currentMission.m_name;
 		}
 
 		Button b = selectMissionCell.m_buttons [0];
-		b.gameObject.SetActive (false);
-//		b.onClick.AddListener (delegate {
-//			SelectMissionButtonPressed ();
-//		});
+
+		if (m_missionPlan.m_state == MissionPlan.State.Planning) {
+
+			b.onClick.AddListener (delegate {
+				SelectMissionButtonPressed ();
+			});
+
+		} else {
+
+			b.gameObject.SetActive (false);
+		}
+
 
 
 
 		// display current state of site selection
 
-		if (m_goal.plan.m_currentMission != null && m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Actor) {
+		if (m_missionPlan.m_currentMission != null && m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Actor) {
 
 			GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_selectHenchmenCellGO, m_contentParent);
 			UICell selectHenchmenCell = (UICell)selectHenchmenCellGO.GetComponent<UICell> ();
 			m_cells.Add (selectHenchmenCell);
 
-			if (m_goal.plan.m_targetActor != null) {
+			if (m_missionPlan.m_targetActor != null) {
 
-				selectHenchmenCell.m_headerText.text = "Target Henchmen: " + m_goal.plan.m_targetActor.m_actor.m_actorName;
+				selectHenchmenCell.m_headerText.text = "Target Henchmen: " + m_missionPlan.m_targetActor.m_actor.m_actorName;
 			} else {
 				selectHenchmenCell.m_headerText.text = "Select Target Henchmen: ";
 			}
 
 			Button b2 = selectHenchmenCell.m_buttons [0];
 
-			if (m_goal.m_state == OmegaPlan.OPGoal.State.Incomplete) {
-				
+			if (m_missionPlan.m_state == MissionPlan.State.Planning) {
+
 				b2.onClick.AddListener (delegate {
 					SelectTargetActorButtonPressed ();
+				});
+			} else {
+
+				b2.gameObject.SetActive (false);
+			}
+
+		} else if (m_missionPlan.m_currentMission != null && m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region) {
+
+			GameObject selectSiteCellGO = (GameObject)Instantiate (m_selectSiteCellGO, m_contentParent);
+			UICell selectSiteCell = (UICell)selectSiteCellGO.GetComponent<UICell> ();
+			m_cells.Add (selectSiteCell);
+
+			string s = "Current Region: ";
+
+			if (m_missionPlan.m_targetRegion != null) {
+
+				s += m_missionPlan.m_targetRegion.m_regionName;
+			} else {
+				s += "None";
+			}
+
+			selectSiteCell.m_headerText.text = s;
+
+			Button b2 = selectSiteCell.m_buttons [0];
+
+			if (m_missionPlan.m_state == MissionPlan.State.Planning) {
+
+				Text t = b2.GetComponentInChildren<Text> ();
+				t.text = "Select Region";
+
+				b2.onClick.AddListener (delegate {
+					SelectSiteButtonPressed ();
 				});
 
 			} else {
 
 				b2.gameObject.SetActive (false);
 			}
+
 		}
-		else if (m_goal.plan.m_currentMission == null || (m_goal.plan.m_currentMission != null
-			&& m_goal.plan.m_currentMission.m_targetType != Mission.TargetType.Lair)) {
+		else if (m_missionPlan.m_currentMission != null && m_missionPlan.m_currentMission.m_targetType != Mission.TargetType.Lair) {
 
 			GameObject selectSiteCellGO = (GameObject)Instantiate (m_selectSiteCellGO, m_contentParent);
 			UICell selectSiteCell = (UICell)selectSiteCellGO.GetComponent<UICell> ();
 			m_cells.Add (selectSiteCell);
 
-			if (m_goal.plan.m_missionSite != null) {
+			if (m_missionPlan.m_missionSite != null) {
 
-				string s = "Current Site: " + m_goal.plan.m_missionSite.m_siteName;
+				string s = "Current Site: " + m_missionPlan.m_missionSite.m_siteName;
 
-				if (m_goal.plan.m_currentMission != null && m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
+				if (m_missionPlan.m_currentMission != null && m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
 
-					s += ", Asset: " + m_goal.plan.m_currentAsset.m_asset.m_name;
+					s += ", Asset: " + m_missionPlan.m_currentAsset.m_asset.m_name;
+				} else if (m_missionPlan.m_currentMission != null && m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait) {
+
+					s += ", Trait: " + m_missionPlan.m_targetSiteTrait.m_name;
 				}
 
 				selectSiteCell.m_headerText.text = s;
@@ -196,15 +238,15 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 			Button b2 = selectSiteCell.m_buttons [0];
 
-			if (m_goal.m_state == OmegaPlan.OPGoal.State.Incomplete) {
+			if (m_missionPlan.m_state == MissionPlan.State.Planning) {
 
 				b2.onClick.AddListener (delegate {
 					SelectSiteButtonPressed ();
 				});
+
 			} else {
 
 				b2.gameObject.SetActive (false);
-
 			}
 
 		}
@@ -215,35 +257,37 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 		int numHenchmenPresent = 0;
 
-		foreach (Player.ActorSlot aSlot in goal.plan.m_actorSlots) {
+		if (m_missionPlan.m_floorSlot != null)
+		{
+			foreach (Player.ActorSlot aSlot in m_missionPlan.m_floorSlot.m_actorSlots) {
 
-			GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_selectHenchmenCellGO, m_contentParent);
-			UICell selectHenchmenCell = (UICell)selectHenchmenCellGO.GetComponent<UICell> ();
-			m_cells.Add (selectHenchmenCell);
+				GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_selectHenchmenCellGO, m_contentParent);
+				UICell selectHenchmenCell = (UICell)selectHenchmenCellGO.GetComponent<UICell> ();
+				m_cells.Add (selectHenchmenCell);
 
-			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+				if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
 
-				selectHenchmenCell.m_headerText.text = "Current Henchmen: " + aSlot.m_actor.m_actorName;
-				numHenchmenPresent++;
-			}
+					selectHenchmenCell.m_headerText.text = "Current Henchmen: " + aSlot.m_actor.m_actorName;
+					numHenchmenPresent++;
+				}
 
-			Button b3 = selectHenchmenCell.m_buttons [0];
+				Button b3 = selectHenchmenCell.m_buttons [0];
 
-			if (m_goal.m_state == OmegaPlan.OPGoal.State.Incomplete) {
-				
-				b3.onClick.AddListener (delegate {
-					SelectHenchmenButtonPressed (aSlot);
-				});
-			} else {
+				if (m_missionPlan.m_state == MissionPlan.State.Planning) {
+					b3.onClick.AddListener (delegate {
+						SelectHenchmenButtonPressed (aSlot);
+					});
+				} else {
 
-				b3.gameObject.SetActive (false);
+					b3.gameObject.SetActive (false);
+				}
 			}
 		}
 
 		// start mission button
 
-		if (m_goal.m_state == OmegaPlan.OPGoal.State.Incomplete) {
-			
+		if (m_missionPlan.m_state == MissionPlan.State.Planning) {
+
 			GameObject startMissionCellGO = (GameObject)Instantiate (m_startMissionCellGO, m_contentParent);
 			UICell startMissionCell = (UICell)startMissionCellGO.GetComponent<UICell> ();
 			m_cells.Add (startMissionCell);
@@ -255,19 +299,13 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 
-			if (m_goal.plan.m_successChance > 0 && m_goal.plan.m_currentMission.m_cost <= cp.m_currentPool && numHenchmenPresent > 0 &&
-				((m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Actor && m_goal.plan.m_targetActor != null) ||
-					(m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_goal.plan.m_currentAsset != null) ||
-					(m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Site && m_goal.plan.m_missionSite != null) ||
-					(m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Lair) || 
-					(m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait && m_goal.plan.m_targetSiteTrait != null) ||
-					(m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Region && m_goal.plan.m_targetRegion != null))) {
-				
-//			if (m_goal.plan.m_successChance > 0 && m_goal.plan.m_currentMission.m_cost <= cp.m_currentPool &&
-//			    ((m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Actor && m_goal.plan.m_targetActor != null) ||
-//			    (m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_goal.plan.m_currentAsset != null) ||
-//			    (m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Site && m_goal.plan.m_missionSite != null) ||
-//			    (m_goal.plan.m_currentMission.m_targetType == Mission.TargetType.Lair))) {
+			if (m_missionPlan.m_successChance > 0 && m_missionPlan.m_currentMission.m_cost <= cp.m_currentPool && numHenchmenPresent > 0 &&
+				((m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Actor && m_missionPlan.m_targetActor != null) ||
+					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_missionPlan.m_currentAsset != null) ||
+					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site && m_missionPlan.m_missionSite != null) ||
+					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Lair) || 
+					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait && m_missionPlan.m_targetSiteTrait != null) ||
+					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region && m_missionPlan.m_targetRegion != null))) {
 
 				startMissionCell.m_buttons [0].interactable = true;
 
@@ -279,10 +317,9 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 				startMissionCell.m_buttons [0].interactable = false;
 			}
+		} else if (m_missionPlan.m_state == MissionPlan.State.Active) {
 
-		} else if (m_goal.m_state == OmegaPlan.OPGoal.State.InProgress) {
-
-			// create cancel mission button
+			// spawn cancel mission cell
 
 			GameObject cancelMissionCellGO = (GameObject)Instantiate (m_cancelMissionCellGO, m_contentParent);
 			UICell cancelMissionCell = (UICell)cancelMissionCellGO.GetComponent<UICell> ();
@@ -297,51 +334,52 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 	public void StartMissionButtonPressed ()
 	{
-		Debug.Log ("Starting new mission: " + m_goal.plan.m_currentMission.m_name);
+		Debug.Log ("Starting new mission: " + m_missionPlan.m_currentMission.m_name);
 
 		Action_SpendCommandPoints payForMission = new Action_SpendCommandPoints ();
 		payForMission.m_playerID = 0;
-		payForMission.m_amount = m_goal.plan.m_currentMission.m_cost;
+		payForMission.m_amount = m_missionPlan.m_currentMission.m_cost;
 		GameController.instance.ProcessAction (payForMission);
 
 		Action_StartNewMission newMission = new Action_StartNewMission ();
-		newMission.m_missionPlan = m_goal.plan;
+		newMission.m_missionPlan = m_missionPlan;
 		newMission.m_playerID = 0;
 		GameController.instance.ProcessAction (newMission);
 
-		((OmegaPlansApp)m_parentApp).homeMenu.isDirty = true;
+//		m_missionPlan = null;
+
 		ParentApp.PopMenu ();
 	}
 
 	public void SelectMissionButtonPressed ()
 	{
 //		((LairApp)m_parentApp).selectMissionMenu.floorSlot = m_floorSlot;
-//		ParentApp.PushMenu (((LairApp)m_parentApp).selectMissionMenu);
+		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectMissionMenu);
 	}
 
 	public void SelectSiteButtonPressed ()
 	{
-//		((LairApp)m_parentApp).selectSiteMenu.floorSlot = m_floorSlot;
-//		ParentApp.PushMenu (((LairApp)m_parentApp).selectSiteMenu);
+//		((MissionsApp)m_parentApp).selectSiteMenu.floorSlot = m_missionPlan.m_floorSlot;
+		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectSiteMenu);
 	}
 
 	public void SelectTargetActorButtonPressed ()
 	{
-//		((LairApp)m_parentApp).selectTargetActorMenu.floorSlot = m_floorSlot;
-//		ParentApp.PushMenu (((LairApp)m_parentApp).selectTargetActorMenu);
+//		((MissionsApp)m_parentApp).selectTargetActorMenu.floorSlot = m_missionPlan.m_floorSlot;
+		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectTargetActorMenu);
 	}
 
 	public void SelectHenchmenButtonPressed (Player.ActorSlot slot)
 	{
-		((OmegaPlansApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
-		((OmegaPlansApp)m_parentApp).selectHenchmenMenu.goal = m_goal;
-		ParentApp.PushMenu (((OmegaPlansApp)m_parentApp).selectHenchmenMenu);
+		((MissionsApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
+		((MissionsApp)m_parentApp).selectHenchmenMenu.floorSlot = m_missionPlan.m_floorSlot;
+		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectHenchmenMenu);
 	}
 
 	public IApp ParentApp 
 	{ get{ return m_parentApp; }}
 
-	public OmegaPlan.OPGoal goal {get{ return m_goal; } set{ m_goal = value; }}
 //	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
+	public MissionPlan missionPlan {get{return m_missionPlan;} set{m_missionPlan = value;}}
 	public bool isDirty {set{m_isDirty = value;}}
 }

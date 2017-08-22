@@ -12,7 +12,8 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 	m_contentParent;
 
 	public GameObject
-	m_assetCellGO;
+	m_assetCellGO,
+	m_headerCellGO;
 
 	private IApp m_parentApp;
 
@@ -75,7 +76,19 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
 
-		foreach (Site.AssetSlot aSlot in assets) {
+		int numAssetSlots = GameController.instance.GetNumAssetSlots (0);
+
+		for (int i=0; i < assets.Count; i++)
+		{
+			Site.AssetSlot aSlot = assets [i];
+
+			if (i == numAssetSlots && i < assets.Count) {
+
+				GameObject headerGO = (GameObject)Instantiate (m_headerCellGO, m_contentParent);
+				UICell headerCell = (UICell)headerGO.GetComponent<UICell> ();
+				headerCell.m_headerText.text = "Assets over the limit";
+				m_cells.Add (headerCell);
+			}
 
 			GameObject assetGO = (GameObject)Instantiate (m_assetCellGO, m_contentParent);
 			UICell assetCell = (UICell)assetGO.GetComponent<UICell> ();
@@ -85,6 +98,20 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 			if (aSlot.m_new) {
 
 				assetCell.m_rectTransforms [1].gameObject.SetActive (true);
+			}
+		}
+
+		int emptySlots = numAssetSlots - assets.Count;
+
+		if (emptySlots > 0) {
+
+			for (int i=0; i < emptySlots; i++)
+			{
+				GameObject assetGO = (GameObject)Instantiate (m_assetCellGO, m_contentParent);
+				UICell assetCell = (UICell)assetGO.GetComponent<UICell> ();
+				assetCell.m_headerText.text = "Empty";
+				assetCell.m_headerText.color = Color.gray;
+				m_cells.Add (assetCell);
 			}
 		}
 

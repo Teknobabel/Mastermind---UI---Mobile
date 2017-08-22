@@ -77,6 +77,7 @@ public class HireApp : BaseApp, IUIObserver, IObserver {
 	{
 		switch (thisEvent)
 		{
+		case GameEvent.Henchmen_RemovedFromHireable:
 		case GameEvent.Player_HiringPoolChanged:
 
 			SetAlerts ();

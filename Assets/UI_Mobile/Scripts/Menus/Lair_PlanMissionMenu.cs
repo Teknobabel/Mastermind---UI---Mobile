@@ -107,6 +107,33 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 			}
 		}
 
+		// if mission has been compiled, display assets
+		Debug.Log(m_floorSlot.m_missionPlan.m_requiredAssets.Count);
+		if (m_floorSlot.m_missionPlan.m_requiredAssets.Count > 0) {
+
+			Player player = GameEngine.instance.game.playerList [0];
+			List<Asset> assets = new List<Asset> ();
+
+			foreach (Site.AssetSlot aSlot in player.assets) {
+
+				assets.Add (aSlot.m_asset);
+			}
+
+			foreach (Asset a in m_floorSlot.m_missionPlan.m_requiredAssets) {
+
+				GameObject assetCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
+				UICell assetCell = (UICell)assetCellGO.GetComponent<UICell> ();
+				m_cells.Add (assetCell);
+				assetCell.m_headerText.text = "Asset: " + a.m_name;
+
+				if (assets.Contains(a))
+				{
+					assets.Remove (a);
+					assetCell.m_headerText.color = Color.green;
+				}
+			}
+		}
+
 		// display current state of mission selection
 
 		GameObject selectMissionCellGO = (GameObject)Instantiate (m_selectMissionCellGO, m_contentParent);
@@ -236,6 +263,8 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 
 		// display current state of henchmen selection
 
+		int numHenchmenPresent = 0;
+
 		foreach (Player.ActorSlot aSlot in m_floorSlot.m_actorSlots) {
 
 			GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_selectHenchmenCellGO, m_contentParent);
@@ -245,6 +274,7 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
 
 				selectHenchmenCell.m_headerText.text = "Current Henchmen: " + aSlot.m_actor.m_actorName;
+				numHenchmenPresent++;
 			}
 
 			Button b3 = selectHenchmenCell.m_buttons [0];
@@ -274,7 +304,7 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 
 			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 
-			if (m_floorSlot.m_missionPlan.m_successChance > 0 && m_floorSlot.m_missionPlan.m_currentMission.m_cost <= cp.m_currentPool &&
+			if (m_floorSlot.m_missionPlan.m_successChance > 0 && m_floorSlot.m_missionPlan.m_currentMission.m_cost <= cp.m_currentPool && numHenchmenPresent > 0 &&
 			    ((m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Actor && m_floorSlot.m_missionPlan.m_targetActor != null) ||
 			    (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset && m_floorSlot.m_missionPlan.m_currentAsset != null) ||
 			    (m_floorSlot.m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site && m_floorSlot.m_missionPlan.m_missionSite != null) ||
@@ -304,6 +334,11 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 			cb.normalColor = Color.red;
 			cb.disabledColor = Color.gray;
 			cancelMissionCell.m_buttons [0].colors = cb;
+
+			Button b3 = cancelMissionCell.m_buttons [0];
+			b3.onClick.AddListener (delegate {
+				CancelMissionButtonPressed (m_floorSlot.m_missionPlan);
+			});
 		}
 	}
 
@@ -321,7 +356,7 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 		newMission.m_playerID = 0;
 		GameController.instance.ProcessAction (newMission);
 
-//		((OmegaPlansApp)m_parentApp).homeMenu.isDirty = true;
+		((LairApp)m_parentApp).homeMenu.isDirty = true;
 		ParentApp.PopMenu ();
 	}
 
@@ -348,6 +383,17 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 		((LairApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
 		((LairApp)m_parentApp).selectHenchmenMenu.floorSlot = m_floorSlot;
 		ParentApp.PushMenu (((LairApp)m_parentApp).selectHenchmenMenu);
+	}
+
+	public void CancelMissionButtonPressed (MissionPlan plan)
+	{
+		Action_CancelMission cancelMission = new Action_CancelMission ();
+		cancelMission.m_missionPlan = plan;
+		cancelMission.m_playerID = 0;
+		GameController.instance.ProcessAction (cancelMission);
+
+		((LairApp)ParentApp).homeMenu.isDirty = true;
+		m_parentApp.PopMenu ();
 	}
 
 	public IApp ParentApp 

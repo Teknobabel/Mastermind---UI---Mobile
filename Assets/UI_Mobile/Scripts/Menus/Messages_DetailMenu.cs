@@ -40,44 +40,42 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 
 	public void DisplayMessages ()
 	{
-		DummyMessageCenter.Conversation convo = GetDummyData.instance.GetConversation (m_henchmenID);
-		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
-
-		m_henchmenInfo.m_image.texture = h.m_portrait_Small;
-		m_henchmenInfo.m_bodyText.text = h.m_name;
-
-//		Debug.Log (convo.m_messages.Count);
-		foreach (Message m in convo.m_messages) {
-
-//			GameObject cellGO = (GameObject)Instantiate (m_messageCellGO, m_contentParent);
-			GameObject cellGO = (GameObject)Instantiate (m_messageCellGO, Vector3.zero, Quaternion.identity);
-
-			UICell cell = (UICell)cellGO.GetComponent<UICell> ();
-			VerticalLayoutGroup vlg = (VerticalLayoutGroup)cellGO.GetComponent<VerticalLayoutGroup> ();
-			float dist = MobileUIEngine.instance.m_mainCanvas.rect.width * 0.25f;
-
-			if (m.m_origin == Message.MessageOrigin.Player) {
-
-				vlg.padding.left = (int)dist;
-				Image i = (Image)cell.m_rectTransforms [0].GetComponent<Image> ();
-				i.color = Color.green;
-				cell.m_bodyText.color = Color.white;
-
-			} else {
-				vlg.padding.right = (int)dist;
-			}
-
-
-
-			cell.m_bodyText.text = m.m_messageText;
-
-			cellGO.transform.SetParent (m_contentParent, false);
-
-			m_cells.Add (cell);
-		}
-
-//		LayoutRebuilder.MarkLayoutForRebuild (m_contentParent.GetComponent<RectTransform> ());
-		LayoutRebuilder.ForceRebuildLayoutImmediate(m_contentParent.GetComponent<RectTransform> ());
+//		DummyMessageCenter.Conversation convo = GetDummyData.instance.GetConversation (m_henchmenID);
+//		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
+//
+//		m_henchmenInfo.m_image.texture = h.m_portrait_Small;
+//		m_henchmenInfo.m_bodyText.text = h.m_name;
+//
+////		Debug.Log (convo.m_messages.Count);
+//		foreach (Message m in convo.m_messages) {
+//
+//			GameObject cellGO = (GameObject)Instantiate (m_messageCellGO, Vector3.zero, Quaternion.identity);
+//
+//			UICell cell = (UICell)cellGO.GetComponent<UICell> ();
+//			VerticalLayoutGroup vlg = (VerticalLayoutGroup)cellGO.GetComponent<VerticalLayoutGroup> ();
+//			float dist = MobileUIEngine.instance.m_mainCanvas.rect.width * 0.25f;
+//
+//			if (m.m_origin == Message.MessageOrigin.Player) {
+//
+//				vlg.padding.left = (int)dist;
+//				Image i = (Image)cell.m_rectTransforms [0].GetComponent<Image> ();
+//				i.color = Color.green;
+//				cell.m_bodyText.color = Color.white;
+//
+//			} else {
+//				vlg.padding.right = (int)dist;
+//			}
+//
+//
+//
+//			cell.m_bodyText.text = m.m_messageText;
+//
+//			cellGO.transform.SetParent (m_contentParent, false);
+//
+//			m_cells.Add (cell);
+//		}
+//			
+//		LayoutRebuilder.ForceRebuildLayoutImmediate(m_contentParent.GetComponent<RectTransform> ());
 	}
 
 	public void OnEnter (bool animate)
