@@ -16,7 +16,7 @@ public class OmegaPlan_SelectHenchmenMenu : MonoBehaviour, IMenu {
 	private List<UICell> m_cells = new List<UICell>();
 
 	private OmegaPlan.OPGoal m_goal;
-	private Player.ActorSlot m_currentSlot;
+//	private Player.ActorSlot m_currentSlot;
 
 	public void Initialize (IApp parentApp)
 	{
@@ -59,7 +59,7 @@ public class OmegaPlan_SelectHenchmenMenu : MonoBehaviour, IMenu {
 
 		List<Player.ActorSlot> henchmenPool = GameController.instance.GetHiredHenchmen (0);
 
-		List<Actor> hList = new List<Actor> ();
+		List<Player.ActorSlot> hList = new List<Player.ActorSlot> ();
 
 		foreach (Player.ActorSlot aSlot in henchmenPool) {
 
@@ -80,46 +80,48 @@ public class OmegaPlan_SelectHenchmenMenu : MonoBehaviour, IMenu {
 				}
 
 				if (!present) {
-					hList.Add (aSlot.m_actor);
+					hList.Add (aSlot);
 				}
 			}
 		}
 
 		if (hList.Count > 1) {
-			hList.Sort (delegate(Actor a, Actor b) {
-				return a.m_actorName.CompareTo (b.m_actorName);
+			hList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+				return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 			});
 		}
 
-		foreach (Actor h in hList) {
+		foreach (Player.ActorSlot h in hList) {
 
 			GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent);
 			UICell c = (UICell)hCell.GetComponent<UICell> ();
 			m_cells.Add (c);
 
-			string nameString = h.m_actorName;
+			string nameString = h.m_actor.m_actorName;
 			string statusString = "Active";
 
 			c.m_headerText.text = nameString;
 			c.m_bodyText.text = statusString;
-			c.m_image.texture = h.m_portrait_Compact;
+			c.m_image.texture = h.m_actor.m_portrait_Compact;
 
 			hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-				HenchmenSelected (h.id);
+				HenchmenSelected (h);
 			});
 		}
 	}
 
-	public void HenchmenSelected (int id)
+	public void HenchmenSelected (Player.ActorSlot aSlot)
 	{
-		Actor a = GameController.instance.GetActor (id);
+		m_goal.plan.m_actorSlots.Add (aSlot);
 
-		if (m_currentSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
-
-			m_currentSlot.RemoveHenchmen ();
-		}
-
-		m_currentSlot.SetHenchmen (a);
+//		Actor a = GameController.instance.GetActor (id);
+//
+//		if (m_currentSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+//
+//			m_currentSlot.RemoveHenchmen ();
+//		}
+//
+//		m_currentSlot.SetHenchmen (a);
 		//		m_currentSlot.m_actor = a;
 		//		m_currentSlot.m_state = Player.ActorSlot.ActorSlotState;
 
@@ -132,6 +134,6 @@ public class OmegaPlan_SelectHenchmenMenu : MonoBehaviour, IMenu {
 	{ get{ return m_parentApp; }}
 
 	public OmegaPlan.OPGoal goal {set {m_goal = value;}}
-	public Player.ActorSlot currentSlot {set {m_currentSlot = value;}}
+//	public Player.ActorSlot currentSlot {set {m_currentSlot = value;}}
 
 }

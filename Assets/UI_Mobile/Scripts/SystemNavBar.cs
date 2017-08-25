@@ -7,6 +7,8 @@ public class SystemNavBar : MonoBehaviour, IObserver {
 
 	public Text m_currentCommandPoolText;
 
+	public GameObject m_backButtonParent;
+
 	private bool m_isActive = false;
 
 	public void Initialize ()
@@ -15,6 +17,7 @@ public class SystemNavBar : MonoBehaviour, IObserver {
 
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 		m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+		SetBackButtonState (false);
 	}
 
 	public void SetActiveState (bool isActive)
@@ -30,9 +33,23 @@ public class SystemNavBar : MonoBehaviour, IObserver {
 		}
 	}
 
+	public void SetBackButtonState (bool isActive)
+	{
+		if (isActive) {
+			m_backButtonParent.SetActive (true);
+		} else {
+			m_backButtonParent.SetActive (false);
+		}
+	}
+
 	public void CloseAppButtonClicked ()
 	{
 		MobileUIEngine.instance.PopApp ();
+	}
+
+	public void BackButtonClicked ()
+	{
+		MobileUIEngine.instance.GetCurrentApp ().PopMenu ();	
 	}
 		
 	public bool isActive {get{ return m_isActive; }}

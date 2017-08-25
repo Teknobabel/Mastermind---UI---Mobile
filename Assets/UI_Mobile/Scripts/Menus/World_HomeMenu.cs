@@ -42,12 +42,12 @@ public class World_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnHold ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
 	public void OnReturn ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
 	private void DisplayWorld ()

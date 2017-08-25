@@ -350,7 +350,7 @@ Prefab:
         type: 2}
       propertyPath: m_systemNavBarGO
       value: 
-      objectReference: {fileID: 1796597662913778, guid: 485110230c5ca4d159fc84633966c3fd,
+      objectReference: {fileID: 1577912189855822, guid: 485110230c5ca4d159fc84633966c3fd,
         type: 2}
     - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
         type: 2}

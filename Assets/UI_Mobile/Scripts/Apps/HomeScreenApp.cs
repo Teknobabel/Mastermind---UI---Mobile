@@ -16,6 +16,7 @@ public class HomeScreenApp : BaseApp {
 
 	private HomeScreenMenu m_homeScreenMenu = null;
 	private bool m_isDirty = false;
+	private HomeScreen_CPBreakdownMenu m_cpBreakdownMenu;
 
 	public override void InitializeApp ()
 	{
@@ -105,7 +106,7 @@ public class HomeScreenApp : BaseApp {
 			le.preferredHeight = screenHeight;
 
 			AppScreen ascreen = go.GetComponent<AppScreen> ();
-			ascreen.Initialize (appList, m_appIcon);
+			ascreen.Initialize (appList, m_appIcon, this);
 
 			numPages++;
 		}
@@ -117,6 +118,11 @@ public class HomeScreenApp : BaseApp {
 
 		homeScreenMenu.m_pageIndicator.SetNumPages (numPages);
 		homeScreenMenu.m_pageIndicator.SetPage (0);
+
+		GameObject cpBreakdownMenuGO = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
+		cpBreakdownMenuGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_cpBreakdownMenu = (HomeScreen_CPBreakdownMenu)cpBreakdownMenuGO.GetComponent<HomeScreen_CPBreakdownMenu> ();
+		m_cpBreakdownMenu.Initialize (this);
 
 		m_menuParent.gameObject.SetActive (false);
 
@@ -157,4 +163,6 @@ public class HomeScreenApp : BaseApp {
 
 		base.EnterApp ();
 	}
+
+	public HomeScreen_CPBreakdownMenu cpBreakdownMenu {get{ return m_cpBreakdownMenu; }}
 }

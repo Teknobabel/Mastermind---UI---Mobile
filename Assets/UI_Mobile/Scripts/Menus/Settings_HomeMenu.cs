@@ -174,12 +174,12 @@ public class Settings_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnHold ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
 	public void OnReturn ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
 	public IApp ParentApp 

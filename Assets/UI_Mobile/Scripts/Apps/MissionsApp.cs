@@ -6,7 +6,7 @@ using UnityEngine;
 public class MissionsApp : BaseApp, IObserver {
 
 	private Missions_HomeMenu m_homeMenu;
-	private Missions_MissionOverviewMenu m_missionOverviewMenu;
+//	private Missions_MissionOverviewMenu m_missionOverviewMenu;
 	private Missions_PlanMissionMenu m_planMissionMenu;
 	private Missions_PlanMissionMenu_SelectMissionMenu m_selectMissionMenu;
 
@@ -21,32 +21,32 @@ public class MissionsApp : BaseApp, IObserver {
 		m_homeMenu = (Missions_HomeMenu)go.GetComponent<Missions_HomeMenu> ();
 		m_homeMenu.Initialize (this);
 	
-		GameObject missionOverviewGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
-		missionOverviewGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_missionOverviewMenu = (Missions_MissionOverviewMenu)missionOverviewGO.GetComponent<Missions_MissionOverviewMenu>();
-		m_missionOverviewMenu.Initialize (this);
+//		GameObject missionOverviewGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
+//		missionOverviewGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+//		m_missionOverviewMenu = (Missions_MissionOverviewMenu)missionOverviewGO.GetComponent<Missions_MissionOverviewMenu>();
+//		m_missionOverviewMenu.Initialize (this);
 
-		GameObject planMissionGO = (GameObject)GameObject.Instantiate (m_menuBank[2], Vector3.zero, Quaternion.identity);
+		GameObject planMissionGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
 		planMissionGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		m_planMissionMenu = (Missions_PlanMissionMenu)planMissionGO.GetComponent<Missions_PlanMissionMenu>();
 		m_planMissionMenu.Initialize (this);
 
-		GameObject selectMissionGO = (GameObject)GameObject.Instantiate (m_menuBank[3], Vector3.zero, Quaternion.identity);
+		GameObject selectMissionGO = (GameObject)GameObject.Instantiate (m_menuBank[2], Vector3.zero, Quaternion.identity);
 		selectMissionGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		m_selectMissionMenu = (Missions_PlanMissionMenu_SelectMissionMenu)selectMissionGO.GetComponent<Missions_PlanMissionMenu_SelectMissionMenu>();
 		m_selectMissionMenu.Initialize (this);
 
-		GameObject selectHenchmenGO = (GameObject)GameObject.Instantiate (m_menuBank[4], Vector3.zero, Quaternion.identity);
+		GameObject selectHenchmenGO = (GameObject)GameObject.Instantiate (m_menuBank[3], Vector3.zero, Quaternion.identity);
 		selectHenchmenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		m_selectHenchmenMenu = (Missions_PlanMissionMenu_SelectHenchmenMenu)selectHenchmenGO.GetComponent<Missions_PlanMissionMenu_SelectHenchmenMenu>();
 		m_selectHenchmenMenu.Initialize (this);
 
-		GameObject selectSiteGO = (GameObject)GameObject.Instantiate (m_menuBank[5], Vector3.zero, Quaternion.identity);
+		GameObject selectSiteGO = (GameObject)GameObject.Instantiate (m_menuBank[4], Vector3.zero, Quaternion.identity);
 		selectSiteGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		m_selectSiteMenu = (Missions_PlanMissionMenu_SelectSiteMenu)selectSiteGO.GetComponent<Missions_PlanMissionMenu_SelectSiteMenu>();
 		m_selectSiteMenu.Initialize (this);
 
-		GameObject selectTargetActorGO = (GameObject)GameObject.Instantiate (m_menuBank[6], Vector3.zero, Quaternion.identity);
+		GameObject selectTargetActorGO = (GameObject)GameObject.Instantiate (m_menuBank[5], Vector3.zero, Quaternion.identity);
 		selectTargetActorGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
 		m_selectTargetActorMenu = (Missions_PlanMissionMenu_SelectTargetActorMenu)selectTargetActorGO.GetComponent<Missions_PlanMissionMenu_SelectTargetActorMenu>();
 		m_selectTargetActorMenu.Initialize (this);
@@ -109,7 +109,7 @@ public class MissionsApp : BaseApp, IObserver {
 	//	}
 
 	public Missions_HomeMenu homeMenu {get{ return m_homeMenu; }}
-	public Missions_MissionOverviewMenu missionOverviewMenu {get{ return m_missionOverviewMenu; }}
+//	public Missions_MissionOverviewMenu missionOverviewMenu {get{ return m_missionOverviewMenu; }}
 	public Missions_PlanMissionMenu planMissionMenu {get{ return m_planMissionMenu; }}
 	public Missions_PlanMissionMenu_SelectMissionMenu selectMissionMenu {get{ return m_selectMissionMenu; }}
 	public Missions_PlanMissionMenu_SelectSiteMenu selectSiteMenu {get{ return m_selectSiteMenu; }}

@@ -39,6 +39,11 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 	public void OnEnter (bool animate)
 	{
 		this.gameObject.SetActive (true);
+
+		// recompile to account for any changes since last visit
+
+		GameController.instance.CompileMission (m_goal.plan);
+
 		DisplayMissionPlan ();
 
 	}
@@ -108,7 +113,7 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 			Player player = GameEngine.instance.game.playerList [0];
 			List<Asset> assets = new List<Asset> ();
 
-			foreach (Site.AssetSlot aSlot in player.assets) {
+			foreach (Site.AssetSlot aSlot in m_goal.plan.m_linkedPlayerAssets) {
 
 				assets.Add (aSlot.m_asset);
 			}
@@ -215,13 +220,17 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 
 		int numHenchmenPresent = 0;
 
-		foreach (Player.ActorSlot aSlot in goal.plan.m_actorSlots) {
+//		foreach (Player.ActorSlot aSlot in goal.plan.m_actorSlots) {
+		for (int i = 0; i < m_goal.m_numActorSlots; i++) {
 
 			GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_selectHenchmenCellGO, m_contentParent);
 			UICell selectHenchmenCell = (UICell)selectHenchmenCellGO.GetComponent<UICell> ();
 			m_cells.Add (selectHenchmenCell);
 
-			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+			if (i < m_goal.plan.m_actorSlots.Count) {
+//			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+
+				Player.ActorSlot aSlot = m_goal.plan.m_actorSlots [i];
 
 				selectHenchmenCell.m_headerText.text = "Current Henchmen: " + aSlot.m_actor.m_actorName;
 				numHenchmenPresent++;
@@ -232,7 +241,7 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 			if (m_goal.m_state == OmegaPlan.OPGoal.State.Incomplete) {
 				
 				b3.onClick.AddListener (delegate {
-					SelectHenchmenButtonPressed (aSlot);
+					SelectHenchmenButtonPressed ();
 				});
 			} else {
 
@@ -331,9 +340,9 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 //		ParentApp.PushMenu (((LairApp)m_parentApp).selectTargetActorMenu);
 	}
 
-	public void SelectHenchmenButtonPressed (Player.ActorSlot slot)
+	public void SelectHenchmenButtonPressed ()
 	{
-		((OmegaPlansApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
+//		((OmegaPlansApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
 		((OmegaPlansApp)m_parentApp).selectHenchmenMenu.goal = m_goal;
 		ParentApp.PushMenu (((OmegaPlansApp)m_parentApp).selectHenchmenMenu);
 	}

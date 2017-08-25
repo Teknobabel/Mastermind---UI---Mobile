@@ -67,6 +67,9 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 	{
 //		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
 
+		// enable back button
+//		MobileUIEngine.instance.systemNavBar.SetBackButtonState(true);
+
 		Actor h = GameController.instance.GetActor (m_henchmenID);
 
 		if (h != null) {
@@ -107,14 +110,14 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 
 
 			// back button slides down 
-			RectTransform appNavRT = m_panels [2].GetComponent<RectTransform> ();
-			appNavRT.anchoredPosition = new Vector2 (0, appNavRT.rect.height);
-			DOTween.To (() => appNavRT.anchoredPosition, x => appNavRT.anchoredPosition = x, new Vector2 (0, 0), 0.25f).SetDelay (0.15f);
+//			RectTransform appNavRT = m_panels [2].GetComponent<RectTransform> ();
+//			appNavRT.anchoredPosition = new Vector2 (0, appNavRT.rect.height);
+//			DOTween.To (() => appNavRT.anchoredPosition, x => appNavRT.anchoredPosition = x, new Vector2 (0, 0), 0.25f).SetDelay (0.15f);
 
 		} else {
 
-			RectTransform appNavRT = m_panels[2].GetComponent<RectTransform> ();
-			appNavRT.anchoredPosition = Vector2.zero;
+//			RectTransform appNavRT = m_panels[2].GetComponent<RectTransform> ();
+//			appNavRT.anchoredPosition = Vector2.zero;
 
 			RectTransform infoPanelRT = m_panels[0].GetComponent<RectTransform> ();
 			infoPanelRT.anchoredPosition = Vector2.zero;
@@ -147,8 +150,8 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 
 	public void OnExitComplete ()
 	{
-		RectTransform appNavRT = m_panels[2].GetComponent<RectTransform> ();
-		appNavRT.anchoredPosition = Vector2.zero;
+//		RectTransform appNavRT = m_panels[2].GetComponent<RectTransform> ();
+//		appNavRT.anchoredPosition = Vector2.zero;
 
 		RectTransform infoPanelRT = m_panels[0].GetComponent<RectTransform> ();
 		infoPanelRT.anchoredPosition = Vector2.zero;
@@ -185,10 +188,10 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 		m_henchmenID = id;
 	}
 
-	public void BackButtonPressed ()
-	{
-		Notify (this, UIEvent.UI_BackButtonPressed);
-	}
+//	public void BackButtonPressed ()
+//	{
+//		Notify (this, UIEvent.UI_BackButtonPressed);
+//	}
 
 	public void FireButtonPressed()
 	{

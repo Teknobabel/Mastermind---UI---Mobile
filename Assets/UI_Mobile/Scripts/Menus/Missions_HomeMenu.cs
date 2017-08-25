@@ -119,11 +119,13 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnHold ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
 	public void OnReturn ()
 	{
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
+
 		if (m_isDirty) {
 
 			m_isDirty = false;
@@ -133,8 +135,11 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 	public void MissionButtonPressed (MissionPlan mp)
 	{
-		((MissionsApp)(m_parentApp)).missionOverviewMenu.missionPlan = mp;
-		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).missionOverviewMenu);
+//		((MissionsApp)(m_parentApp)).missionOverviewMenu.missionPlan = mp;
+//		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).missionOverviewMenu);
+
+		((MissionsApp)(m_parentApp)).planMissionMenu.missionPlan = mp;
+		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).planMissionMenu);
 	}
 
 	public void NewMissionButtonPressed ()

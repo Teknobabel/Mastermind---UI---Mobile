@@ -52,6 +52,8 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 	{
 		this.gameObject.SetActive (true);
 
+//		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
+
 		DisplayHenchmen ();
 
 		// slide in animation
@@ -142,11 +144,13 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnHold ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
 	public void OnReturn ()
 	{
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
+
 		if (m_isDirty) {
 
 			m_isDirty = false;

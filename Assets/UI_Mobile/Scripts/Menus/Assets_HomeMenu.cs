@@ -19,6 +19,8 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 	private List<UICell> m_cells = new List<UICell>();
 
+	private bool m_isDirty = false;
+
 	public void Initialize (IApp parentApp)
 	{
 		m_parentApp = parentApp;
@@ -37,6 +39,8 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnExit (bool animate)
 	{
+		m_isDirty = false;
+
 		// clear out new flags
 
 		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
@@ -62,7 +66,11 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnReturn ()
 	{
+		if (m_isDirty) {
 
+			m_isDirty = false;
+			DisplayAssets ();
+		}
 	}
 
 	public void DisplayAssets ()
@@ -92,13 +100,24 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 			GameObject assetGO = (GameObject)Instantiate (m_assetCellGO, m_contentParent);
 			UICell assetCell = (UICell)assetGO.GetComponent<UICell> ();
-			assetCell.m_headerText.text = aSlot.m_asset.m_name;
+
+			string s = aSlot.m_asset.m_name;
+			if (aSlot.m_state == Site.AssetSlot.State.InUse) {
+				s += " - In Use";
+			}
+
+			assetCell.m_headerText.text = s;
 			m_cells.Add (assetCell);
 
 			if (aSlot.m_new) {
 
 				assetCell.m_rectTransforms [1].gameObject.SetActive (true);
 			}
+
+			Button b = assetCell.m_buttons [0];
+			b.onClick.AddListener (delegate {
+				AssetClicked (aSlot);
+			});
 		}
 
 		int emptySlots = numAssetSlots - assets.Count;
@@ -117,6 +136,14 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 
 	}
 
+	public void AssetClicked (Site.AssetSlot assetSlot)
+	{
+		((AssetsApp)m_parentApp).assetDetailMenu.assetSlot = assetSlot;
+		ParentApp.PushMenu (((AssetsApp)m_parentApp).assetDetailMenu);
+	}
+
 	public IApp ParentApp 
 	{ get{ return m_parentApp; }}
+	public bool isDirty {get{ return m_isDirty; }set{m_isDirty = value;}}
+
 }

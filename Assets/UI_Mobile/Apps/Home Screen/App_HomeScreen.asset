@@ -15,7 +15,8 @@ MonoBehaviour:
   m_icon: {fileID: 0}
   m_icon_Pressed: {fileID: 0}
   m_wantsSystemNavBar: 0
-  m_menuBank: []
+  m_menuBank:
+  - {fileID: 1053078314125982, guid: d49a225e3a3ec4edea06c2c33bc630d0, type: 2}
   m_homeScreen: {fileID: 1357965692608042, guid: 3f3855f4cc424458eaa1893bc4ebdbe8,
     type: 2}
   m_activityCenter: {fileID: 1402771108206296, guid: 345abfeddb8cf4a77944325c8a492131,

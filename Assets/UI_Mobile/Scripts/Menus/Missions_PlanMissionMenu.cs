@@ -36,7 +36,10 @@ public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
 	public void OnEnter (bool animate)
 	{
 		this.gameObject.SetActive (true);
-		m_missionPlan = new MissionPlan ();
+
+		if (m_missionPlan == null) {
+			m_missionPlan = new MissionPlan ();
+		}
 		DisplayMissionPlan ();
 
 	}
@@ -329,6 +332,11 @@ public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
 			cb.normalColor = Color.red;
 			cb.disabledColor = Color.gray;
 			cancelMissionCell.m_buttons [0].colors = cb;
+
+			Button b3 = cancelMissionCell.m_buttons [0];
+			b3.onClick.AddListener (delegate {
+				CancelMissionButtonPressed (m_missionPlan);
+			});
 		}
 	}
 
@@ -346,9 +354,21 @@ public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
 		newMission.m_playerID = 0;
 		GameController.instance.ProcessAction (newMission);
 
-//		m_missionPlan = null;
+		m_missionPlan = null;
 
+		((MissionsApp)ParentApp).homeMenu.isDirty = true;
 		ParentApp.PopMenu ();
+	}
+
+	public void CancelMissionButtonPressed (MissionPlan plan)
+	{
+		Action_CancelMission cancelMission = new Action_CancelMission ();
+		cancelMission.m_missionPlan = plan;
+		cancelMission.m_playerID = 0;
+		GameController.instance.ProcessAction (cancelMission);
+
+		((MissionsApp)ParentApp).homeMenu.isDirty = true;
+		m_parentApp.PopMenu ();
 	}
 
 	public void SelectMissionButtonPressed ()

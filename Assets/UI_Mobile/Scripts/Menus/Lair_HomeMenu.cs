@@ -122,11 +122,13 @@ public class Lair_HomeMenu : MonoBehaviour, IMenu {
 
 	public void OnHold ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
 	public void OnReturn ()
 	{
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
+
 		if (m_isDirty) {
 
 			m_isDirty = false;

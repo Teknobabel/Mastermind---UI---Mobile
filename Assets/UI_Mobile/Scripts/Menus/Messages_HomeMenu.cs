@@ -97,12 +97,12 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public void OnHold ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
 	public void OnReturn ()
 	{
-
+		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)

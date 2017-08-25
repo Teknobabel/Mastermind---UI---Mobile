@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen : MonoBehaviour, IObserver {
+public class AppScreen : MonoBehaviour, IObserver, IMenu {
 
 	public RectTransform m_gridView;
 	public Text 
 	m_currentCommandPoolText,
 	m_CommandPoolUpkeepText;
 
+	private IApp m_parentApp;
+
 	// Use this for initialization
 	void Start () {
 		
 	}
 
-	public void Initialize (List<IApp> apps, GameObject appIcon)
+	public void Initialize (IApp parentApp)
+	{
+		m_parentApp = parentApp;
+	}
+
+	public void Initialize (List<IApp> apps, GameObject appIcon, IApp parentApp)
 	{
 //		GridLayoutGroup glg = m_gridView.GetComponent<GridLayoutGroup> ();
 //		float numColumns = (float)glg.constraintCount;
@@ -27,6 +34,8 @@ public class AppScreen : MonoBehaviour, IObserver {
 //		Vector2 spacing = glg.spacing;
 //		spacing.x = iconWidthSpacing;
 //		glg.spacing = spacing;
+
+		Initialize (parentApp);
 
 		GameController.instance.AddObserver (this);
 
@@ -55,6 +64,11 @@ public class AppScreen : MonoBehaviour, IObserver {
 
 		Action_EndPhase endTurn = new Action_EndPhase ();
 		GameController.instance.ProcessAction (endTurn);
+	}
+
+	public void CPBreakdownButtonPressed ()
+	{
+		m_parentApp.PushMenu (((HomeScreenApp)(m_parentApp)).cpBreakdownMenu);
 	}
 
 	private void UpdateUpkeep ()
@@ -103,4 +117,23 @@ public class AppScreen : MonoBehaviour, IObserver {
 			break;
 		}
 	}
+
+	public void OnEnter (bool animate)
+	{
+	}
+
+	public void OnExit (bool animate)
+	{
+	}
+
+	public void OnHold ()
+	{
+	}
+
+	public void OnReturn ()
+	{
+	}
+
+	public IApp ParentApp 
+	{ get{ return m_parentApp; }}
 }

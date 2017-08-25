@@ -141,8 +141,21 @@ public class MobileUIEngine : MonoBehaviour {
 		}
 	}
 
-	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
+	public IApp GetCurrentApp ()
+	{
+		if (m_appStack.Count > 0) {
 
+			return m_appStack[m_appStack.Count-1];
+
+		} else {
+
+			Debug.Log ("No app found");
+
+			return null;
+		}
+	}
+
+	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
 	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
 	public IApp homeScreenApp {get{ return m_homeScreenApp; }}
 

@@ -59,16 +59,19 @@ public class Lair_SelectMissionMenu : MonoBehaviour, IMenu {
 
 		foreach (Mission m in m_floorSlot.m_floor.m_missions) {
 
-			GameObject missionCellGO = (GameObject)Instantiate (m_missionCell, m_contentParent);
-			UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
-			m_cells.Add (missionCell);
-			missionCell.m_headerText.text = m.m_name;
-			missionCell.m_bodyText.text = m.m_cost.ToString () + " CP, " + m.m_duration.ToString () + " Turns";
+			if (m.IsValid (m_floorSlot.m_missionPlan)) {
+				
+				GameObject missionCellGO = (GameObject)Instantiate (m_missionCell, m_contentParent);
+				UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
+				m_cells.Add (missionCell);
+				missionCell.m_headerText.text = m.m_name;
+				missionCell.m_bodyText.text = m.m_cost.ToString () + " CP, " + m.m_duration.ToString () + " Turns";
 
-			Button b = missionCell.m_buttons [0];
-			b.onClick.AddListener (delegate {
-				MissionSelected (m);
-			});
+				Button b = missionCell.m_buttons [0];
+				b.onClick.AddListener (delegate {
+					MissionSelected (m);
+				});
+			}
 		}
 	}
 

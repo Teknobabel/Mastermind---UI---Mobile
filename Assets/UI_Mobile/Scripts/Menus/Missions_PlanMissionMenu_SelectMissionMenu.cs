@@ -82,16 +82,19 @@ public class Missions_PlanMissionMenu_SelectMissionMenu : MonoBehaviour, IMenu, 
 
 					foreach (Mission m in fSlot.m_floor.m_missions) {
 
-						GameObject missionCellGO = (GameObject)Instantiate (m_missionCell, m_contentParent);
-						UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
-						m_cells.Add (missionCell);
-						missionCell.m_headerText.text = m.m_name;
-						missionCell.m_bodyText.text = m.m_cost.ToString () + " CP, " + m.m_duration.ToString () + " Turns";
+						if (m.IsValid (fSlot.m_missionPlan)) {
 
-						Button b = missionCell.m_buttons [0];
-						b.onClick.AddListener (delegate {
-							MissionSelected (m);
-						});
+							GameObject missionCellGO = (GameObject)Instantiate (m_missionCell, m_contentParent);
+							UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
+							m_cells.Add (missionCell);
+							missionCell.m_headerText.text = m.m_name;
+							missionCell.m_bodyText.text = m.m_cost.ToString () + " CP, " + m.m_duration.ToString () + " Turns";
+
+							Button b = missionCell.m_buttons [0];
+							b.onClick.AddListener (delegate {
+								MissionSelected (m);
+							});
+						}
 					}
 				}
 			}
@@ -106,7 +109,7 @@ public class Missions_PlanMissionMenu_SelectMissionMenu : MonoBehaviour, IMenu, 
 
 					foreach (Mission m in fSlot.m_floor.m_missions) {
 
-						if (m.m_requiredTraits.Length > 0) {
+						if (m.IsValid(fSlot.m_missionPlan) && m.m_requiredTraits.Length > 0) {
 							
 							Trait skillTrait = m.m_requiredTraits [0];
 
