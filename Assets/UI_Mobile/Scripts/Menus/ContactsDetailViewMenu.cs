@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Linq;
 
-public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IMenu {
+public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 
 	public enum InfoPanelType
 	{
@@ -36,35 +36,26 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 	private List<IUIObserver>
 	m_observers = new List<IUIObserver> ();
 
-	private List<UICell>
-	m_cells = new List<UICell>();
-
 	private InfoPanelType 
 	m_currentPanel = InfoPanelType.None;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-	private IApp m_parentApp;
-
 	protected int m_henchmenID = -1;
-
-//	private Transform m_menuParent;
 
 	private ContactsDetailViewMenu m_menuObject;
 
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_infoPanelToggle.AddObserver (this);
 		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public virtual void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 //		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
 
 		// enable back button
@@ -134,8 +125,10 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		if (animate) {
 			// slide out animation
 			RectTransform rt = gameObject.GetComponent<RectTransform> ();
@@ -171,16 +164,6 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 		}
 
 		this.gameObject.SetActive (false);
-	}
-
-	public void OnHold ()
-	{
-
-	}
-
-	public void OnReturn ()
-	{
-
 	}
 
 	public void SetHenchmen (int id)
@@ -353,7 +336,4 @@ public class ContactsDetailViewMenu : MonoBehaviour, IUISubject, IUIObserver, IM
 //			}
 //		}
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

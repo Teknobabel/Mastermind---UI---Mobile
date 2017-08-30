@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Missions_PlanMissionMenu_SelectMissionMenu : MonoBehaviour, IMenu, IUIObserver {
+public class Missions_PlanMissionMenu_SelectMissionMenu : BaseMenu, IUIObserver {
 
 	public enum DisplayType {
 		ByLairFloor,
@@ -19,51 +19,36 @@ public class Missions_PlanMissionMenu_SelectMissionMenu : MonoBehaviour, IMenu, 
 
 	public SegmentedToggle m_infoPanelToggle;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
 	private Lair.FloorSlot m_floorSlot;
 
 	private DisplayType m_displayType = DisplayType.ByLairFloor;
 
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 		m_infoPanelToggle.AddObserver (this);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-		DisplayMissions ();
+		DisplayContent ();
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void DisplayContent ()
 	{
-
-	}
-
-	public void OnReturn ()
-	{
-
-	}
-
-	private void DisplayMissions ()
-	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		Lair lair = GameController.instance.GetLair (0);
 
@@ -199,13 +184,10 @@ public class Missions_PlanMissionMenu_SelectMissionMenu : MonoBehaviour, IMenu, 
 				break;
 
 			}
-			DisplayMissions ();
+			DisplayContent ();
 			break;
 		}
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 
 	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
 }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_Hire
   m_EditorClassIdentifier: 
   m_name: HIRE
+  m_appType: 4
   m_icon: {fileID: 21300000, guid: 44b04a25be6ce48edb2aa9885c3e37e4, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 331401f0f164c47b19b3fd233889f84b, type: 3}
   m_wantsSystemNavBar: 1

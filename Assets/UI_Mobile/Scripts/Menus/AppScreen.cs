@@ -3,23 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen : MonoBehaviour, IObserver, IMenu {
+public class AppScreen : BaseMenu, IObserver {
 
 	public RectTransform m_gridView;
 	public Text 
 	m_currentCommandPoolText,
 	m_CommandPoolUpkeepText;
 
-	private IApp m_parentApp;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 	}
 
 	public void Initialize (List<IApp> apps, GameObject appIcon, IApp parentApp)
@@ -87,6 +80,10 @@ public class AppScreen : MonoBehaviour, IObserver, IMenu {
 			}
 		}
 
+		// check for having too many assets
+
+		upkeepCost += GameController.instance.GetAssetUpkeep (0);
+
 		if (upkeepCost > 0) {
 
 			upkeep += upkeepCost.ToString () + "/TURN";
@@ -109,7 +106,7 @@ public class AppScreen : MonoBehaviour, IObserver, IMenu {
 			m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
 
 			break;
-
+		case GameEvent.Player_AssetsChanged:
 		case GameEvent.Player_HenchmenPoolChanged:
 
 			UpdateUpkeep ();
@@ -117,23 +114,4 @@ public class AppScreen : MonoBehaviour, IObserver, IMenu {
 			break;
 		}
 	}
-
-	public void OnEnter (bool animate)
-	{
-	}
-
-	public void OnExit (bool animate)
-	{
-	}
-
-	public void OnHold ()
-	{
-	}
-
-	public void OnReturn ()
-	{
-	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

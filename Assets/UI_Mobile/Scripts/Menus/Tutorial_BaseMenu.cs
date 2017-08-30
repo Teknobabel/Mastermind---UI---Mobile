@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class Tutorial_BaseMenu : MonoBehaviour, IMenu {
+public class Tutorial_BaseMenu : BaseMenu {
 
 	[System.Serializable]
 	public struct ProgressText
@@ -24,8 +24,6 @@ public class Tutorial_BaseMenu : MonoBehaviour, IMenu {
 	[SerializeField]
 	public List<ProgressText> m_progressText;
 
-	protected IApp m_parentApp;
-
 	protected float 
 	m_holdTime = 3.0f,
 	m_currentHoldTime = 0.0f;
@@ -34,19 +32,10 @@ public class Tutorial_BaseMenu : MonoBehaviour, IMenu {
 
 	protected List<ProgressText> m_currentProgressText;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_currentProgressText = new List<ProgressText> (m_progressText);
 
 		this.gameObject.SetActive (false);
@@ -80,17 +69,6 @@ public class Tutorial_BaseMenu : MonoBehaviour, IMenu {
 		}
 	}
 
-	public virtual void OnEnter (bool animate)
-	{
-
-	}
-
-	public virtual void OnExit (bool animate)
-	{
-
-	}
-
-
 	public void OnExitComplete ()
 	{
 		//		Color c = m_bgPanel.color;
@@ -101,21 +79,4 @@ public class Tutorial_BaseMenu : MonoBehaviour, IMenu {
 		//
 		this.gameObject.SetActive (false);
 	}
-
-	public virtual void OnHold ()
-	{
-
-	}
-
-	public virtual void OnReturn ()
-	{
-
-	}
-
-
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-
-
 }

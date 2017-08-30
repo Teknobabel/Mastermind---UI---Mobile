@@ -4,16 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class OmegaPlan_GoalInfoMenu : MonoBehaviour, IMenu {
-
-//	public Text
-//	m_appNameText;
-//
-//	public GameObject
-//	m_henchmenCellGO;
-
-//	public Transform
-//	m_contactsListParent;
+public class OmegaPlan_GoalInfoMenu : BaseMenu {
 
 	public RectTransform
 		m_infoPanel;
@@ -21,22 +12,12 @@ public class OmegaPlan_GoalInfoMenu : MonoBehaviour, IMenu {
 	public RawImage
 		m_bgPanel;
 
-	private IApp m_parentApp;
-
-//	private List<UICell> m_cells = new List<UICell>();
-
-	//	private Transform m_menuParent;
-
 	private float m_darkenAmount = 0;
 
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 //		m_appNameText.text = parentApp.Name;
 		m_darkenAmount = m_bgPanel.color.a;
 		this.gameObject.SetActive (false);
@@ -47,8 +28,10 @@ public class OmegaPlan_GoalInfoMenu : MonoBehaviour, IMenu {
 		m_parentApp.PopMenu ();
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
 		// slide in animation
@@ -80,8 +63,10 @@ public class OmegaPlan_GoalInfoMenu : MonoBehaviour, IMenu {
 		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		if (animate) {
 			// fade in background
 			Color c = m_bgPanel.color;
@@ -111,17 +96,4 @@ public class OmegaPlan_GoalInfoMenu : MonoBehaviour, IMenu {
 
 		this.gameObject.SetActive (false);
 	}
-
-	public void OnHold ()
-	{
-
-	}
-
-	public void OnReturn ()
-	{
-
-	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

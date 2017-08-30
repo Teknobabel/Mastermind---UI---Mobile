@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_Missions
   m_EditorClassIdentifier: 
   m_name: MISSIONS
+  m_appType: 2
   m_icon: {fileID: 21300000, guid: b915d6fd8637b469b988340d2228d827, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: b983e0126bd7b4923bd0478abbe6ef43, type: 3}
   m_wantsSystemNavBar: 1

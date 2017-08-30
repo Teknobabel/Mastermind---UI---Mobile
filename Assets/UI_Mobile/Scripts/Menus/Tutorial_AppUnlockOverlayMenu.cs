@@ -8,7 +8,7 @@ public class Tutorial_AppUnlockOverlayMenu : OmegaPlan_GoalInfoMenu {
 
 	public Transform m_appParent;
 
-	private List<GameObject> m_cells = new List<GameObject>();
+	private List<GameObject> m_appIcons = new List<GameObject>();
 
 	public void InitializeOverlay (List<IApp> appList)
 	{
@@ -16,7 +16,7 @@ public class Tutorial_AppUnlockOverlayMenu : OmegaPlan_GoalInfoMenu {
 		foreach (IApp a in appList) {
 
 			GameObject go = (GameObject)GameObject.Instantiate (m_appIconGO, m_appParent);
-			m_cells.Add (go);
+			m_appIcons.Add (go);
 			AppIcon ai = (AppIcon)go.GetComponent<AppIcon>();
 			ai.Initialize(a);
 			ai.DisableButton ();
@@ -25,12 +25,13 @@ public class Tutorial_AppUnlockOverlayMenu : OmegaPlan_GoalInfoMenu {
 
 	public override void OnExitComplete ()
 	{
-		while (m_cells.Count > 0) {
+		while (m_appIcons.Count > 0) {
 
-			GameObject g = m_cells [0];
-			m_cells.RemoveAt (0);
+			GameObject g = m_appIcons [0];
+			m_appIcons.RemoveAt (0);
 			Destroy (g);
 		}
+
 
 		base.OnExitComplete ();
 	}

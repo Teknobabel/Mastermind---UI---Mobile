@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
+public class ContactsMenu : BaseMenu, IUIObserver {
 
 	public enum DisplayType {
 		Alpha,
@@ -24,35 +24,26 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 
 	public SegmentedToggle m_infoPanelToggle;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
 	private DisplayType m_displayType = DisplayType.Alpha;
 
-	private bool m_isDirty = false;
-
-//	private Transform m_menuParent;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_appNameText.text = parentApp.Name;
 		m_infoPanelToggle.AddObserver (this);
 //		m_infoPanelToggle.ToggleButtonClicked (0);
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-		DisplayHenchmen ();
+		DisplayContent ();
 
 		// slide in animation
 		if (animate) {
@@ -83,8 +74,9 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
 		// clear any remaining new flags
 
 //		bool newStateChanged = false;
@@ -138,20 +130,18 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
+		base.OnReturn ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
-
-		if (m_isDirty) {
-
-			m_isDirty = false;
-			DisplayHenchmen ();
-		}
 	}
 
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
@@ -173,7 +163,7 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 				break;
 				
 			}
-			DisplayHenchmen ();
+			DisplayContent ();
 			break;
 		}
 	}
@@ -188,14 +178,9 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 		m_parentApp.PushMenu (((HenchmenApp)(m_parentApp)).detailMenu);
 	}
 
-	private void DisplayHenchmen ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
 
@@ -338,9 +323,4 @@ public class ContactsMenu : MonoBehaviour, IMenu, IUIObserver {
 			break;
 		}
 	}
-	
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-
-	public bool isDirty {set{ m_isDirty = value; }}
 }

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Settings_HomeMenu : MonoBehaviour, IMenu {
-
-	private IApp m_parentApp;
+public class Settings_HomeMenu : BaseMenu {
 
 	public Texture
 	m_toggleEmpty,
@@ -37,15 +35,18 @@ public class Settings_HomeMenu : MonoBehaviour, IMenu {
 		}
 	}
 
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 //		m_appNameText.text = parentApp.Name;
 		this.gameObject.SetActive (false);
 	}
 	
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
 //		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
@@ -96,8 +97,10 @@ public class Settings_HomeMenu : MonoBehaviour, IMenu {
 //		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 //		int playTutorial = PlayerPrefs.GetInt ("PlayTutorial");
 //		bool savePrefs = false;
 //
@@ -172,16 +175,17 @@ public class Settings_HomeMenu : MonoBehaviour, IMenu {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
+		base.OnReturn ();
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

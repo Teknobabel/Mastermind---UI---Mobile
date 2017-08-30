@@ -426,6 +426,16 @@ MonoBehaviour:
   m_headerCellGO: {fileID: 1575044260185468, guid: fefac4bbf778c469ea7c92f2c707cacb,
     type: 2}
   m_contactsListParent: {fileID: 224421541785936810}
+  m_skills:
+  - {fileID: 11400000, guid: 5012507d9c84147ffa815f096eab1388, type: 2}
+  - {fileID: 11400000, guid: 8f84ae1514a0d47c1bae40000ab37336, type: 2}
+  - {fileID: 11400000, guid: 623d1d424d81f49f3b83c27c07649bbd, type: 2}
+  - {fileID: 11400000, guid: eba96bd9f53114d57ab478711dd08586, type: 2}
+  - {fileID: 11400000, guid: cc61c91c3717c45bd92a5453346da037, type: 2}
+  - {fileID: 11400000, guid: 3e9e65fa5e5de47c89b6caf3433efa07, type: 2}
+  - {fileID: 11400000, guid: 7d51e0fd373854f98baae47297cd2fc5, type: 2}
+  - {fileID: 11400000, guid: b236a0df5ee4043eda45eb7f7d024dde, type: 2}
+  - {fileID: 11400000, guid: 4b9a34e25d0e94c8b9d942e91992d4b8, type: 2}
   m_infoPanelToggle: {fileID: 114011540352122210}
 --- !u!114 &114152579698636004
 MonoBehaviour:

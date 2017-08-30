@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Assets_AssetDetailMenu : MonoBehaviour, IMenu {
+public class Assets_AssetDetailMenu : BaseMenu {
 
 	public Text m_text;
 	public Button m_button;
 
-	private IApp m_parentApp;
-
 	private Site.AssetSlot m_assetSlot;
 
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		string s = "Asset: " + m_assetSlot.m_asset.m_name;
 
 		if (m_assetSlot.m_state == Site.AssetSlot.State.InUse) {
@@ -35,19 +36,11 @@ public class Assets_AssetDetailMenu : MonoBehaviour, IMenu {
 
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		this.gameObject.SetActive (false);
-	}
-
-	public void OnHold ()
-	{
-
-	}
-
-	public void OnReturn ()
-	{
-
 	}
 
 	public void DiscardAssetButtonClicked ()
@@ -66,7 +59,5 @@ public class Assets_AssetDetailMenu : MonoBehaviour, IMenu {
 		m_parentApp.PopMenu ();
 	}
 
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 	public Site.AssetSlot assetSlot {set{m_assetSlot = value;}}
 }

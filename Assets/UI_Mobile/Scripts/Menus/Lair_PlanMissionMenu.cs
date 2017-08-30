@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
+public class Lair_PlanMissionMenu : BaseMenu {
 
 	public GameObject
 		m_missionOverviewCellGO,
@@ -17,52 +17,43 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_contentParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
 	private Lair.FloorSlot m_floorSlot;
 
-	private bool m_isDirty = false;
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 //		m_appNameText.text = parentApp.Name;
 		//		m_infoPanelToggle.AddObserver (this);
 		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
 		// recompile to account for any changes since last visit
 
 		GameController.instance.CompileMission (m_floorSlot.m_missionPlan);
 
-		DisplayMissionPlan ();
+		DisplayContent ();
 
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
-		m_isDirty = false;
+		base.OnExit (animate);
 
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
-	{
-
-	}
-
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
 		if (m_isDirty) {
 
-			m_isDirty = false;
+
 
 //			foreach (Player.ActorSlot aSlot in m_floorSlot.m_missionPlan.m_actorSlots) {
 //
@@ -75,20 +66,14 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 			m_floorSlot.m_missionPlan.m_actorSlots = m_floorSlot.m_actorSlots;
 
 			GameController.instance.CompileMission (m_floorSlot.m_missionPlan);
-
-			DisplayMissionPlan ();
 		}
+
+		base.OnReturn (); 
 	}
 
-	private void DisplayMissionPlan ()
+	public override void DisplayContent ()
 	{
-//		Debug.Log (m_floorSlot.m_missionPlan.m_state);
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		// check if the mission needs to be recompiled
 		// if the state of any mission element changed since last visit to this menu
@@ -465,10 +450,5 @@ public class Lair_PlanMissionMenu : MonoBehaviour, IMenu {
 		((LairApp)ParentApp).homeMenu.isDirty = true;
 		m_parentApp.PopMenu ();
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-
 	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
-	public bool isDirty {set{m_isDirty = value;}}
 }

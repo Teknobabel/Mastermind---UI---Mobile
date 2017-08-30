@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
+public class Missions_PlanMissionMenu : BaseMenu {
 
 	public GameObject
 	m_missionOverviewCellGO,
@@ -17,69 +17,52 @@ public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_contentParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
-//	private Lair.FloorSlot m_floorSlot;
-
-	private bool m_isDirty = false;
-
 	private MissionPlan m_missionPlan = new MissionPlan ();
 
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
 		if (m_missionPlan == null) {
 			m_missionPlan = new MissionPlan ();
 		}
-		DisplayMissionPlan ();
+		DisplayContent ();
 
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
-		m_isDirty = false;
+		base.OnExit (animate);
 
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
-	{
-
-	}
-
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
 		if (m_isDirty) {
-
-			m_isDirty = false;
 
 			if (m_missionPlan.m_floorSlot != null) {
 				m_missionPlan.m_actorSlots = m_missionPlan.m_floorSlot.m_actorSlots;
 			}
 
 			GameController.instance.CompileMission (m_missionPlan);
-
-			DisplayMissionPlan ();
 		}
+
+		base.OnReturn ();
 	}
 
-	private void DisplayMissionPlan ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		// display mission overview cell
 
@@ -396,10 +379,5 @@ public class Missions_PlanMissionMenu : MonoBehaviour, IMenu {
 		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectHenchmenMenu);
 	}
 
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-
-//	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
 	public MissionPlan missionPlan {get{return m_missionPlan;} set{m_missionPlan = value;}}
-	public bool isDirty {set{m_isDirty = value;}}
 }

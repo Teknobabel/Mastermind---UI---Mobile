@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_Lair
   m_EditorClassIdentifier: 
   m_name: LAIR
+  m_appType: 7
   m_icon: {fileID: 21300000, guid: 1a8529cdb159649ff879a99146e871ad, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 7d37bf7ed957d42c18fc97ab746b613c, type: 3}
   m_wantsSystemNavBar: 1

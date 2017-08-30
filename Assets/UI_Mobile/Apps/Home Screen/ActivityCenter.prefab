@@ -295,6 +295,8 @@ MonoBehaviour:
     type: 2}
   m_activityCell: {fileID: 1622127230023270, guid: d1013e1f8736b4dd4a4e246c5da257fe,
     type: 2}
+  m_activityCellWithIcon: {fileID: 1622127230023270, guid: 4adfee8d9070d4e0e922bba5ed35d924,
+    type: 2}
 --- !u!114 &114897642867742152
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_Assets
   m_EditorClassIdentifier: 
   m_name: ASSETS
+  m_appType: 3
   m_icon: {fileID: 21300000, guid: 5ca2976089a6448e5b1b0fcbee509f9e, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 93fbaef1d5f734396b5dc6ef6ad4f63d, type: 3}
   m_wantsSystemNavBar: 1

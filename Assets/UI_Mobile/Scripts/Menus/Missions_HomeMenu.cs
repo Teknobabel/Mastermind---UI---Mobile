@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Missions_HomeMenu : MonoBehaviour, IMenu {
+public class Missions_HomeMenu : BaseMenu {
 
 	public Text
 	m_appNameText;
@@ -15,31 +15,22 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_contentParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
-	private bool m_isDirty = false;
-
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_appNameText.text = parentApp.Name;
 		//		m_infoPanelToggle.AddObserver (this);
 		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
-		this.gameObject.SetActive (true);
+		base.OnEnter (animate);
 
-		DisplayMissions ();
+		this.gameObject.SetActive (true);
+		DisplayContent ();
 
 		//		// slide in animation
 		//		if (animate) {
@@ -70,8 +61,10 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 		//		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		// clear out new flags
 
 		List<MissionPlan> missions = GameController.instance.GetMissions (0);
@@ -113,24 +106,22 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 
 //		RectTransform rt = gameObject.GetComponent<RectTransform> ();
 //		rt.anchoredPosition = Vector2.zero;
-		m_isDirty = false;
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
+		base.OnReturn ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
-
-		if (m_isDirty) {
-
-			m_isDirty = false;
-			DisplayMissions ();
-		}
 	}
 
 	public void MissionButtonPressed (MissionPlan mp)
@@ -147,14 +138,9 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).planMissionMenu);
 	}
 
-	private void DisplayMissions ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		List<MissionPlan> missions = GameController.instance.GetMissions (0);
 
@@ -186,8 +172,4 @@ public class Missions_HomeMenu : MonoBehaviour, IMenu {
 			}
 		}
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-	public bool isDirty {get{return m_isDirty;} set{ m_isDirty = value; }}
 }

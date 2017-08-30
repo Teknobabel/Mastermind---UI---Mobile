@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_Messages
   m_EditorClassIdentifier: 
   m_name: MESSAGES
+  m_appType: 0
   m_icon: {fileID: 21300000, guid: a95f155432497443c9e4d08d0e75bf30, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 1350900be18114933bfc6298d2eccf96, type: 3}
   m_wantsSystemNavBar: 1

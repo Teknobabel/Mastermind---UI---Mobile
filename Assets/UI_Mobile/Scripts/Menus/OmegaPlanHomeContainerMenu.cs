@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
+public class OmegaPlanHomeContainerMenu : BaseMenu, IUIObserver {
 
 	public Transform
 	m_contentParent;
@@ -11,20 +11,11 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 	public PageIndicator
 	m_pageIndicator;
 
-	private IApp m_parentApp;
-
 	private List<IMenu> m_childScreens = new List<IMenu> ();
 
-	private bool m_isDirty = false;
-
-	// Use this for initialization
-//	void Start () {
-//
-//	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 //		m_appNameText.text = parentApp.Name;
 	//		m_infoPanelToggle.AddObserver (this);
 	//		m_infoPanelToggle.ToggleButtonClicked (0);
@@ -66,19 +57,22 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		foreach (IMenu menu in m_childScreens) {
 
 			menu.OnEnter (animate);
 		}
 
 		this.gameObject.SetActive (true);
-
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		foreach (IMenu menu in m_childScreens) {
 
 			menu.OnExit (animate);
@@ -116,18 +110,18 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 
 		if (m_isDirty) {
-
-			m_isDirty = false;
 
 			// refresh goals screens
 
@@ -136,10 +130,9 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 				menu.OnReturn ();
 			}
 		}
-	}
 
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
+		base.OnReturn ();
+	}
 
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
 	{
@@ -151,6 +144,4 @@ public class OmegaPlanHomeContainerMenu : MonoBehaviour, IMenu, IUIObserver {
 			break;
 		}
 	}
-
-	public bool isDirty {set{m_isDirty = value;}}
 }

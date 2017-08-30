@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
+public class OmegaPlanHomeMenu : BaseMenu {
 
 	public Text
 	m_appNameText,
@@ -16,22 +16,13 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_opGoalListParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
 	private OmegaPlan.Phase m_phaseGoals;
 
 	private int m_phaseNumber = -1;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 
 		Player.OmegaPlanSlot omegaPlan = GameController.instance.GetOmegaPlan (0);
 
@@ -47,14 +38,9 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 
 	}
 
-	private void DisplayGoals ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		Player.OmegaPlanSlot omegaPlan = GameController.instance.GetOmegaPlan (0);
 
@@ -92,10 +78,12 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 	}
 
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
-		DisplayGoals ();
+		DisplayContent ();
 
 
 //		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
@@ -147,8 +135,8 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 //		}
 	}
 
-	public void OnExit (bool animate)
-	{
+//	public override void OnExit (bool animate)
+//	{
 //		// slide out animation
 //		RectTransform rt = gameObject.GetComponent<RectTransform>();
 //		Rect r = rt.rect;
@@ -165,26 +153,18 @@ public class OmegaPlanHomeMenu : MonoBehaviour, IMenu {
 //			Destroy (c.gameObject);
 //		}
 //
-	}
+//	}
 
 	public void OnExitComplete ()
 	{
 
 	}
 
-	public void OnHold ()
+	public override void OnReturn () // TODO: check if this is needed still
 	{
-
+		base.OnReturn ();
+		DisplayContent ();
 	}
-
-	public void OnReturn ()
-	{
-		Debug.Log ("SLDKFSLDKFJ;");
-		DisplayGoals ();
-	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 
 	public OmegaPlan.Phase phaseGoals {get{ return m_phaseGoals;}set{m_phaseGoals = value; }}
 	public int phaseNumber {set{ m_phaseNumber = value; }}

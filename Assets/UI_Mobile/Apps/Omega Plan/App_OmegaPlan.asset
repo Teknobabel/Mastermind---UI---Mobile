@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_OmegaPlan
   m_EditorClassIdentifier: 
   m_name: OMEGA PLAN
+  m_appType: 1
   m_icon: {fileID: 21300000, guid: 186146199693041f6ad5d4dad865ea30, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 51c736faae7cc41acab0a07c4a47e971, type: 3}
   m_wantsSystemNavBar: 1

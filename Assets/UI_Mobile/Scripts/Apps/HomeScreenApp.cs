@@ -78,7 +78,7 @@ public class HomeScreenApp : BaseApp {
 
 		GameObject ac = (GameObject)GameObject.Instantiate (m_activityCenter, homeScreenMenu.m_contentParent);
 		ActivityCenterMenu acMenu = (ActivityCenterMenu)ac.GetComponent<ActivityCenterMenu> ();
-		acMenu.Initialize ();
+
 		LayoutElement acle = ac.GetComponent<LayoutElement> ();
 		acle.preferredWidth = screenWidth;
 		acle.preferredHeight = screenHeight;
@@ -97,6 +97,12 @@ public class HomeScreenApp : BaseApp {
 				// instantiate app
 				IApp newApp = (IApp)ScriptableObject.Instantiate(a);
 				newApp.InitializeApp ();
+
+				if (!MobileUIEngine.instance.appList.ContainsKey (((BaseApp)newApp).m_appType)) {
+					
+					MobileUIEngine.instance.appList.Add (((BaseApp)newApp).m_appType, newApp);
+				}
+
 				appList.Add (newApp);
 			}
 
@@ -110,6 +116,8 @@ public class HomeScreenApp : BaseApp {
 
 			numPages++;
 		}
+
+		acMenu.Initialize ();
 
 		ScrollRectSnap srt = (ScrollRectSnap) homeScreenGO.GetComponent<ScrollRectSnap> ();
 		srt.screens = numPages;

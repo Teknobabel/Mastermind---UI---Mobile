@@ -21,7 +21,8 @@ public class SegmentedToggle : MonoBehaviour, IUISubject {
 
 	// Use this for initialization
 	void Start () {
-		
+		SetButtonActiveState (0);
+		m_activeButton = 0;
 	}
 
 	public void ToggleButtonClicked (int buttonNum)

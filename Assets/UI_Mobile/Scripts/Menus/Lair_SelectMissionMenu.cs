@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Lair_SelectMissionMenu : MonoBehaviour, IMenu {
+public class Lair_SelectMissionMenu : BaseMenu {
 
 	public GameObject
 		m_missionCell;
@@ -11,51 +11,36 @@ public class Lair_SelectMissionMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_contentParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
 	private Lair.FloorSlot m_floorSlot;
 
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 		//		m_appNameText.text = parentApp.Name;
 		//		m_infoPanelToggle.AddObserver (this);
 		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-		DisplayMissions ();
+		DisplayContent ();
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void DisplayContent ()
 	{
-
-	}
-
-	public void OnReturn ()
-	{
-
-	}
-
-	private void DisplayMissions ()
-	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		foreach (Mission m in m_floorSlot.m_floor.m_missions) {
 
@@ -85,9 +70,6 @@ public class Lair_SelectMissionMenu : MonoBehaviour, IMenu {
 
 		ParentApp.PopMenu ();
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 
 	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
 }

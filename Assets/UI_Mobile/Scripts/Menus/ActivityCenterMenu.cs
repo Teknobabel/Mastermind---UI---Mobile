@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class ActivityCenterMenu : MonoBehaviour, IObserver {
 
@@ -11,7 +12,8 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 
 	public GameObject
 	m_activityHeader,
-	m_activityCell;
+	m_activityCell,
+	m_activityCellWithIcon;
 
 	private List<GameObject> m_cells = new List<GameObject>();
 
@@ -49,15 +51,45 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 			for (int i = 0; i < sList.Count; i++) {
 					
 				NotificationCenter.Notification s = sList[i];
-				GameObject cellGO = (GameObject)Instantiate (m_activityCell, m_scrollViewParent);
-				UICell cell = (UICell)cellGO.GetComponent<UICell> ();
-				cell.m_bodyText.text = s.m_title + "\n";
-				cell.m_bodyText.text += s.m_message;
-				m_cells.Add (cellGO);
 
-				if (entry.Key == activityList.Count-1) {
+				if (s.m_location != EventLocation.None) {
 
-					cell.m_rectTransforms [0].anchoredPosition = new Vector2(MobileUIEngine.instance.m_mainCanvas.sizeDelta.x, 0);
+
+
+					GameObject cellGO = (GameObject)Instantiate (m_activityCellWithIcon, m_scrollViewParent);
+					UICell cell = (UICell)cellGO.GetComponent<UICell> ();
+					cell.m_bodyText.text = s.m_title + "\n";
+					cell.m_bodyText.text += s.m_message;
+
+					IApp app = MobileUIEngine.instance.GetApp (s.m_location);
+					Debug.Log (app);
+					if (app != null && app.Icon != null) {
+						cell.m_image.texture = app.Icon.texture;
+					}
+
+					Button b = cell.m_buttons [0];
+					b.onClick.AddListener (delegate {
+						NotificationTapped(s.m_location);});
+
+					m_cells.Add (cellGO);
+
+					if (entry.Key == activityList.Count-1) {
+
+						cell.m_rectTransforms [0].anchoredPosition = new Vector2(MobileUIEngine.instance.m_mainCanvas.sizeDelta.x, 0);
+					}
+
+				} else {
+
+					GameObject cellGO = (GameObject)Instantiate (m_activityCell, m_scrollViewParent);
+					UICell cell = (UICell)cellGO.GetComponent<UICell> ();
+					cell.m_bodyText.text = s.m_title + "\n";
+					cell.m_bodyText.text += s.m_message;
+					m_cells.Add (cellGO);
+
+					if (entry.Key == activityList.Count-1) {
+
+						cell.m_rectTransforms [0].anchoredPosition = new Vector2(MobileUIEngine.instance.m_mainCanvas.sizeDelta.x, 0);
+					}
 				}
 			}
 		}
@@ -73,6 +105,16 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 			SetActivity (feed);
 
 			break;
+		}
+	}
+
+	public void NotificationTapped (EventLocation location)
+	{
+		IApp app = MobileUIEngine.instance.GetApp (location);
+
+		if (app != null) {
+
+			MobileUIEngine.instance.PushApp (app);
 		}
 	}
 	

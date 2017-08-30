@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class World_HomeMenu : MonoBehaviour, IMenu {
+public class World_HomeMenu : BaseMenu {
 
 	public Text
 	m_appNameText;
@@ -18,46 +18,46 @@ public class World_HomeMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_worldListParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_appNameText.text = parentApp.Name;
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
-		DisplayWorld ();
+		DisplayContent ();
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
+		base.OnReturn ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
-	private void DisplayWorld ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		List<Region> regionList = GameController.instance.GetWorld ();
 
@@ -130,7 +130,4 @@ public class World_HomeMenu : MonoBehaviour, IMenu {
 			}
 		}
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

@@ -24,6 +24,8 @@ public class MobileUIEngine : MonoBehaviour {
 
 	private List<IApp> m_appStack = new List<IApp>();
 
+	private Dictionary<EventLocation, IApp> m_appList = new Dictionary<EventLocation, IApp>();
+
 	private SystemNavBar m_systemNavBar;
 
 	private IApp 
@@ -79,6 +81,10 @@ public class MobileUIEngine : MonoBehaviour {
 			// instantiate home screen
 			startApp = (IApp)ScriptableObject.Instantiate(m_homeScreen);
 			startApp.InitializeApp ();
+
+			if (!m_appList.ContainsKey (((BaseApp)startApp).m_appType)) {
+				m_appList.Add (((BaseApp)startApp).m_appType, startApp);
+			}
 			m_homeScreenApp = startApp;
 
 			// instantitae turn processing screen
@@ -155,8 +161,23 @@ public class MobileUIEngine : MonoBehaviour {
 		}
 	}
 
+	public IApp GetApp (EventLocation type)
+	{
+		foreach (KeyValuePair<EventLocation, IApp> pair in m_appList) {
+
+			if (pair.Key == type) {
+
+				return pair.Value;
+			}
+		}
+
+		Debug.Log ("App of type: " + type + " not found");
+
+		return null;
+	}
+
 	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
 	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
 	public IApp homeScreenApp {get{ return m_homeScreenApp; }}
-
+	public Dictionary<EventLocation, IApp> appList {get{ return m_appList; } set{ m_appList = value; }}
 }

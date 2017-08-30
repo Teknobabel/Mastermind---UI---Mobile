@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_HomeScreen
   m_EditorClassIdentifier: 
   m_name: HOME
+  m_appType: 0
   m_icon: {fileID: 0}
   m_icon_Pressed: {fileID: 0}
   m_wantsSystemNavBar: 0

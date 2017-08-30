@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
+public class Hire_HomeMenu : BaseMenu, IUIObserver {
 
 	public enum DisplayType {
 		New,
@@ -22,39 +22,36 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 	public Transform
 	m_contactsListParent;
 
+	public Trait[] m_skills;
+
 	public SegmentedToggle m_infoPanelToggle;
-
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
 
 	private DisplayType m_displayType = DisplayType.Alpha;
 
-	private bool m_isDirty = false;
+	private List<Trait> m_currentlySeekingSkills = new List<Trait>();
+	private bool m_currentlySeekingChanged = false;
 
-	//	private Transform m_menuParent;
-
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_appNameText.text = parentApp.Name;
 		m_infoPanelToggle.AddObserver (this);
-//		m_infoPanelToggle.ToggleButtonClicked (0); // find some other way to set initial toggle state
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-//		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
+		// update seeking skills
 
-		DisplayHenchmen ();
+		Player player = GameEngine.instance.game.playerList [0];
+		m_currentlySeekingSkills = player.hiringPool.m_seekingSkills;
+
+		DisplayContent ();
 
 		// slide in animation
 		if (animate) {
@@ -85,8 +82,20 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
+		// update currently seeking skills if necessary
+
+		if (m_currentlySeekingChanged) {
+
+			Action_UpdateSeekingSkills updateSeeking = new Action_UpdateSeekingSkills ();
+			updateSeeking.m_playerID = 0;
+			updateSeeking.m_seekingSkills = m_currentlySeekingSkills;
+			GameController.instance.ProcessAction (updateSeeking);
+		}
+
 		// clear any remaining new flags
 
 		bool newStateChanged = false;
@@ -109,8 +118,6 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 			
 			m_parentApp.SetAlerts ();
 		}
-
-		m_isDirty = false;
 
 		if (animate) {
 			// slide out animation
@@ -142,21 +149,19 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
+		base.OnReturn ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 
-		if (m_isDirty) {
-
-			m_isDirty = false;
-
-			DisplayHenchmen ();
-		}
 	}
 
 	public void OnNotify (IUISubject subject, UIEvent thisUIEvent)
@@ -178,7 +183,7 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 				break;
 
 			}
-			DisplayHenchmen ();
+			DisplayContent ();
 			break;
 		}
 	}
@@ -205,14 +210,9 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 		m_parentApp.PushMenu (((HireApp)(m_parentApp)).detailMenu);
 	}
 
-	private void DisplayHenchmen ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiringPool (0);
 
@@ -473,10 +473,43 @@ public class Hire_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 
 			break;
 		}
+
+		// display looking to hire menu
+
+		GameObject lookingToHireHeaderGO = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+		UICell lookingToHireCell = (UICell)lookingToHireHeaderGO.GetComponent<UICell> ();
+		lookingToHireCell.m_headerText.text = "I WANT TO HIRE:";
+		m_cells.Add (lookingToHireCell);
+
+		foreach (Trait t in m_skills) {
+
+			GameObject skillTraitGO = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+			UICell skillTraitCell = (UICell)skillTraitGO.GetComponent<UICell> ();
+			skillTraitCell.m_headerText.text = t.m_name;
+			m_cells.Add (skillTraitCell);
+
+			if (m_currentlySeekingSkills.Contains (t)) {
+
+				skillTraitCell.m_images [0].color = Color.blue;
+				skillTraitCell.m_headerText.color = Color.white;
+			}
+
+			skillTraitCell.m_buttons[0].onClick.AddListener (delegate {
+				SkillTypeTapped (t);
+			});
+		}
 	}
 
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
+	private void SkillTypeTapped (Trait t)
+	{
+		if (!m_currentlySeekingSkills.Contains (t)) {
 
-	public bool isDirty {get{ return m_isDirty; }set{ m_isDirty = value; }}
+			m_currentlySeekingSkills.Add (t);
+		} else {
+			m_currentlySeekingSkills.Remove (t);
+		}
+
+		m_currentlySeekingChanged = true;
+		DisplayContent ();
+	}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
+public class Messages_DetailMenu : BaseMenu, IUISubject {
 
 	public GameObject
 	m_messageCellGO;
@@ -15,18 +15,14 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 	public UICell
 	m_henchmenInfo;
 
-	private IApp m_parentApp;
-
 	protected int m_henchmenID = -1;
 
 	private List<IUIObserver>
 	m_observers = new List<IUIObserver> ();
 
-	private List<UICell> m_cells = new List<UICell>();
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
 //		m_appNameText.text = parentApp.Name;
 //		m_infoPanelToggle.AddObserver (this);
 //		m_infoPanelToggle.ToggleButtonClicked (0);
@@ -38,7 +34,7 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 		m_parentApp.PushMenu (((MessagesApp)m_parentApp).newMessageOverlay);
 	}
 
-	public void DisplayMessages ()
+	public override void DisplayContent ()
 	{
 //		DummyMessageCenter.Conversation convo = GetDummyData.instance.GetConversation (m_henchmenID);
 //		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
@@ -78,11 +74,13 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 //		LayoutRebuilder.ForceRebuildLayoutImmediate(m_contentParent.GetComponent<RectTransform> ());
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-		DisplayMessages ();
+		DisplayContent ();
 
 		// slide in animation
 		if (animate) {
@@ -113,8 +111,10 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 //		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 //		if (animate) {
 //			// slide out animation
 //			RectTransform rt = gameObject.GetComponent<RectTransform> ();
@@ -143,16 +143,6 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 //		rt.anchoredPosition = Vector2.zero;
 //
 		this.gameObject.SetActive (false);
-	}
-
-	public void OnHold ()
-	{
-
-	}
-
-	public void OnReturn ()
-	{
-
 	}
 
 	public void SetHenchmen (int id)
@@ -185,7 +175,4 @@ public class Messages_DetailMenu : MonoBehaviour, IMenu, IUISubject {
 			m_observers[i].OnNotify(subject, thisUIEvent);
 		}
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

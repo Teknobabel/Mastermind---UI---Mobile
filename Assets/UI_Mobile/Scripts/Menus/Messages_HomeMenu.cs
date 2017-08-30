@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
+public class Messages_HomeMenu : BaseMenu, IUIObserver {
 
 	public Text
 	m_appNameText;
@@ -15,24 +15,23 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 	public Transform
 	m_contactsListParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_appNameText.text = parentApp.Name;
 //		m_infoPanelToggle.AddObserver (this);
 //		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-		DisplayHenchmen ();
+		DisplayContent ();
 
 		// slide in animation
 		if (animate) {
@@ -63,8 +62,10 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 		}
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		if (animate) {
 			// slide out animation
 			RectTransform rt = gameObject.GetComponent<RectTransform> ();
@@ -95,13 +96,17 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void OnHold ()
 	{
+		base.OnHold ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (true);
 	}
 
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
+		base.OnReturn ();
+
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
@@ -129,14 +134,9 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 //		}
 	}
 
-	private void DisplayHenchmen ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 //		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
 
@@ -228,7 +228,4 @@ public class Messages_HomeMenu : MonoBehaviour, IMenu, IUIObserver {
 //			break;
 //		}
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

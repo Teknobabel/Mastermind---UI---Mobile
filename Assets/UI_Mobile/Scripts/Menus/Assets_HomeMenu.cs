@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Assets_HomeMenu : MonoBehaviour, IMenu {
+public class Assets_HomeMenu : BaseMenu {
 
 	public Text
 	m_appNameText;
@@ -15,31 +15,28 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 	m_assetCellGO,
 	m_headerCellGO;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
-	private bool m_isDirty = false;
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		m_appNameText.text = parentApp.Name;
 		//		m_infoPanelToggle.AddObserver (this);
 		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
-		DisplayAssets ();
+		DisplayContent ();
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
-		m_isDirty = false;
+		base.OnExit (animate);
 
 		// clear out new flags
 
@@ -59,28 +56,9 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
+	public override void DisplayContent ()
 	{
-
-	}
-
-	public void OnReturn ()
-	{
-		if (m_isDirty) {
-
-			m_isDirty = false;
-			DisplayAssets ();
-		}
-	}
-
-	public void DisplayAssets ()
-	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
 
@@ -141,9 +119,5 @@ public class Assets_HomeMenu : MonoBehaviour, IMenu {
 		((AssetsApp)m_parentApp).assetDetailMenu.assetSlot = assetSlot;
 		ParentApp.PushMenu (((AssetsApp)m_parentApp).assetDetailMenu);
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-	public bool isDirty {get{ return m_isDirty; }set{m_isDirty = value;}}
 
 }

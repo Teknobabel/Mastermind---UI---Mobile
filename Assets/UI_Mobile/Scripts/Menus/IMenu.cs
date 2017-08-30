@@ -6,6 +6,8 @@ public interface IMenu  {
 
 	IApp ParentApp { get;}
 
+	bool isDirty { set;}
+
 	void Initialize (IApp parentApp);
 
 	void OnEnter (bool animate);
@@ -15,4 +17,6 @@ public interface IMenu  {
 	void OnHold ();
 
 	void OnReturn ();
+
+	void DisplayContent ();
 }

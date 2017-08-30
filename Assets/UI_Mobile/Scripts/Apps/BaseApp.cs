@@ -6,6 +6,7 @@ using DG.Tweening;
 public class BaseApp : ScriptableObject, IApp {
 
 	public string m_name;
+	public EventLocation m_appType = EventLocation.None;
 	public Sprite m_icon;
 	public Sprite m_icon_Pressed;
 	public bool m_wantsSystemNavBar = true;

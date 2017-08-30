@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HomeScreen_CPBreakdownMenu : MonoBehaviour, IMenu {
+public class HomeScreen_CPBreakdownMenu : BaseMenu {
 
 	public Text m_cpBreakdownText;
 
-	private IApp m_parentApp;
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 //		m_appNameText.text = parentApp.Name;
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
 		string breakdown = "Command Pool Breakdown:\n";
@@ -49,20 +50,27 @@ public class HomeScreen_CPBreakdownMenu : MonoBehaviour, IMenu {
 
 		// get any upkeep from having too many assets
 
-		int numAssetSlots = GameController.instance.GetNumAssetSlots (0);
-		int numAssets = 0;
-		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
+//		int numAssetSlots = GameController.instance.GetNumAssetSlots (0);
+//		int numAssets = 0;
+//		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
+//
+//		foreach (Site.AssetSlot aSlot in assets) {
+//
+//			if (aSlot.m_state != Site.AssetSlot.State.None) {
+//				numAssets++;
+//			}
+//		}
+//
+//		if (numAssets > numAssetSlots) {
+//
+//			breakdown += "\nAssets: -" + (numAssets - numAssetSlots).ToString () + " CP\n";
+//		}
 
-		foreach (Site.AssetSlot aSlot in assets) {
+		int assetUpkeep = GameController.instance.GetAssetUpkeep (0);
 
-			if (aSlot.m_state != Site.AssetSlot.State.None) {
-				numAssets++;
-			}
-		}
+		if (assetUpkeep > 0) {
 
-		if (numAssets > numAssetSlots) {
-
-			breakdown += "\nAssets: -" + (numAssets - numAssetSlots).ToString () + " CP\n";
+			breakdown += "\nAssets: -" + assetUpkeep.ToString () + " CP\n";
 		}
 
 		// check for any bonuses from lair floors
@@ -101,18 +109,11 @@ public class HomeScreen_CPBreakdownMenu : MonoBehaviour, IMenu {
 
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
+		base.OnExit (animate);
+
 		this.gameObject.SetActive (false);
-
-	}
-
-	public void OnHold ()
-	{
-	}
-
-	public void OnReturn ()
-	{
 
 	}
 
@@ -120,7 +121,4 @@ public class HomeScreen_CPBreakdownMenu : MonoBehaviour, IMenu {
 	{
 		m_parentApp.PopMenu ();
 	}
-
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
 }

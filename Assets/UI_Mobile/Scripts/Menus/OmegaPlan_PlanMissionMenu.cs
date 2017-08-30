@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
+public class OmegaPlan_PlanMissionMenu : BaseMenu {
 
 	public GameObject
 	m_missionOverviewCellGO,
@@ -17,72 +17,55 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 	public Transform
 	m_contentParent;
 
-	private IApp m_parentApp;
-
-	private List<UICell> m_cells = new List<UICell>();
-
-//	private Lair.FloorSlot m_floorSlot;
-
 	private OmegaPlan.OPGoal m_goal;
 
-	private bool m_isDirty = false;
-
-	public void Initialize (IApp parentApp)
+	public override void Initialize (IApp parentApp)
 	{
-		m_parentApp = parentApp;
+		base.Initialize (parentApp);
+
 		//		m_appNameText.text = parentApp.Name;
 		//		m_infoPanelToggle.AddObserver (this);
 		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnEnter (bool animate)
+	public override void OnEnter (bool animate)
 	{
+		base.OnEnter (animate);
+
 		this.gameObject.SetActive (true);
 
 		// recompile to account for any changes since last visit
 
 		GameController.instance.CompileMission (m_goal.plan);
 
-		DisplayMissionPlan ();
+		DisplayContent ();
 
 	}
 
-	public void OnExit (bool animate)
+	public override void OnExit (bool animate)
 	{
-		m_isDirty = false;
+		base.OnExit (animate);
 
 		this.gameObject.SetActive (false);
 	}
 
-	public void OnHold ()
-	{
 
-	}
-
-	public void OnReturn ()
+	public override void OnReturn ()
 	{
 		if (m_isDirty) {
 
-			m_isDirty = false;
-
-
-//			m_floorSlot.m_missionPlan.m_actorSlots = m_floorSlot.m_actorSlots;
-
 			GameController.instance.CompileMission (m_goal.plan);
 
-			DisplayMissionPlan ();
+			DisplayContent ();
 		}
+
+		base.OnReturn ();
 	}
 
-	private void DisplayMissionPlan ()
+	public override void DisplayContent ()
 	{
-		while (m_cells.Count > 0) {
-
-			UICell c = m_cells [0];
-			m_cells.RemoveAt (0);
-			Destroy (c.gameObject);
-		}
+		base.DisplayContent ();
 
 		// display mission overview cell
 		Debug.Log(m_goal.plan.m_currentMission);
@@ -347,10 +330,5 @@ public class OmegaPlan_PlanMissionMenu : MonoBehaviour, IMenu {
 		ParentApp.PushMenu (((OmegaPlansApp)m_parentApp).selectHenchmenMenu);
 	}
 
-	public IApp ParentApp 
-	{ get{ return m_parentApp; }}
-
 	public OmegaPlan.OPGoal goal {get{ return m_goal; } set{ m_goal = value; }}
-//	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
-	public bool isDirty {set{m_isDirty = value;}}
 }
