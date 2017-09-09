@@ -62,6 +62,8 @@ public class Assets_HomeMenu : BaseMenu {
 
 		List<Site.AssetSlot> assets = GameController.instance.GetAssets (0);
 
+		List<Asset> assetsNeededForOP = (GameController.instance.GetOmegaPlan (0)).m_omegaPlan.GetNeededAssets ();
+
 		int numAssetSlots = GameController.instance.GetNumAssetSlots (0);
 
 		for (int i=0; i < assets.Count; i++)
@@ -90,6 +92,11 @@ public class Assets_HomeMenu : BaseMenu {
 			if (aSlot.m_new) {
 
 				assetCell.m_rectTransforms [1].gameObject.SetActive (true);
+			}
+
+			if (assetsNeededForOP.Contains (aSlot.m_asset)) {
+
+				assetCell.m_rectTransforms [2].gameObject.SetActive (true);
 			}
 
 			Button b = assetCell.m_buttons [0];

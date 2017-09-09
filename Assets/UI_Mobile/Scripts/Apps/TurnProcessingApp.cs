@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class TurnProcessingApp : BaseApp, IObserver {
 
-	private GameObject m_turnProcessingMenu;
+//	private TurnProcessing_HomeMenu m_turnProcessingMenu;
+	private Alert_MissionReport m_missionReport;
 
 	private float
 		m_durationTime = 3.0f,
@@ -13,15 +14,20 @@ public class TurnProcessingApp : BaseApp, IObserver {
 
 	private bool m_finishedProcessingTurn = false;
 
+//	private List<MissionSummary> m_completedMissions = new List<MissionSummary> ();
+
 	public override void InitializeApp ()
 	{
-		foreach (GameObject menu in m_menuBank) {
+		
+		GameObject go = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
+		go.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_homeMenu = (BaseMenu)go.GetComponent<BaseMenu>();
+		m_homeMenu.Initialize (this);
 
-			GameObject go = (GameObject)GameObject.Instantiate (menu, Vector3.zero, Quaternion.identity);
-			go.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-			m_turnProcessingMenu = go;
-			m_turnProcessingMenu.SetActive (false);
-		}
+		GameObject missionReportGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
+		missionReportGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_missionReport = (Alert_MissionReport)missionReportGO.GetComponent<Alert_MissionReport>();
+		m_missionReport.Initialize (this);
 
 		GameController.instance.AddObserver (this);
 
@@ -30,35 +36,60 @@ public class TurnProcessingApp : BaseApp, IObserver {
 
 	public override void EnterApp ()
 	{
-		m_turnProcessingMenu.gameObject.SetActive (true);
+		if (m_menuStack.Count == 0) {
 
-		base.EnterApp ();
-	}
-
-	public override void ExitApp ()
-	{
-		m_turnProcessingMenu.gameObject.SetActive (false);
-
-		m_finishedProcessingTurn = false;
-		m_timer = 0.0f;
-
-		base.ExitApp ();
-	}
-
-	public override void UpdateApp ()
-	{
-		base.UpdateApp ();
-
-		m_timer = Mathf.Clamp (m_timer += Time.deltaTime, 0, m_durationTime);
-
-		if (m_timer == m_durationTime && m_finishedProcessingTurn) {
-
-			((HomeScreenApp)MobileUIEngine.instance.homeScreenApp).NewTurnStarted ();
-			MobileUIEngine.instance.PopApp ();
-
+			PushMenu (m_homeMenu);
 		}
 
+//		m_turnProcessingMenu.gameObject.SetActive (true);
+
+//		Action_EndPhase endTurn = new Action_EndPhase ();
+//		GameController.instance.ProcessAction (endTurn);
+//
+//		base.EnterApp ();
+//
+//		Player player = GameController.instance.game.playerList [0];
+//
+//		m_completedMissions = player.missionsCompletedThisTurn;
 	}
+
+//	public override void ExitApp ()
+//	{
+////		m_turnProcessingMenu.gameObject.SetActive (false);
+//
+//		m_finishedProcessingTurn = false;
+//		m_timer = 0.0f;
+//
+//		base.ExitApp ();
+//	}
+
+//	public override void UpdateApp ()
+//	{
+//		base.UpdateApp ();
+//
+//		m_timer = Mathf.Clamp (m_timer += Time.deltaTime, 0, m_durationTime);
+//
+//		if (m_timer == m_durationTime && m_finishedProcessingTurn) {
+//
+//
+//			if (m_completedMissions.Count > 0) {
+//				
+//				MissionSummary ms = m_completedMissions [0];
+//				m_completedMissions.RemoveAt (0);
+//
+//				m_missionReport.missionSummary = ms;
+//				PushMenu (m_missionReport);
+//				return;
+//			} else {
+//
+//				Player player = GameController.instance.game.playerList [0];
+//				player.missionsCompletedThisTurn.Clear ();
+//				((HomeScreenApp)MobileUIEngine.instance.homeScreenApp).NewTurnStarted ();
+//				MobileUIEngine.instance.PopApp ();
+//			}
+//		}
+//
+//	}
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
@@ -66,9 +97,15 @@ public class TurnProcessingApp : BaseApp, IObserver {
 
 		case GameEvent.Turn_PlayerPhaseStarted:
 
+//			Player player = GameController.instance.game.playerList [0];
+//
+//			m_completedMissions = player.missionsCompletedThisTurn;
+
 			m_finishedProcessingTurn = true;
 
 			break;
 		}
 	}
+
+	public Alert_MissionReport missionReport {get{ return m_missionReport; }}
 }

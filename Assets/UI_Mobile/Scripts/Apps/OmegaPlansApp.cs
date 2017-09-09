@@ -12,9 +12,9 @@ public class OmegaPlansApp : BaseApp, IObserver {
 	private Transform m_menuParent = null;
 
 	private OmegaPlan_GoalInfoMenu m_opGoalInfoOverlay;
-	private OmegaPlanHomeContainerMenu m_homeMenu;
-	private OmegaPlan_PlanMissionMenu m_missionPlanningMenu;
-	private OmegaPlan_SelectHenchmenMenu m_selectHenchmenMenu;
+//	private OmegaPlanHomeContainerMenu m_homeMenu;
+	private PlanMissionMenu m_missionPlanningMenu;
+//	private OmegaPlan_SelectHenchmenMenu m_selectHenchmenMenu;
 
 	public override void InitializeApp ()
 	{
@@ -26,7 +26,7 @@ public class OmegaPlansApp : BaseApp, IObserver {
 		GameObject homeScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		m_menuParent = homeScreenGO.transform;
 		homeScreenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (OmegaPlanHomeContainerMenu)homeScreenGO.GetComponent<OmegaPlanHomeContainerMenu> ();
+		m_homeMenu = (BaseMenu)homeScreenGO.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 
 		GameObject infoScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[2], Vector3.zero, Quaternion.identity);
@@ -37,13 +37,13 @@ public class OmegaPlansApp : BaseApp, IObserver {
 
 		GameObject missionPlanningGO = (GameObject)GameObject.Instantiate (m_menuBank[3], Vector3.zero, Quaternion.identity);
 		missionPlanningGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_missionPlanningMenu = (OmegaPlan_PlanMissionMenu)missionPlanningGO.GetComponent<OmegaPlan_PlanMissionMenu> ();
+		m_missionPlanningMenu = (PlanMissionMenu)missionPlanningGO.GetComponent<PlanMissionMenu> ();
 		m_missionPlanningMenu.Initialize (this);
 
-		GameObject selectHenchmenGO = (GameObject)GameObject.Instantiate (m_menuBank[4], Vector3.zero, Quaternion.identity);
-		selectHenchmenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_selectHenchmenMenu = (OmegaPlan_SelectHenchmenMenu)selectHenchmenGO.GetComponent<OmegaPlan_SelectHenchmenMenu> ();
-		m_selectHenchmenMenu.Initialize (this);
+//		GameObject selectHenchmenGO = (GameObject)GameObject.Instantiate (m_menuBank[4], Vector3.zero, Quaternion.identity);
+//		selectHenchmenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+//		m_selectHenchmenMenu = (OmegaPlan_SelectHenchmenMenu)selectHenchmenGO.GetComponent<OmegaPlan_SelectHenchmenMenu> ();
+//		m_selectHenchmenMenu.Initialize (this);
 
 		m_menuParent.gameObject.SetActive (false);
 
@@ -110,7 +110,7 @@ public class OmegaPlansApp : BaseApp, IObserver {
 		}
 	}
 
-	public OmegaPlan_PlanMissionMenu missionPlanningMenu {get{ return m_missionPlanningMenu;}}
-	public OmegaPlan_SelectHenchmenMenu selectHenchmenMenu {get{ return m_selectHenchmenMenu;}}
-	public OmegaPlanHomeContainerMenu homeMenu {get{ return m_homeMenu;}}
+	public PlanMissionMenu missionPlanningMenu {get{ return m_missionPlanningMenu;}}
+//	public OmegaPlan_SelectHenchmenMenu selectHenchmenMenu {get{ return m_selectHenchmenMenu;}}
+//	public OmegaPlanHomeContainerMenu homeMenu {get{ return m_homeMenu;}}
 }

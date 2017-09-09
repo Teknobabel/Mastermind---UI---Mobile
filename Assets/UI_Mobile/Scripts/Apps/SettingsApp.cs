@@ -6,13 +6,13 @@ using DG.Tweening;
 [CreateAssetMenu]
 public class SettingsApp : BaseApp {
 
-	private Settings_HomeMenu m_homeMenu;
+//	private Settings_HomeMenu m_homeMenu;
 
 	public override void InitializeApp ()
 	{
 		GameObject settingsScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		settingsScreenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (Settings_HomeMenu)settingsScreenGO.GetComponent<Settings_HomeMenu> ();
+		m_homeMenu = (BaseMenu)settingsScreenGO.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 
 		base.InitializeApp ();

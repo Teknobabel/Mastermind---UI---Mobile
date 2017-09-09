@@ -5,14 +5,14 @@ using UnityEngine;
 [CreateAssetMenu]
 public class HireApp : BaseApp, IUIObserver, IObserver {
 
-	private Hire_HomeMenu m_homeMenu;
+//	private Hire_HomeMenu m_homeMenu;
 	private Hire_HenchmenDetailMenu m_henchmenDetailMenu;
 
 	public override void InitializeApp ()
 	{
 		GameObject go = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		go.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (Hire_HomeMenu)go.GetComponent<Hire_HomeMenu> ();
+		m_homeMenu = (BaseMenu)go.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 
 		GameObject detailScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
@@ -86,6 +86,6 @@ public class HireApp : BaseApp, IUIObserver, IObserver {
 		}
 	}
 
-	public Hire_HomeMenu homeMenu {get{ return m_homeMenu; }}
+//	public Hire_HomeMenu homeMenu {get{ return m_homeMenu; }}
 	public Hire_HenchmenDetailMenu detailMenu{get{ return m_henchmenDetailMenu; }}
 }

@@ -357,26 +357,26 @@ public class Missions_PlanMissionMenu : BaseMenu {
 	public void SelectMissionButtonPressed ()
 	{
 //		((LairApp)m_parentApp).selectMissionMenu.floorSlot = m_floorSlot;
-		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectMissionMenu);
+//		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectMissionMenu);
 	}
 
 	public void SelectSiteButtonPressed ()
 	{
 //		((MissionsApp)m_parentApp).selectSiteMenu.floorSlot = m_missionPlan.m_floorSlot;
-		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectSiteMenu);
+//		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectSiteMenu);
 	}
 
 	public void SelectTargetActorButtonPressed ()
 	{
 //		((MissionsApp)m_parentApp).selectTargetActorMenu.floorSlot = m_missionPlan.m_floorSlot;
-		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectTargetActorMenu);
+//		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectTargetActorMenu);
 	}
 
 	public void SelectHenchmenButtonPressed (Player.ActorSlot slot)
 	{
-		((MissionsApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
-		((MissionsApp)m_parentApp).selectHenchmenMenu.floorSlot = m_missionPlan.m_floorSlot;
-		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectHenchmenMenu);
+//		((MissionsApp)m_parentApp).selectHenchmenMenu.currentSlot = slot;
+//		((MissionsApp)m_parentApp).selectHenchmenMenu.floorSlot = m_missionPlan.m_floorSlot;
+//		ParentApp.PushMenu (((MissionsApp)m_parentApp).selectHenchmenMenu);
 	}
 
 	public MissionPlan missionPlan {get{return m_missionPlan;} set{m_missionPlan = value;}}

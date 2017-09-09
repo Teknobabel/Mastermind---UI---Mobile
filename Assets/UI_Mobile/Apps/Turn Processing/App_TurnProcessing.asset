@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Name: App_TurnProcessing
   m_EditorClassIdentifier: 
   m_name: TURN PROCESSING
+  m_appType: 0
   m_icon: {fileID: 0}
   m_icon_Pressed: {fileID: 0}
   m_wantsSystemNavBar: 0
   m_menuBank:
   - {fileID: 1359907691858566, guid: e2fe40a39d3d7494d9625a5cbf8dd7d8, type: 2}
+  - {fileID: 1503521624933904, guid: cbd3458d4560a4513a70d80033da48e9, type: 2}

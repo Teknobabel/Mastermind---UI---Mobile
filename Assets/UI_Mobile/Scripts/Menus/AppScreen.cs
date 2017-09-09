@@ -55,8 +55,8 @@ public class AppScreen : BaseMenu, IObserver {
 
 		MobileUIEngine.instance.PushApp (MobileUIEngine.instance.turnProcessingApp);
 
-		Action_EndPhase endTurn = new Action_EndPhase ();
-		GameController.instance.ProcessAction (endTurn);
+//		Action_EndPhase endTurn = new Action_EndPhase ();
+//		GameController.instance.ProcessAction (endTurn);
 	}
 
 	public void CPBreakdownButtonPressed ()

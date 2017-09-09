@@ -6,7 +6,7 @@ using DG.Tweening;
 [CreateAssetMenu]
 public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 
-	private ContactsMenu m_homeMenu;
+//	private ContactsMenu m_homeMenu;
 	private ContactsDetailViewMenu m_henchmenDetailMenu;
 
 	public override void InitializeApp ()
@@ -14,7 +14,7 @@ public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 
 		GameObject contactsScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		contactsScreenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (ContactsMenu)contactsScreenGO.GetComponent<ContactsMenu> ();
+		m_homeMenu = (BaseMenu)contactsScreenGO.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 
 
@@ -89,6 +89,6 @@ public class HenchmenApp : BaseApp, IUIObserver, IObserver {
 		}
 	}
 
-	public ContactsMenu homeMenu {get{ return m_homeMenu; }}
+//	public ContactsMenu homeMenu {get{ return m_homeMenu; }}
 	public ContactsDetailViewMenu detailMenu {get{return m_henchmenDetailMenu; }}
 }

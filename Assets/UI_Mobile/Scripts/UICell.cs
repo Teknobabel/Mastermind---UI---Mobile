@@ -22,6 +22,8 @@ public class UICell : MonoBehaviour {
 
 	public Sprite[] m_sprites;
 
+	public Text[] m_text;
+
 	// Use this for initialization
 	void Start () {
 		

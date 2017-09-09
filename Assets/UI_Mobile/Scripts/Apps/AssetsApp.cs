@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class AssetsApp : BaseApp, IObserver {
 
-	private Assets_HomeMenu m_homeMenu;
+//	private Assets_HomeMenu m_homeMenu;
 	private Assets_AssetDetailMenu m_assetDetailMenu;
 
 	public override void InitializeApp ()
 	{
 		GameObject go = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		go.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (Assets_HomeMenu)go.GetComponent<Assets_HomeMenu> ();
+		m_homeMenu = (BaseMenu)go.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 
 		GameObject assetDetailGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
@@ -63,5 +63,5 @@ public class AssetsApp : BaseApp, IObserver {
 	}
 
 	public Assets_AssetDetailMenu assetDetailMenu {get{ return m_assetDetailMenu;}}
-	public Assets_HomeMenu homeMenu {get{return m_homeMenu;}}
+//	public Assets_HomeMenu homeMenu {get{return m_homeMenu;}}
 }

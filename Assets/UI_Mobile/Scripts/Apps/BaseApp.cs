@@ -14,6 +14,7 @@ public class BaseApp : ScriptableObject, IApp {
 
 	protected List<IMenu> m_menuStack = new List<IMenu>();
 	protected AppIcon m_appIconInstance;
+	protected BaseMenu m_homeMenu;
 
 	public virtual void InitializeApp ()
 	{
@@ -166,4 +167,5 @@ public class BaseApp : ScriptableObject, IApp {
 
 	public int menuStackSize {get{ return m_menuStack.Count; }}
 	public AppIcon AppIconInstance {set{ m_appIconInstance = value; }}
+	public BaseMenu homeMenu {get{ return m_homeMenu;}}
 }

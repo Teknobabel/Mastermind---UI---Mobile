@@ -62,7 +62,7 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 					cell.m_bodyText.text += s.m_message;
 
 					IApp app = MobileUIEngine.instance.GetApp (s.m_location);
-					Debug.Log (app);
+//					Debug.Log (app);
 					if (app != null && app.Icon != null) {
 						cell.m_image.texture = app.Icon.texture;
 					}

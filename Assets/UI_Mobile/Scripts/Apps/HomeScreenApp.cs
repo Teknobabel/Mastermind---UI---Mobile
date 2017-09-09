@@ -136,6 +136,15 @@ public class HomeScreenApp : BaseApp {
 
 		base.InitializeApp ();
 
+		// instantiate toast alert
+
+		GameObject toastGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_toastGO, Vector3.zero, Quaternion.identity);
+		toastGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		Alert_Toast toast  = (Alert_Toast)toastGO.GetComponent<Alert_Toast> ();
+		//		toastGO.Initialize ();
+		MobileUIEngine.instance.toast = toast;
+		MobileUIEngine.instance.toast.gameObject.SetActive (false);
+
 		// instantiate system nav bar
 
 		GameObject sysNavGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_systemNavBarGO, Vector3.zero, Quaternion.identity);

@@ -226,7 +226,31 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 				m_cells.Add (c);
 
 					string nameString = h.m_actor.m_actorName;
-				string statusString = "Status: " + h.m_actor.m_status.m_name;
+//				string statusString = "Status: " + h.m_actor.m_status.m_name;
+
+				string statusString = "";
+
+				switch (h.m_actor.m_rank) {
+
+				case 1:
+					statusString += "Novice ";
+					break;
+				case 2:
+					statusString += "Skilled ";
+					break;
+				case 3:
+					statusString += "Veteran ";
+					break;
+				case 4:
+					statusString += "Master ";
+					break;
+				}
+
+				if (h.m_actor.traits.Count > 0) {
+
+					Trait t = h.m_actor.traits [0];
+					statusString += t.m_name;
+				}
 
 				c.m_headerText.text = nameString;
 				c.m_bodyText.text = statusString;
@@ -296,30 +320,160 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 						return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 					});
 
-					foreach (Player.ActorSlot h in sortedList) {
+					foreach (Player.ActorSlot aSlot in sortedList) {
 
 						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
 						UICell c = (UICell)hCell.GetComponent<UICell> ();
 						m_cells.Add (c);
 
-						string nameString = h.m_actor.m_actorName;
-						string statusString = "Status: " + h.m_actor.m_status.m_name;
+						string nameString = aSlot.m_actor.m_actorName;
+						string statusString = "";
+
+						switch (aSlot.m_actor.m_rank) {
+
+						case 1:
+							statusString += "Novice ";
+							break;
+						case 2:
+							statusString += "Skilled ";
+							break;
+						case 3:
+							statusString += "Veteran ";
+							break;
+						case 4:
+							statusString += "Master ";
+							break;
+						}
+
+						if (aSlot.m_actor.traits.Count > 0) {
+
+							Trait t = aSlot.m_actor.traits [0];
+							statusString += t.m_name;
+						}
 
 						c.m_headerText.text = nameString;
 						c.m_bodyText.text = statusString;
-						c.m_image.texture = h.m_actor.m_portrait_Compact;
-
-						if (h.m_new) {
-							c.m_rectTransforms [1].gameObject.SetActive (true);
-						}
+						c.m_image.texture = aSlot.m_actor.m_portrait_Compact;
 
 						hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-							HenchmenCellClicked (h);
+							HenchmenCellClicked (aSlot);
 						});
 					}
 				}
 			}
 			
+			break;
+
+		case DisplayType.Mission:
+
+			List<MissionPlan> missions = GameController.instance.GetMissions (0);
+
+			foreach (MissionPlan mp in missions) {
+
+				GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+				UICell headerCell = (UICell)header.GetComponent<UICell> ();
+				headerCell.m_headerText.text = mp.m_currentMission.m_name;
+				m_cells.Add (headerCell);
+
+				foreach (Player.ActorSlot aSlot in mp.m_actorSlots) {
+
+					if (hList.Contains (aSlot)) {
+
+						hList.Remove (aSlot);
+					}
+
+					GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+					UICell c = (UICell)hCell.GetComponent<UICell> ();
+					m_cells.Add (c);
+
+					string nameString = aSlot.m_actor.m_actorName;
+					string statusString = "";
+
+					switch (aSlot.m_actor.m_rank) {
+
+					case 1:
+						statusString += "Novice ";
+						break;
+					case 2:
+						statusString += "Skilled ";
+						break;
+					case 3:
+						statusString += "Veteran ";
+						break;
+					case 4:
+						statusString += "Master ";
+						break;
+					}
+
+					if (aSlot.m_actor.traits.Count > 0) {
+
+						Trait t = aSlot.m_actor.traits [0];
+						statusString += t.m_name;
+					}
+
+					c.m_headerText.text = nameString;
+					c.m_bodyText.text = statusString;
+					c.m_image.texture = aSlot.m_actor.m_portrait_Compact;
+
+					hCell.GetComponent<Button> ().onClick.AddListener (delegate {
+						HenchmenCellClicked (aSlot);
+					});
+
+				}
+			}
+
+			if (hList.Count > 0) {
+
+				hList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+					return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
+				});
+
+				GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+				UICell headerCell = (UICell)header.GetComponent<UICell> ();
+				headerCell.m_headerText.text = "Unassigned";
+				m_cells.Add (headerCell);
+
+				foreach (Player.ActorSlot aSlot in hList) {
+
+					GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+					UICell c = (UICell)hCell.GetComponent<UICell> ();
+					m_cells.Add (c);
+
+					string nameString = aSlot.m_actor.m_actorName;
+					string statusString = "";
+
+					switch (aSlot.m_actor.m_rank) {
+
+					case 1:
+						statusString += "Novice ";
+						break;
+					case 2:
+						statusString += "Skilled ";
+						break;
+					case 3:
+						statusString += "Veteran ";
+						break;
+					case 4:
+						statusString += "Master ";
+						break;
+					}
+
+					if (aSlot.m_actor.traits.Count > 0) {
+
+						Trait t = aSlot.m_actor.traits [0];
+						statusString += t.m_name;
+					}
+
+					c.m_headerText.text = nameString;
+					c.m_bodyText.text = statusString;
+					c.m_image.texture = aSlot.m_actor.m_portrait_Compact;
+
+					hCell.GetComponent<Button> ().onClick.AddListener (delegate {
+						HenchmenCellClicked (aSlot);
+					});
+				}
+			}
+
 			break;
 		}
 	}

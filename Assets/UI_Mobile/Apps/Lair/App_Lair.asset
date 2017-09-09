@@ -18,8 +18,4 @@ MonoBehaviour:
   m_wantsSystemNavBar: 1
   m_menuBank:
   - {fileID: 1117226361454164, guid: bdd737a49283e463baa75e99b43af0ed, type: 2}
-  - {fileID: 1355405323940118, guid: ca2da824ede524778996c14781946b1d, type: 2}
-  - {fileID: 1355405323940118, guid: 83ea128e5f6a149d7952bf8e0c9e49bd, type: 2}
-  - {fileID: 1355405323940118, guid: cde0eb426296f42a0b06985986c9c77c, type: 2}
-  - {fileID: 1355405323940118, guid: 08e6db27d3bd445b1b197caf8cba424d, type: 2}
-  - {fileID: 1355405323940118, guid: 289084a8698f0459aad22bf6601b2c91, type: 2}
+  - {fileID: 1363656250372784, guid: efe767b4295494eb2b79711a491859eb, type: 2}

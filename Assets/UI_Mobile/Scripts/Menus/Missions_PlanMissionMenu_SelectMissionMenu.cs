@@ -150,7 +150,7 @@ public class Missions_PlanMissionMenu_SelectMissionMenu : BaseMenu, IUIObserver 
 	{
 		Debug.Log( "Mission: " + m.m_name + " selected");
 
-		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_currentMission = m;
+//		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_currentMission = m;
 
 		Lair lair = GameController.instance.GetLair (0);
 
@@ -158,7 +158,7 @@ public class Missions_PlanMissionMenu_SelectMissionMenu : BaseMenu, IUIObserver 
 
 			if (fSlot.m_floor.m_missions.Contains (m)) {
 
-				((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_floorSlot = fSlot;
+//				((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_floorSlot = fSlot;
 				break;
 			}
 		}

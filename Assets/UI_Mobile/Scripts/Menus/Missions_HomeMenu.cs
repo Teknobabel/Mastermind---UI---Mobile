@@ -135,6 +135,22 @@ public class Missions_HomeMenu : BaseMenu {
 
 	public void NewMissionButtonPressed ()
 	{
+		MissionPlan newPlan = new MissionPlan ();
+
+		Lair lair = GameController.instance.GetLair (0);
+
+		foreach (Lair.FloorSlot fSlot in lair.floorSlots) {
+
+			if (fSlot.m_state != Lair.FloorSlot.FloorState.Empty && fSlot.m_state != Lair.FloorSlot.FloorState.MissionInProgress) {
+
+				foreach (Mission m in fSlot.m_floor.m_missions) {
+
+					newPlan.m_missionOptions.Add (m);
+				}
+			}
+		}
+
+		((MissionsApp)(m_parentApp)).planMissionMenu.missionPlan = newPlan;
 		ParentApp.PushMenu (((MissionsApp)(m_parentApp)).planMissionMenu);
 	}
 

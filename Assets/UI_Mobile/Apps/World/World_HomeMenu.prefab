@@ -548,9 +548,11 @@ MonoBehaviour:
     type: 2}
   m_siteAlertCellGO: {fileID: 1170532840082482, guid: 480a10111d6044ac19e843b300b5363e,
     type: 2}
-  m_siteAssetCellGO: {fileID: 1438775223369516, guid: 71d56d23dc4e64f779cbc73b68aa7346,
+  m_siteAssetCellGO: {fileID: 1145774830237794, guid: 15406cd9bd2f14241bd1371cc1e15f5c,
     type: 2}
-  m_siteTraitCellGO: {fileID: 1438775223369516, guid: 71d56d23dc4e64f779cbc73b68aa7346,
+  m_siteTraitCellGO: {fileID: 1145774830237794, guid: c8e92ef3dfeb742eeb92cc8c495ed757,
+    type: 2}
+  m_separatorCellGO: {fileID: 1104989579354144, guid: 54944e6292d1c4f7fa67e39d4afb4200,
     type: 2}
   m_worldListParent: {fileID: 224921411133220738}
 --- !u!114 &114585067431346414

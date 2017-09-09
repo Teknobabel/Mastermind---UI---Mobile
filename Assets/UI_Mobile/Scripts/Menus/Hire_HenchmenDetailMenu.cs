@@ -73,6 +73,7 @@ public class Hire_HenchmenDetailMenu : ContactsDetailViewMenu {
 		Action_RemoveHireable dismissHenchmen = new Action_RemoveHireable ();
 		dismissHenchmen.m_playerID = 0;
 		dismissHenchmen.m_actorID = m_henchmenID;
+		dismissHenchmen.m_wasDismissed = true;
 		GameController.instance.ProcessAction (dismissHenchmen);
 
 //		Player player = GameEngine.instance.game.playerList [0];

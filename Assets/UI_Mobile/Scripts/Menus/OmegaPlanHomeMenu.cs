@@ -72,7 +72,7 @@ public class OmegaPlanHomeMenu : BaseMenu {
 	{
 		// push mission planning menu
 
-		((OmegaPlansApp)(m_parentApp)).missionPlanningMenu.goal = goal;
+		((OmegaPlansApp)(m_parentApp)).missionPlanningMenu.missionPlan = goal.plan;
 		ParentApp.PushMenu (((OmegaPlansApp)(m_parentApp)).missionPlanningMenu);
 
 	}

@@ -11,6 +11,7 @@ public interface IApp {
 	List<GameObject> MenuBank { get;}
 	bool WantsSystemNavBar { get; }
 	AppIcon AppIconInstance { set;}
+	BaseMenu homeMenu { get; }
 
 	void InitializeApp ();
 

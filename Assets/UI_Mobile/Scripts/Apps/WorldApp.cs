@@ -5,13 +5,13 @@ using UnityEngine;
 [CreateAssetMenu]
 public class WorldApp : BaseApp {
 
-	private World_HomeMenu m_homeMenu;
+//	private World_HomeMenu m_homeMenu;
 
 	public override void InitializeApp ()
 	{
 		GameObject go = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		go.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (World_HomeMenu)go.GetComponent<World_HomeMenu> ();
+		m_homeMenu = (BaseMenu)go.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 		
 		//		GameObject detailScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);

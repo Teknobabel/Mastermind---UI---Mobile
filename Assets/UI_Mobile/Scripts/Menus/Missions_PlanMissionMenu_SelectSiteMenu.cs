@@ -47,8 +47,8 @@ public class Missions_PlanMissionMenu_SelectSiteMenu : BaseMenu {
 	{
 		base.DisplayContent ();
 
-		MissionPlan missionPlan = ((MissionsApp)m_parentApp).planMissionMenu.missionPlan;
-
+//		MissionPlan missionPlan = ((MissionsApp)m_parentApp).planMissionMenu.missionPlan;
+		MissionPlan missionPlan = new MissionPlan();
 		List<Region> regionList = GameController.instance.GetWorld ();
 
 		foreach (Region r in regionList) {
@@ -160,8 +160,8 @@ public class Missions_PlanMissionMenu_SelectSiteMenu : BaseMenu {
 		Debug.Log( "Site: " + s.m_siteName + " selected");
 
 //		m_floorSlot.m_missionPlan.m_missionSite = s;
-		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_missionSite = s;
-		((MissionsApp)m_parentApp).planMissionMenu.isDirty = true;
+//		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_missionSite = s;
+//		((MissionsApp)m_parentApp).planMissionMenu.isDirty = true;
 
 		ParentApp.PopMenu ();
 	}
@@ -169,8 +169,8 @@ public class Missions_PlanMissionMenu_SelectSiteMenu : BaseMenu {
 	public void SiteTraitSelected (SiteTrait trait, Site s)
 	{
 		Debug.Log("Site Trait: " + trait.m_name + " Selected");
-		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_missionSite = s;
-		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_targetSiteTrait = trait;
+//		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_missionSite = s;
+//		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_targetSiteTrait = trait;
 //		m_floorSlot.m_missionPlan.m_missionSite = s;
 //		m_floorSlot.m_missionPlan.m_targetSiteTrait = trait;
 
@@ -183,8 +183,8 @@ public class Missions_PlanMissionMenu_SelectSiteMenu : BaseMenu {
 	public void RegionSelected (Region r)
 	{
 //		m_floorSlot.m_missionPlan.m_targetRegion = r;
-		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_targetRegion = r;
-		((MissionsApp)m_parentApp).planMissionMenu.isDirty = true;
+//		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_targetRegion = r;
+//		((MissionsApp)m_parentApp).planMissionMenu.isDirty = true;
 
 		ParentApp.PopMenu ();
 	}
@@ -198,8 +198,8 @@ public class Missions_PlanMissionMenu_SelectSiteMenu : BaseMenu {
 //			m_floorSlot.m_missionPlan.m_missionSite = s;
 //			m_floorSlot.m_missionPlan.m_currentAsset = aSlot;
 
-			((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_missionSite = s;
-			((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_currentAsset = aSlot;
+//			((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_missionSite = s;
+//			((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_currentAsset = aSlot;
 
 			((MissionsApp)m_parentApp).planMissionMenu.isDirty = true;
 

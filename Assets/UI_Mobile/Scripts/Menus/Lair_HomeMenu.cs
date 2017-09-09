@@ -138,7 +138,16 @@ public class Lair_HomeMenu : BaseMenu {
 
 			if (fSlot.m_id == floorSlotID) {
 
-				((LairApp)(m_parentApp)).planMissionMenu.floorSlot = fSlot;
+				fSlot.m_missionPlan.m_missionOptions.Clear ();
+
+				foreach (Mission m in fSlot.m_floor.m_missions) {
+
+					fSlot.m_missionPlan.m_missionOptions.Add (m);
+				}
+
+				fSlot.m_missionPlan.m_maxActorSlots = fSlot.m_numActorSlots;
+
+				((LairApp)(m_parentApp)).planMissionMenu.missionPlan = fSlot.m_missionPlan;
 				m_parentApp.PushMenu (((LairApp)(m_parentApp)).planMissionMenu);
 				break;
 			}
@@ -156,6 +165,8 @@ public class Lair_HomeMenu : BaseMenu {
 			GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);
 			UICell floorCell = (UICell)floorGO.GetComponent<UICell> ();
 			floorCell.m_headerText.text = fSlot.m_floor.m_name;
+			floorCell.m_bodyText.text = "Level " + fSlot.m_floor.level.ToString() + "\n";
+			floorCell.m_bodyText.text += "No Active Missions";
 			m_cells.Add (floorCell);
 
 			Button b = floorCell.m_buttons [0];
@@ -169,8 +180,13 @@ public class Lair_HomeMenu : BaseMenu {
 
 				if (fSlot.m_state == Lair.FloorSlot.FloorState.MissionInProgress) {
 
-					Text t = b.GetComponentInChildren<Text> ();
-					t.text = "Mission In Progress";
+//					Text t = b.GetComponentInChildren<Text> ();
+//					t.text = "Mission In Progress";
+					floorCell.m_bodyText.color = Color.black;
+					floorCell.m_bodyText.text = "Level " + fSlot.m_floor.level.ToString() + "\n";
+					floorCell.m_bodyText.text = "Mission In Progress:\n";
+					floorCell.m_bodyText.text += fSlot.m_missionPlan.m_currentMission.m_name;
+					floorCell.m_bodyText.text += "(" + fSlot.m_missionPlan.m_turnNumber.ToString () + "/" + fSlot.m_missionPlan.m_currentMission.m_duration.ToString () + ")";
 				}
 
 				b.onClick.AddListener (delegate {
@@ -179,8 +195,10 @@ public class Lair_HomeMenu : BaseMenu {
 			}
 
 			if (fSlot.m_new) {
-				floorCell.m_rectTransforms [1].gameObject.SetActive (true);
+				floorCell.m_rectTransforms [0].gameObject.SetActive (true);
 			}
 		}
+
+		LayoutRebuilder.ForceRebuildLayoutImmediate (m_contentParent.GetComponent<RectTransform>());
 	}
 }

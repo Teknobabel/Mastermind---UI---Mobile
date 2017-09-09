@@ -84,7 +84,31 @@ public class Missions_PlanMissionMenu_SelectHenchmenMenu : BaseMenu {
 			m_cells.Add (c);
 
 			string nameString = h.m_actorName;
-			string statusString = "Status: " + h.m_status.m_name;
+//			string statusString = "Status: " + h.m_status.m_name;
+
+			string statusString = "";
+
+			switch (h.m_rank) {
+
+			case 1:
+				statusString += "Novice ";
+				break;
+			case 2:
+				statusString += "Skilled ";
+				break;
+			case 3:
+				statusString += "Veteran ";
+				break;
+			case 4:
+				statusString += "Master ";
+				break;
+			}
+
+			if (h.traits.Count > 0) {
+
+				Trait t = h.traits [0];
+				statusString += t.m_name;
+			}
 
 			c.m_headerText.text = nameString;
 			c.m_bodyText.text = statusString;

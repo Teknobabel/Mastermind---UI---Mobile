@@ -13,7 +13,8 @@ public class World_HomeMenu : BaseMenu {
 	m_siteInfoCellGO,
 	m_siteAlertCellGO,
 	m_siteAssetCellGO,
-	m_siteTraitCellGO;
+	m_siteTraitCellGO,
+	m_separatorCellGO;
 
 	public Transform
 	m_worldListParent;
@@ -58,6 +59,8 @@ public class World_HomeMenu : BaseMenu {
 	public override void DisplayContent ()
 	{
 		base.DisplayContent ();
+
+		List<Asset> assetsNeededForOP = (GameController.instance.GetOmegaPlan (0)).m_omegaPlan.GetNeededAssets ();
 
 		List<Region> regionList = GameController.instance.GetWorld ();
 
@@ -123,10 +126,20 @@ public class World_HomeMenu : BaseMenu {
 
 						siteAssetCell.m_headerText.text = "Asset: " + aSlot.m_asset.m_name;
 
+						if (assetsNeededForOP.Contains (aSlot.m_asset)) {
+
+							siteAssetCell.m_rectTransforms [2].gameObject.SetActive (true);
+						}
+
 					}
 
 					m_cells.Add (siteAssetCell);
 				}
+
+				GameObject separatorCellGO = (GameObject)Instantiate (m_separatorCellGO, m_worldListParent);
+				UICell separatorCell = (UICell)separatorCellGO.GetComponent<UICell> ();
+				m_cells.Add (separatorCell);
+
 			}
 		}
 	}

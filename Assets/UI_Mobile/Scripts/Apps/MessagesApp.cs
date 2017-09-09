@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class MessagesApp : BaseApp, IUIObserver {
 
-	private Messages_HomeMenu m_homeMenu;
+//	private Messages_HomeMenu m_homeMenu;
 	private Messages_DetailMenu m_detailMenu;
 	private Messages_NewMessageOverlay m_newMessageOverlay;
 
@@ -13,7 +13,7 @@ public class MessagesApp : BaseApp, IUIObserver {
 	{
 		GameObject go = (GameObject)GameObject.Instantiate (m_menuBank[0], Vector3.zero, Quaternion.identity);
 		go.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		m_homeMenu = (Messages_HomeMenu)go.GetComponent<Messages_HomeMenu> ();
+		m_homeMenu = (BaseMenu)go.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 
 		GameObject detailScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);

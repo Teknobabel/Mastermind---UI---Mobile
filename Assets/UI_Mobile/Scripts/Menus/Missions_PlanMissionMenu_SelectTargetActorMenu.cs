@@ -71,7 +71,7 @@ public class Missions_PlanMissionMenu_SelectTargetActorMenu : BaseMenu {
 	public void TargetSelected (Player.ActorSlot targetSlot)
 	{
 		//		Debug.Log( "Site: " + s.m_siteName + " selected");
-		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_targetActor = targetSlot;
+//		((MissionsApp)m_parentApp).planMissionMenu.missionPlan.m_targetActor = targetSlot;
 //		m_floorSlot.m_missionPlan.m_targetActor = targetSlot;
 
 		((MissionsApp)m_parentApp).planMissionMenu.isDirty = true;

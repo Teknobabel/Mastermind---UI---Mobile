@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
 
-public class MobileUIEngine : MonoBehaviour {
+public class MobileUIEngine : MonoBehaviour, IObserver {
 	public static MobileUIEngine instance;
 
 	public RectTransform 
@@ -14,7 +14,8 @@ public class MobileUIEngine : MonoBehaviour {
 	m_homeScreen;
 
 	public GameObject
-	m_systemNavBarGO;
+	m_systemNavBarGO,
+	m_toastGO;
 
 	public ScriptableObject m_tutorial;
 
@@ -27,6 +28,8 @@ public class MobileUIEngine : MonoBehaviour {
 	private Dictionary<EventLocation, IApp> m_appList = new Dictionary<EventLocation, IApp>();
 
 	private SystemNavBar m_systemNavBar;
+
+	private Alert_Toast m_toast;
 
 	private IApp 
 	m_turnProcessingApp,
@@ -93,10 +96,10 @@ public class MobileUIEngine : MonoBehaviour {
 			m_turnProcessingApp.InitializeApp ();
 
 		}
-			
-
 
 		PushApp (startApp);
+
+		GameController.instance.AddObserver (this);
 	}
 
 	public void PushApp (IApp newApp)
@@ -176,7 +179,37 @@ public class MobileUIEngine : MonoBehaviour {
 		return null;
 	}
 
+	public void DisplayToast (NotificationCenter.Notification notification)
+	{
+		Debug.Log ("Displaying Toast");
+
+		toast.m_toastCell.m_bodyText.text = notification.m_title + "\n";
+		toast.m_toastCell.m_bodyText.text += notification.m_message;
+
+		IApp app = MobileUIEngine.instance.GetApp (notification.m_location);
+		if (app != null && app.Icon != null) {
+			toast.m_toastCell.m_image.texture = app.Icon.texture;
+		}
+
+		toast.OnEnter (true);
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	{
+		switch (thisGameEvent) 
+		{
+		case GameEvent.Player_NotificationReceived:
+
+			NotificationCenter.Notification n = (NotificationCenter.Notification)subject;
+
+			DisplayToast (n);
+
+			break;
+		}
+	}
+
 	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
+	public Alert_Toast toast {get{ return m_toast; } set { m_toast = value; }}
 	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
 	public IApp homeScreenApp {get{ return m_homeScreenApp; }}
 	public Dictionary<EventLocation, IApp> appList {get{ return m_appList; } set{ m_appList = value; }}
