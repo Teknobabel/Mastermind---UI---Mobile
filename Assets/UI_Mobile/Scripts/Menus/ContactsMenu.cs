@@ -32,18 +32,14 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 
 		m_appNameText.text = parentApp.Name;
 		m_infoPanelToggle.AddObserver (this);
-//		m_infoPanelToggle.ToggleButtonClicked (0);
-
 		this.gameObject.SetActive (false);
 	}
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
 
-		DisplayContent ();
+		base.OnEnter (animate);
 
 		// slide in animation
 		if (animate) {
@@ -184,8 +180,6 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
 
-//		bool newStateChanged = false;
-
 		List<Player.ActorSlot> hList = new List<Player.ActorSlot> ();
 
 		foreach (Player.ActorSlot aSlot in hiringPool) {
@@ -193,23 +187,10 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
 
 				hList.Add (aSlot);
-
-//				if (aSlot.m_new) {
-//
-//					Action_SetActorNewState newState = new Action_SetActorNewState ();
-//					newState.m_actorSlot = aSlot;
-//					GameController.instance.ProcessAction (newState);
-//					newStateChanged = true;
-//				}
 			}
 		}
 
 		int emptySlots = hiringPool.Count - hList.Count;
-
-//		if (newStateChanged) {
-//
-//			m_parentApp.SetAlerts ();
-//		}
 
 		switch (m_displayType)
 		{
@@ -222,43 +203,9 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 				foreach (Player.ActorSlot h in hList) {
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-				UICell c = (UICell)hCell.GetComponent<UICell> ();
-				m_cells.Add (c);
-
-					string nameString = h.m_actor.m_actorName;
-//				string statusString = "Status: " + h.m_actor.m_status.m_name;
-
-				string statusString = "";
-
-				switch (h.m_actor.m_rank) {
-
-				case 1:
-					statusString += "Novice ";
-					break;
-				case 2:
-					statusString += "Skilled ";
-					break;
-				case 3:
-					statusString += "Veteran ";
-					break;
-				case 4:
-					statusString += "Master ";
-					break;
-				}
-
-				if (h.m_actor.traits.Count > 0) {
-
-					Trait t = h.m_actor.traits [0];
-					statusString += t.m_name;
-				}
-
-				c.m_headerText.text = nameString;
-				c.m_bodyText.text = statusString;
-					c.m_image.texture = h.m_actor.m_portrait_Compact;
-
-				if (h.m_new) {
-					c.m_rectTransforms [1].gameObject.SetActive (true);
-				}
+				Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+				m_cells.Add ((UICell)c);
+				c.SetActor (h);
 
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 						HenchmenCellClicked (h);
@@ -323,37 +270,9 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 					foreach (Player.ActorSlot aSlot in sortedList) {
 
 						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-						UICell c = (UICell)hCell.GetComponent<UICell> ();
-						m_cells.Add (c);
-
-						string nameString = aSlot.m_actor.m_actorName;
-						string statusString = "";
-
-						switch (aSlot.m_actor.m_rank) {
-
-						case 1:
-							statusString += "Novice ";
-							break;
-						case 2:
-							statusString += "Skilled ";
-							break;
-						case 3:
-							statusString += "Veteran ";
-							break;
-						case 4:
-							statusString += "Master ";
-							break;
-						}
-
-						if (aSlot.m_actor.traits.Count > 0) {
-
-							Trait t = aSlot.m_actor.traits [0];
-							statusString += t.m_name;
-						}
-
-						c.m_headerText.text = nameString;
-						c.m_bodyText.text = statusString;
-						c.m_image.texture = aSlot.m_actor.m_portrait_Compact;
+						Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+						m_cells.Add ((UICell)c);
+						c.SetActor (aSlot);
 
 						hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 							HenchmenCellClicked (aSlot);
@@ -383,37 +302,9 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 					}
 
 					GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-					UICell c = (UICell)hCell.GetComponent<UICell> ();
-					m_cells.Add (c);
-
-					string nameString = aSlot.m_actor.m_actorName;
-					string statusString = "";
-
-					switch (aSlot.m_actor.m_rank) {
-
-					case 1:
-						statusString += "Novice ";
-						break;
-					case 2:
-						statusString += "Skilled ";
-						break;
-					case 3:
-						statusString += "Veteran ";
-						break;
-					case 4:
-						statusString += "Master ";
-						break;
-					}
-
-					if (aSlot.m_actor.traits.Count > 0) {
-
-						Trait t = aSlot.m_actor.traits [0];
-						statusString += t.m_name;
-					}
-
-					c.m_headerText.text = nameString;
-					c.m_bodyText.text = statusString;
-					c.m_image.texture = aSlot.m_actor.m_portrait_Compact;
+					Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+					m_cells.Add ((UICell)c);
+					c.SetActor (aSlot);
 
 					hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 						HenchmenCellClicked (aSlot);
@@ -436,37 +327,9 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 				foreach (Player.ActorSlot aSlot in hList) {
 
 					GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-					UICell c = (UICell)hCell.GetComponent<UICell> ();
-					m_cells.Add (c);
-
-					string nameString = aSlot.m_actor.m_actorName;
-					string statusString = "";
-
-					switch (aSlot.m_actor.m_rank) {
-
-					case 1:
-						statusString += "Novice ";
-						break;
-					case 2:
-						statusString += "Skilled ";
-						break;
-					case 3:
-						statusString += "Veteran ";
-						break;
-					case 4:
-						statusString += "Master ";
-						break;
-					}
-
-					if (aSlot.m_actor.traits.Count > 0) {
-
-						Trait t = aSlot.m_actor.traits [0];
-						statusString += t.m_name;
-					}
-
-					c.m_headerText.text = nameString;
-					c.m_bodyText.text = statusString;
-					c.m_image.texture = aSlot.m_actor.m_portrait_Compact;
+					Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+					m_cells.Add ((UICell)c);
+					c.SetActor (aSlot);
 
 					hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 						HenchmenCellClicked (aSlot);

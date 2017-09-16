@@ -54,9 +54,9 @@ GameObject:
   - component: {fileID: 224237232874472682}
   - component: {fileID: 222890805991183360}
   - component: {fileID: 114533904870098722}
-  - component: {fileID: 114662494926753684}
   - component: {fileID: 114019599325715258}
   - component: {fileID: 114821377552090730}
+  - component: {fileID: 114704192326892548}
   m_Layer: 5
   m_Name: Cell_Header
   m_TagString: Untagged
@@ -116,7 +116,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 114821377552090730}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -173,7 +173,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
---- !u!114 &114662494926753684
+--- !u!114 &114704192326892548
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1575044260185468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fff9788463f34012bb18e6f7d58eebe, type: 3}
+  m_Script: {fileID: 11500000, guid: 7061a38ac1d1e49e69c63176c085ba09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_headerText: {fileID: 114628418495921012}
@@ -189,12 +189,11 @@ MonoBehaviour:
   m_image: {fileID: 0}
   m_rectTransforms:
   - {fileID: 224628978771746684}
-  m_buttons:
-  - {fileID: 114019599325715258}
+  m_buttons: []
   m_rawImages: []
-  m_images:
-  - {fileID: 114821377552090730}
+  m_images: []
   m_sprites: []
+  m_text: []
 --- !u!114 &114788706211971110
 MonoBehaviour:
   m_ObjectHideFlags: 1

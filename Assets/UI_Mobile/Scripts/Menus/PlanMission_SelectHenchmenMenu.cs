@@ -28,10 +28,9 @@ public class PlanMission_SelectHenchmenMenu : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
-		DisplayContent ();
+
+		base.OnEnter (animate);
 
 	}
 

@@ -19,18 +19,14 @@ public class Lair_HomeMenu : BaseMenu {
 		base.Initialize (parentApp);
 
 		m_appNameText.text = parentApp.Name;
-//		m_infoPanelToggle.AddObserver (this);
-//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
 
-		DisplayContent ();
+		base.OnEnter (animate);
 
 //		// slide in animation
 //		if (animate) {
@@ -128,7 +124,7 @@ public class Lair_HomeMenu : BaseMenu {
 		MobileUIEngine.instance.systemNavBar.SetBackButtonState (false);
 	}
 
-	public void IdleFloorButtonClicked (int floorSlotID)
+	public void FloorButtonClicked (int floorSlotID)
 	{
 		Debug.Log ("Idle floor clicked, start mission planning");
 
@@ -163,40 +159,13 @@ public class Lair_HomeMenu : BaseMenu {
 		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
 
 			GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);
-			UICell floorCell = (UICell)floorGO.GetComponent<UICell> ();
-			floorCell.m_headerText.text = fSlot.m_floor.m_name;
-			floorCell.m_bodyText.text = "Level " + fSlot.m_floor.level.ToString() + "\n";
-			floorCell.m_bodyText.text += "No Active Missions";
-			m_cells.Add (floorCell);
+			Cell_LairFloor floorCell = (Cell_LairFloor)floorGO.GetComponent<Cell_LairFloor> ();
+			floorCell.SetFloor (fSlot);
+			m_cells.Add ((UICell)floorCell);
 
-			Button b = floorCell.m_buttons [0];
-
-			if (fSlot.m_floor.m_missions.Count == 0) {
-
-				b.interactable = false;
-				b.gameObject.SetActive (false);
-
-			} else {
-
-				if (fSlot.m_state == Lair.FloorSlot.FloorState.MissionInProgress) {
-
-//					Text t = b.GetComponentInChildren<Text> ();
-//					t.text = "Mission In Progress";
-					floorCell.m_bodyText.color = Color.black;
-					floorCell.m_bodyText.text = "Level " + fSlot.m_floor.level.ToString() + "\n";
-					floorCell.m_bodyText.text = "Mission In Progress:\n";
-					floorCell.m_bodyText.text += fSlot.m_missionPlan.m_currentMission.m_name;
-					floorCell.m_bodyText.text += "(" + fSlot.m_missionPlan.m_turnNumber.ToString () + "/" + fSlot.m_missionPlan.m_currentMission.m_duration.ToString () + ")";
-				}
-
-				b.onClick.AddListener (delegate {
-					IdleFloorButtonClicked (fSlot.m_id);
-				});
-			}
-
-			if (fSlot.m_new) {
-				floorCell.m_rectTransforms [0].gameObject.SetActive (true);
-			}
+			floorCell.m_buttons [0].onClick.AddListener (delegate {
+				FloorButtonClicked (fSlot.m_id);
+			});
 		}
 
 		LayoutRebuilder.ForceRebuildLayoutImmediate (m_contentParent.GetComponent<RectTransform>());

@@ -27,10 +27,9 @@ public class Missions_HomeMenu : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
-		DisplayContent ();
+
+		base.OnEnter (animate);
 
 		//		// slide in animation
 		//		if (animate) {

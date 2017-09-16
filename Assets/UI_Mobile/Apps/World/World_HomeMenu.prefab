@@ -241,6 +241,7 @@ MonoBehaviour:
   - {fileID: 114422972568257544}
   - {fileID: 114248330770986652}
   - {fileID: 114787006809135500}
+  m_sentEvent: 3
   m_buttonActiveStateColor: {r: 0, g: 0, b: 0, a: 1}
   m_buttonTextActiveStateColor: {r: 1, g: 1, b: 1, a: 1}
   m_buttonInactiveStateColor: {r: 1, g: 1, b: 1, a: 1}
@@ -553,6 +554,8 @@ MonoBehaviour:
   m_siteTraitCellGO: {fileID: 1145774830237794, guid: c8e92ef3dfeb742eeb92cc8c495ed757,
     type: 2}
   m_separatorCellGO: {fileID: 1104989579354144, guid: 54944e6292d1c4f7fa67e39d4afb4200,
+    type: 2}
+  m_filterOptionsCellGO: {fileID: 1535202979235924, guid: cb5f7cfba3a71465ead1738a1a601c3d,
     type: 2}
   m_worldListParent: {fileID: 224921411133220738}
 --- !u!114 &114585067431346414

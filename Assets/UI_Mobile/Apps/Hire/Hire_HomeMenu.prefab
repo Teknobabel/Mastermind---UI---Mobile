@@ -425,6 +425,8 @@ MonoBehaviour:
     type: 2}
   m_headerCellGO: {fileID: 1575044260185468, guid: fefac4bbf778c469ea7c92f2c707cacb,
     type: 2}
+  m_assetCellGO: {fileID: 1145774830237794, guid: 15406cd9bd2f14241bd1371cc1e15f5c,
+    type: 2}
   m_contactsListParent: {fileID: 224421541785936810}
   m_skills:
   - {fileID: 11400000, guid: 5012507d9c84147ffa815f096eab1388, type: 2}

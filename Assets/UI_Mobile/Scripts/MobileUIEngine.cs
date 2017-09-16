@@ -15,7 +15,8 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 	public GameObject
 	m_systemNavBarGO,
-	m_toastGO;
+	m_toastGO,
+	m_alertDialogueGO;
 
 	public ScriptableObject m_tutorial;
 
@@ -30,6 +31,8 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 	private SystemNavBar m_systemNavBar;
 
 	private Alert_Toast m_toast;
+
+	private Alert_Generic m_alertDialogue;
 
 	private IApp 
 	m_turnProcessingApp,
@@ -210,6 +213,7 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
 	public Alert_Toast toast {get{ return m_toast; } set { m_toast = value; }}
+	public Alert_Generic alertDialogue {get{ return m_alertDialogue; } set { m_alertDialogue = value;}}
 	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
 	public IApp homeScreenApp {get{ return m_homeScreenApp; }}
 	public Dictionary<EventLocation, IApp> appList {get{ return m_appList; } set{ m_appList = value; }}

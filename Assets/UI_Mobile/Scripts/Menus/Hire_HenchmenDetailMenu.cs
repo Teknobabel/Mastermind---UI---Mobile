@@ -44,6 +44,18 @@ public class Hire_HenchmenDetailMenu : ContactsDetailViewMenu {
 			}
 		}
 
+
+		if (!vacancy) {
+
+			string header = "No Space Available";
+			string message = "There is no room for an additional Henchmen. Fire a Henchmen or expand your Lair and try again.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+		}
+
 		// can player afford the actor
 
 		if (cp.m_currentPool >= h.m_startingCost && vacancy) {
@@ -63,6 +75,16 @@ public class Hire_HenchmenDetailMenu : ContactsDetailViewMenu {
 			((HireApp)ParentApp).homeMenu.isDirty = true;
 
 			ParentApp.PopMenu ();
+
+		} else if (h.m_startingCost > cp.m_currentPool) {
+
+			string header = "Can't Afford Henchmen";
+			string message = "There aren't enough points in your Command Pool to hire this Henchmen.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
 		}
 	}
 

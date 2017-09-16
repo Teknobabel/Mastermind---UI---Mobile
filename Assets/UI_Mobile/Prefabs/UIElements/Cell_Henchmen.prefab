@@ -120,9 +120,9 @@ GameObject:
   - component: {fileID: 224476993075692958}
   - component: {fileID: 222979446320214742}
   - component: {fileID: 114940062048201056}
-  - component: {fileID: 114476645844875260}
   - component: {fileID: 114691795334474068}
   - component: {fileID: 114615852058420302}
+  - component: {fileID: 114511180407818854}
   m_Layer: 5
   m_Name: Cell_Henchmen
   m_TagString: Untagged
@@ -224,7 +224,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &114476645844875260
+--- !u!114 &114511180407818854
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1622127230023270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fff9788463f34012bb18e6f7d58eebe, type: 3}
+  m_Script: {fileID: 11500000, guid: 8489676bb1e1e4ba0b718891cd550f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_headerText: {fileID: 114962798481995708}
@@ -676,10 +676,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 175}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: 0}
+  m_SizeDelta: {x: 719, y: 175}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224528458573935194
 RectTransform:

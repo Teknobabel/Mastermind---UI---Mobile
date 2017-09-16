@@ -20,18 +20,14 @@ public class Assets_HomeMenu : BaseMenu {
 		base.Initialize (parentApp);
 
 		m_appNameText.text = parentApp.Name;
-		//		m_infoPanelToggle.AddObserver (this);
-		//		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
 
-		DisplayContent ();
+		base.OnEnter (animate);
 	}
 
 	public override void OnExit (bool animate)
@@ -73,31 +69,15 @@ public class Assets_HomeMenu : BaseMenu {
 			if (i == numAssetSlots && i < assets.Count) {
 
 				GameObject headerGO = (GameObject)Instantiate (m_headerCellGO, m_contentParent);
-				UICell headerCell = (UICell)headerGO.GetComponent<UICell> ();
-				headerCell.m_headerText.text = "Assets over the limit";
+				Cell_Header headerCell = (Cell_Header)headerGO.GetComponent<Cell_Header> ();
+				headerCell.SetHeader("Assets over the limit");
 				m_cells.Add (headerCell);
 			}
 
 			GameObject assetGO = (GameObject)Instantiate (m_assetCellGO, m_contentParent);
-			UICell assetCell = (UICell)assetGO.GetComponent<UICell> ();
-
-			string s = aSlot.m_asset.m_name;
-			if (aSlot.m_state == Site.AssetSlot.State.InUse) {
-				s += " - In Use";
-			}
-
-			assetCell.m_headerText.text = s;
+			Cell_Asset assetCell = (Cell_Asset)assetGO.GetComponent<Cell_Asset> ();
+			assetCell.SetAsset (aSlot);
 			m_cells.Add (assetCell);
-
-			if (aSlot.m_new) {
-
-				assetCell.m_rectTransforms [1].gameObject.SetActive (true);
-			}
-
-			if (assetsNeededForOP.Contains (aSlot.m_asset)) {
-
-				assetCell.m_rectTransforms [2].gameObject.SetActive (true);
-			}
 
 			Button b = assetCell.m_buttons [0];
 			b.onClick.AddListener (delegate {

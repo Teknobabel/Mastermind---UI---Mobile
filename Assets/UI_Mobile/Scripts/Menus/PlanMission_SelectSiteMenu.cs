@@ -29,11 +29,9 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
 
-		DisplayContent ();
+		base.OnEnter (animate);
 	}
 
 	public override void OnExit (bool animate)
@@ -129,9 +127,9 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 
 					foreach (SiteTrait t in s.traits) {
 
-						GameObject siteTrait = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
-						UICell siteTraitCell = (UICell)siteTrait.GetComponent<UICell> ();
-						siteTraitCell.m_headerText.text = "Trait: " + t.m_name;
+						GameObject siteTrait = (GameObject)Instantiate (m_siteTraitCellGO, m_contentParent);
+						Cell_Trait siteTraitCell = (Cell_Trait)siteTrait.GetComponent<Cell_Trait> ();
+						siteTraitCell.SetSiteTrait (t);
 						m_cells.Add (siteTraitCell);
 
 						if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait) {
@@ -149,16 +147,9 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 					foreach (Site.AssetSlot aSlot in s.assets) {
 
 						GameObject siteAsset = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
-						UICell siteAssetCell = (UICell)siteAsset.GetComponent<UICell> ();
-
-						if (aSlot.m_state == Site.AssetSlot.State.Hidden) {
-
-							siteAssetCell.m_headerText.text = "Asset: ?????";
-						} else {
-							siteAssetCell.m_headerText.text = "Asset: " + aSlot.m_asset.m_name;
-
-						}
-
+						Cell_Asset siteAssetCell = (Cell_Asset)siteAsset.GetComponent<Cell_Asset> ();
+						siteAssetCell.SetAsset (aSlot);
+					
 						if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
 
 							Button b = siteAssetCell.m_buttons [0];

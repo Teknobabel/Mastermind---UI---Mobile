@@ -379,6 +379,12 @@ Prefab:
       value: 
       objectReference: {fileID: 1894022225083790, guid: 5445db89efa41425da8ad553d390aef0,
         type: 2}
+    - target: {fileID: 114967503446390416, guid: fe35d3103f8cf4a729e3a7aa03c11f18,
+        type: 2}
+      propertyPath: m_alertDialogueGO
+      value: 
+      objectReference: {fileID: 1503521624933904, guid: 63dadae98ec654a4fbed05625a429c97,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fe35d3103f8cf4a729e3a7aa03c11f18, type: 2}
   m_IsPrefabParent: 0

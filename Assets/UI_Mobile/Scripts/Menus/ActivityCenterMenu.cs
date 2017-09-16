@@ -57,15 +57,8 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 
 
 					GameObject cellGO = (GameObject)Instantiate (m_activityCellWithIcon, m_scrollViewParent);
-					UICell cell = (UICell)cellGO.GetComponent<UICell> ();
-					cell.m_bodyText.text = s.m_title + "\n";
-					cell.m_bodyText.text += s.m_message;
-
-					IApp app = MobileUIEngine.instance.GetApp (s.m_location);
-//					Debug.Log (app);
-					if (app != null && app.Icon != null) {
-						cell.m_image.texture = app.Icon.texture;
-					}
+					Cell_Notification cell = (Cell_Notification)cellGO.GetComponent<Cell_Notification> ();
+					cell.SetNotification (s);
 
 					Button b = cell.m_buttons [0];
 					b.onClick.AddListener (delegate {

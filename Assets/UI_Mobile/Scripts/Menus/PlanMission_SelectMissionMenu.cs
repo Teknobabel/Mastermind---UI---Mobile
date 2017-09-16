@@ -27,11 +27,9 @@ public class PlanMission_SelectMissionMenu : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
 
-		DisplayContent ();
+		base.OnEnter (animate);
 	}
 
 	public override void OnExit (bool animate)

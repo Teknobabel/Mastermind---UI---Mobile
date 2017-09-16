@@ -153,6 +153,14 @@ public class HomeScreenApp : BaseApp {
 		sysNavBar.Initialize ();
 		MobileUIEngine.instance.systemNavBar = sysNavBar;
 		MobileUIEngine.instance.systemNavBar.SetActiveState (false);
+
+		// instantiate generic alert dialogue
+
+		GameObject alertGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_alertDialogueGO, Vector3.zero, Quaternion.identity);
+		alertGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		Alert_Generic alert  = (Alert_Generic)alertGO.GetComponent<Alert_Generic> ();
+		alert.Initialize (this);
+		MobileUIEngine.instance.alertDialogue = alert;
 	}
 
 	public void NewTurnStarted ()

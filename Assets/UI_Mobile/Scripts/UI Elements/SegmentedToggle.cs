@@ -7,6 +7,8 @@ public class SegmentedToggle : MonoBehaviour, IUISubject {
 
 	public Button[] m_buttons;
 
+	public UIEvent m_sentEvent = UIEvent.UI_ToggleButtonPressed;
+
 	public Color 
 	m_buttonActiveStateColor = Color.black,
 	m_buttonTextActiveStateColor = Color.white,
@@ -30,7 +32,7 @@ public class SegmentedToggle : MonoBehaviour, IUISubject {
 		if (buttonNum != m_activeButton) {
 			SetButtonActiveState (buttonNum);
 			m_activeButton = buttonNum;
-			Notify (this, UIEvent.UI_ToggleButtonPressed);
+			Notify (this, m_sentEvent);
 		}
 	}
 

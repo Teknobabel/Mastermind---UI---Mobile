@@ -49,21 +49,14 @@ public class OmegaPlanHomeMenu : BaseMenu {
 		foreach (OmegaPlan.OPGoal g in m_phaseGoals.m_goals) {
 
 			GameObject gCell = (GameObject)Instantiate (m_opGoalCell, m_opGoalListParent);
-			UICell c = (UICell)gCell.GetComponent<UICell> ();
-			m_cells.Add (c);
+			Cell_OPGoal c = (Cell_OPGoal)gCell.GetComponent<Cell_OPGoal> ();
+			c.SetGoal (g);
+			m_cells.Add ((UICell)c);
 
 			if (g.m_state != OmegaPlan.OPGoal.State.Complete) {
-				gCell.GetComponent<Button> ().onClick.AddListener (delegate {
+				c.m_buttons[0].onClick.AddListener (delegate {
 					GoalButtonClicked (g);
 				});
-			}
-
-			c.m_headerText.text = g.m_mission.m_name;
-			c.m_bodyText.text = g.m_state.ToString ();
-
-			if (g.m_new && (m_phaseNumber-1) == omegaPlan.m_omegaPlan.currentPhase) {
-
-				c.m_rectTransforms [1].gameObject.SetActive (true);
 			}
 		}
 	}
@@ -80,11 +73,9 @@ public class OmegaPlanHomeMenu : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
-		DisplayContent ();
 
+		base.OnEnter (animate);
 
 //		List<Henchmen> hList = GetDummyData.instance.GetHenchmenList ();
 //

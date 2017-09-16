@@ -56,11 +56,6 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 	{
 		base.OnEnter (animate);
 
-//		Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
-
-		// enable back button
-//		MobileUIEngine.instance.systemNavBar.SetBackButtonState(true);
-
 		Actor h = GameController.instance.GetActor (m_henchmenID);
 
 		if (h != null) {
@@ -171,13 +166,23 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 		m_henchmenID = id;
 	}
 
-//	public void BackButtonPressed ()
-//	{
-//		Notify (this, UIEvent.UI_BackButtonPressed);
-//	}
-
 	public void FireButtonPressed()
 	{
+		string header = "Fire Henchmen";
+		string message = "Are you sure you want to fire this henchmen? Fired henchmen will be available for hire again in the future.";
+
+		MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+		Button b1 = MobileUIEngine.instance.alertDialogue.AddButton ("Fire Henchmen");
+		b1.onClick.AddListener(delegate { FireHenchmen ();});
+		Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Cancel");
+		b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+		m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+	}
+
+	public void FireHenchmen ()
+	{
+		MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+
 		Action_FireAgent fireAgent = new Action_FireAgent ();
 		fireAgent.m_playerNumber = (0);
 		fireAgent.m_henchmenID = m_henchmenID;
@@ -268,8 +273,8 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 				foreach (Trait t in h.traits) {
 
 					GameObject traitCellGO = (GameObject)Instantiate (m_traitCellGO, m_panels[3]);
-					UICell tCell = (UICell)traitCellGO.GetComponent<UICell> ();
-					tCell.m_headerText.text = t.m_name;
+					Cell_Trait tCell = (Cell_Trait)traitCellGO.GetComponent<Cell_Trait> ();
+					tCell.SetTrait(t);
 					m_cells.Add (tCell);
 				}
 			}
@@ -295,8 +300,8 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 			foreach(KeyValuePair<int, List<NotificationCenter.Notification>> entry in notifications.Reverse())
 			{
 				GameObject header = (GameObject)Instantiate (m_activityHeader, m_panels[4]);
-				UICell headerCell = (UICell)header.GetComponent<UICell> ();
-				headerCell.m_headerText.text = "Turn " + entry.Key.ToString ();
+				Cell_Header headerCell = (Cell_Header)header.GetComponent<Cell_Header> ();
+				headerCell.SetHeader("Turn " + entry.Key.ToString ());
 				m_cells.Add (headerCell);
 
 				List<NotificationCenter.Notification> sList = entry.Value;

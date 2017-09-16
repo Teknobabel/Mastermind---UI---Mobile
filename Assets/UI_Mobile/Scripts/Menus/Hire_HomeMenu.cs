@@ -17,7 +17,8 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 
 	public GameObject
 	m_henchmenCellGO,
-	m_headerCellGO;
+	m_headerCellGO,
+	m_assetCellGO;
 
 	public Transform
 	m_contactsListParent;
@@ -42,16 +43,14 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
 		this.gameObject.SetActive (true);
+
+		base.OnEnter (animate);
 
 		// update seeking skills
 
 		Player player = GameEngine.instance.game.playerList [0];
 		m_currentlySeekingSkills = player.hiringPool.m_seekingSkills;
-
-		DisplayContent ();
 
 		// slide in animation
 		if (animate) {
@@ -190,21 +189,6 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 
 	public void HenchmenCellClicked (Player.ActorSlot aSlot)
 	{
-//		Debug.Log("Henchmen Cell w id: " + henchmenID + " clicked");
-
-		// clear new state
-//
-//		if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_new) {
-//
-//			Action_SetActorNewState newState = new Action_SetActorNewState ();
-//			newState.m_newState = false;
-//			newState.m_actorSlot = aSlot;
-//			GameController.instance.ProcessAction (newState);
-//			m_parentApp.SetAlerts ();
-//			m_isDirty = true;
-//
-//		}
-
 		((HireApp)(m_parentApp)).detailMenu.SetHenchmen(aSlot.m_actor.id);
 
 		m_parentApp.PushMenu (((HireApp)(m_parentApp)).detailMenu);
@@ -254,44 +238,9 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 				Actor h = aSlot.m_actor;
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-				UICell c = (UICell)hCell.GetComponent<UICell> ();
+				Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+				c.SetActor (aSlot);
 				m_cells.Add (c);
-
-				string nameString = h.m_actorName;
-//				string statusString = "Status: " + h.m_status.m_name;
-
-				string statusString = "";
-
-				switch (aSlot.m_actor.m_rank) {
-
-				case 1:
-					statusString += "Novice ";
-					break;
-				case 2:
-					statusString += "Skilled ";
-					break;
-				case 3:
-					statusString += "Veteran ";
-					break;
-				case 4:
-					statusString += "Master ";
-					break;
-				}
-
-				if (aSlot.m_actor.traits.Count > 0) {
-
-					Trait t = aSlot.m_actor.traits [0];
-					statusString += t.m_name;
-				}
-
-				c.m_headerText.text = nameString;
-				c.m_bodyText.text = statusString;
-				c.m_image.texture = h.m_portrait_Compact;
-
-				if (aSlot.m_new) {
-					c.m_rectTransforms [1].gameObject.SetActive (true);
-				}
-
 
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 					HenchmenCellClicked (aSlot);
@@ -324,43 +273,9 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 				Actor h = aSlot.m_actor;
 
 				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-				UICell c = (UICell)hCell.GetComponent<UICell> ();
+				Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+				c.SetActor (aSlot);
 				m_cells.Add (c);
-
-				string nameString = h.m_actorName;
-//				string statusString = "Status: " + h.m_status.m_name;
-
-				string statusString = "";
-
-				switch (aSlot.m_actor.m_rank) {
-
-				case 1:
-					statusString += "Novice ";
-					break;
-				case 2:
-					statusString += "Skilled ";
-					break;
-				case 3:
-					statusString += "Veteran ";
-					break;
-				case 4:
-					statusString += "Master ";
-					break;
-				}
-
-				if (aSlot.m_actor.traits.Count > 0) {
-
-					Trait t = aSlot.m_actor.traits [0];
-					statusString += t.m_name;
-				}
-
-				c.m_headerText.text = nameString;
-				c.m_bodyText.text = statusString;
-				c.m_image.texture = h.m_portrait_Compact;
-
-				if (aSlot.m_new) {
-					c.m_rectTransforms [1].gameObject.SetActive (true);
-				}
 
 				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 					HenchmenCellClicked (aSlot);
@@ -426,43 +341,9 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 						Actor h = aSlot.m_actor;
 							
 						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-						UICell c = (UICell)hCell.GetComponent<UICell> ();
+						Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+						c.SetActor (aSlot);
 						m_cells.Add (c);
-
-						string nameString = h.m_actorName;
-//						string statusString = "Status: " + h.m_status.m_name;
-
-						string statusString = "";
-
-						switch (aSlot.m_actor.m_rank) {
-
-						case 1:
-							statusString += "Novice ";
-							break;
-						case 2:
-							statusString += "Skilled ";
-							break;
-						case 3:
-							statusString += "Veteran ";
-							break;
-						case 4:
-							statusString += "Master ";
-							break;
-						}
-
-						if (aSlot.m_actor.traits.Count > 0) {
-
-							Trait t = aSlot.m_actor.traits [0];
-							statusString += t.m_name;
-						}
-
-						c.m_headerText.text = nameString;
-						c.m_bodyText.text = statusString;
-						c.m_image.texture = h.m_portrait_Compact;
-
-						if (aSlot.m_new) {
-							c.m_rectTransforms [1].gameObject.SetActive (true);
-						}
 
 						hCell.GetComponent<Button> ().onClick.AddListener (delegate {
 							HenchmenCellClicked (aSlot);
@@ -477,21 +358,22 @@ public class Hire_HomeMenu : BaseMenu, IUIObserver {
 		// display looking to hire menu
 
 		GameObject lookingToHireHeaderGO = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
-		UICell lookingToHireCell = (UICell)lookingToHireHeaderGO.GetComponent<UICell> ();
-		lookingToHireCell.m_headerText.text = "I WANT TO HIRE:";
+		Cell_Header lookingToHireCell = (Cell_Header)lookingToHireHeaderGO.GetComponent<Cell_Header> ();
+		lookingToHireCell.SetHeader("I WANT TO HIRE:");
 		m_cells.Add (lookingToHireCell);
 
 		foreach (Trait t in m_skills) {
 
-			GameObject skillTraitGO = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+			GameObject skillTraitGO = (GameObject)Instantiate (m_assetCellGO, m_contactsListParent);
 			UICell skillTraitCell = (UICell)skillTraitGO.GetComponent<UICell> ();
 			skillTraitCell.m_headerText.text = t.m_name;
 			m_cells.Add (skillTraitCell);
 
 			if (m_currentlySeekingSkills.Contains (t)) {
 
-				skillTraitCell.m_images [0].color = Color.blue;
-				skillTraitCell.m_headerText.color = Color.white;
+				skillTraitCell.m_headerText.color = Color.green;
+//				skillTraitCell.m_images [0].color = Color.blue;
+//				skillTraitCell.m_headerText.color = Color.white;
 			}
 
 			skillTraitCell.m_buttons[0].onClick.AddListener (delegate {

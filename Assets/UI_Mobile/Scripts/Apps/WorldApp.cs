@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class WorldApp : BaseApp {
 
-//	private World_HomeMenu m_homeMenu;
+	private World_FilterMenu m_filterMenu;
 
 	public override void InitializeApp ()
 	{
@@ -14,11 +14,11 @@ public class WorldApp : BaseApp {
 		m_homeMenu = (BaseMenu)go.GetComponent<BaseMenu> ();
 		m_homeMenu.Initialize (this);
 		
-		//		GameObject detailScreenGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
-		//		detailScreenGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		//		m_henchmenDetailMenu = (Hire_HenchmenDetailMenu)detailScreenGO.GetComponent<Hire_HenchmenDetailMenu>();
-		//		m_henchmenDetailMenu.Initialize (this);
-		//		m_henchmenDetailMenu.AddObserver (this);
+		GameObject filterMenuGO = (GameObject)GameObject.Instantiate (m_menuBank[1], Vector3.zero, Quaternion.identity);
+		filterMenuGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_filterMenu = (World_FilterMenu)filterMenuGO.GetComponent<World_FilterMenu>();
+		m_filterMenu.Initialize (this);
+		m_filterMenu.parentMenu = (World_HomeMenu) m_homeMenu;
 
 		base.InitializeApp ();
 	}
@@ -43,4 +43,6 @@ public class WorldApp : BaseApp {
 	//			break;
 	//		}
 	//	}
+
+	public World_FilterMenu filterMenu {get{ return m_filterMenu; }}
 }

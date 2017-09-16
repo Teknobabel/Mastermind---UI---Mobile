@@ -11,6 +11,7 @@ public class PlanMissionMenu : BaseMenu {
 	m_selectSiteCellGO,
 	m_selectHenchmenCellGO,
 	m_traitCellGO,
+	m_assetCellGO,
 	m_startMissionCellGO,
 	m_cancelMissionCellGO,
 	m_repeatMissionCellGO,
@@ -70,15 +71,13 @@ public class PlanMissionMenu : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
-
-		this.gameObject.SetActive (true);
-
 		// recompile to account for any changes since last visit
 
 		GameController.instance.CompileMission (m_missionPlan);
 
-		DisplayContent ();
+		this.gameObject.SetActive (true);
+
+		base.OnEnter (animate);
 
 	}
 
@@ -170,13 +169,14 @@ public class PlanMissionMenu : BaseMenu {
 		foreach (Trait t in m_missionPlan.m_requiredTraits) {
 
 			GameObject traitCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
-			UICell traitCell = (UICell)traitCellGO.GetComponent<UICell> ();
+			Cell_Trait traitCell = (Cell_Trait)traitCellGO.GetComponent<Cell_Trait> ();
 			m_cells.Add (traitCell);
-			traitCell.m_headerText.text = t.m_name;
 
 			if (m_missionPlan.m_matchingTraits.Contains (t)) {
 
-				traitCell.m_headerText.color = Color.green;
+				traitCell.SetTrait (t, Cell_Trait.TraitState.Positive);
+			} else {
+				traitCell.SetTrait (t);
 			}
 		}
 
@@ -194,15 +194,18 @@ public class PlanMissionMenu : BaseMenu {
 
 			foreach (Asset a in m_missionPlan.m_requiredAssets) {
 
-				GameObject assetCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
-				UICell assetCell = (UICell)assetCellGO.GetComponent<UICell> ();
+				GameObject assetCellGO = (GameObject)Instantiate (m_assetCellGO, m_contentParent);
+				Cell_Asset assetCell = (Cell_Asset)assetCellGO.GetComponent<Cell_Asset> ();
 				m_cells.Add (assetCell);
-				assetCell.m_headerText.text = "Asset: " + a.m_name;
-
-				if (assets.Contains(a))
-				{
+//				assetCell.m_headerText.text = "Asset: " + a.m_name;
+//
+				if (assets.Contains (a)) {
 					assets.Remove (a);
-					assetCell.m_headerText.color = Color.green;
+					assetCell.SetAsset (a, Cell_Asset.AssetState.Positive);
+//					assetCell.m_headerText.color = Color.green;
+				} else {
+
+					assetCell.SetAsset (a);
 				}
 			}
 		}
@@ -466,16 +469,19 @@ public class PlanMissionMenu : BaseMenu {
 					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait && m_missionPlan.m_targetSiteTrait != null) ||
 					(m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region && m_missionPlan.m_targetRegion != null))) {
 
-				startMissionCell.m_buttons [0].interactable = true;
 
-				startMissionCell.m_buttons [0].onClick.AddListener (delegate {
-					StartMissionButtonPressed ();
-				});
 
-			} else {
+			} 
+//			else {
+//
+//				startMissionCell.m_buttons [0].interactable = false;
+//			}
 
-				startMissionCell.m_buttons [0].interactable = false;
-			}
+			startMissionCell.m_buttons [0].interactable = true;
+
+			startMissionCell.m_buttons [0].onClick.AddListener (delegate {
+				StartMissionButtonPressed ();
+			});
 
 			// spawn repeat mission toggle if enabled
 
@@ -510,7 +516,7 @@ public class PlanMissionMenu : BaseMenu {
 
 			Button b3 = cancelMissionCell.m_buttons [0];
 			b3.onClick.AddListener (delegate {
-				CancelMissionButtonPressed (m_missionPlan);
+				CancelMissionButtonPressed ();
 			});
 		}
 	}
@@ -533,6 +539,56 @@ public class PlanMissionMenu : BaseMenu {
 
 	public void StartMissionButtonPressed ()
 	{
+		// alert if there isn't a henchmen attached
+
+		if (m_missionPlan.m_actorSlots.Count == 0 || m_missionPlan.m_currentMission == null) {
+
+			string header = "Can't Start Mission";
+			string message = "You need to select a Mission and assign at least 1 Henchmen to start a Mission.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			return;
+		}
+
+
+		// alert if player can't afford mission
+
+		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
+
+		if (m_missionPlan.m_currentMission.m_cost > cp.m_currentPool) {
+
+			string header = "Can't Afford Mission";
+			string message = "There aren't enough points in your Command Pool to start this Mission.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			return;
+		}
+
+
+		// alert if there is 0% success rate
+
+		if (m_missionPlan.m_successChance <= 0) {
+
+			string header = "Can't Start Mission";
+			string message = "You can't start a Mission with a 0% Success Chance.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			return;
+		}
+
+
 		Debug.Log ("Starting new mission: " + m_missionPlan.m_currentMission.m_name);
 //		Debug.Log (m_missionPlan.m_currentAsset.m_asset);
 
@@ -582,16 +638,36 @@ public class PlanMissionMenu : BaseMenu {
 		ParentApp.PushMenu (m_selectHenchmenMenu);
 	}
 
-	public void CancelMissionButtonPressed (MissionPlan plan)
+	public void CancelMissionButtonPressed ()
 	{
+		string header = "Cancel Mission";
+		string message = "Are you sure you want to cancel this Mission?";
+
+		MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+		Button b1 = MobileUIEngine.instance.alertDialogue.AddButton ("Cancel Mission");
+		b1.onClick.AddListener (delegate {
+			CancelMission ();
+		});
+		Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Cancel");
+		b2.onClick.AddListener (delegate {
+			MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+		});
+		m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+	}
+
+	public void CancelMission ()
+	{
+		MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+
 		Action_CancelMission cancelMission = new Action_CancelMission ();
-		cancelMission.m_missionPlan = plan;
+		cancelMission.m_missionPlan = m_missionPlan;
 		cancelMission.m_playerID = 0;
 		GameController.instance.ProcessAction (cancelMission);
 
 		m_parentApp.homeMenu.isDirty = true;
 		m_parentApp.PopMenu ();
 	}
+
 //	public Lair.FloorSlot floorSlot {set {m_floorSlot = value;}}
 	public MissionPlan missionPlan {set {m_missionPlan = value;}}
 }
