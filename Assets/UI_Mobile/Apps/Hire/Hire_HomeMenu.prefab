@@ -241,6 +241,7 @@ MonoBehaviour:
   - {fileID: 114575061913104738}
   - {fileID: 114102232980704494}
   - {fileID: 114077207610539212}
+  m_sentEvent: 3
   m_buttonActiveStateColor: {r: 0, g: 0, b: 0, a: 1}
   m_buttonTextActiveStateColor: {r: 1, g: 1, b: 1, a: 1}
   m_buttonInactiveStateColor: {r: 1, g: 1, b: 1, a: 1}
@@ -957,7 +958,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588232338184990}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -965,10 +966,10 @@ RectTransform:
   m_Father: {fileID: 224954642240860580}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.787}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.09056621}
+  m_AnchorMax: {x: 1, y: 0.75956625}
+  m_AnchoredPosition: {x: 0, y: 1.8749}
+  m_SizeDelta: {x: 0, y: 3.7499}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224146209021041344
 RectTransform:

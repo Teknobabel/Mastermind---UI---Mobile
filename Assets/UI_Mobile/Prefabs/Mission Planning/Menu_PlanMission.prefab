@@ -225,6 +225,10 @@ MonoBehaviour:
     type: 2}
   m_assetCellGO: {fileID: 1145774830237794, guid: 15406cd9bd2f14241bd1371cc1e15f5c,
     type: 2}
+  m_effectCellGO: {fileID: 1145774830237794, guid: 2d7545f100f7e473790adab518d19ba1,
+    type: 2}
+  m_floorMinimalCellGO: {fileID: 1412014337009740, guid: 99a1d4af43bd5441193b9de31239bfba,
+    type: 2}
   m_startMissionCellGO: {fileID: 1576693542216804, guid: 018a97771530f48d6a9ef7ad62383e3f,
     type: 2}
   m_cancelMissionCellGO: {fileID: 1576693542216804, guid: 556bd028317fc4986a66e24ec1973957,

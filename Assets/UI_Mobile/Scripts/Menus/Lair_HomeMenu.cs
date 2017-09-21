@@ -156,16 +156,30 @@ public class Lair_HomeMenu : BaseMenu {
 
 		Lair l = GameController.instance.GetLair (0);
 
-		foreach (Lair.FloorSlot fSlot in l.floorSlots) {
+		for (int i = 0; i < l.maxFloors; i++) {
 
-			GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);
-			Cell_LairFloor floorCell = (Cell_LairFloor)floorGO.GetComponent<Cell_LairFloor> ();
-			floorCell.SetFloor (fSlot);
-			m_cells.Add ((UICell)floorCell);
+			if (i < l.floorSlots.Count) {
 
-			floorCell.m_buttons [0].onClick.AddListener (delegate {
-				FloorButtonClicked (fSlot.m_id);
-			});
+				Lair.FloorSlot fSlot = l.floorSlots [i];
+
+				GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);
+				Cell_LairFloor floorCell = (Cell_LairFloor)floorGO.GetComponent<Cell_LairFloor> ();
+				floorCell.SetFloor (fSlot);
+				m_cells.Add ((UICell)floorCell);
+
+				floorCell.m_buttons [0].onClick.AddListener (delegate {
+					FloorButtonClicked (fSlot.m_id);
+				});
+			} else {
+
+				GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);
+				Cell_LairFloor floorCell = (Cell_LairFloor)floorGO.GetComponent<Cell_LairFloor> ();
+				floorCell.m_headerText.text = "Empty";
+				floorCell.m_headerText.color = Color.gray;
+				floorCell.m_bodyText.text = "No Facility Present";
+//				floorCell.SetFloor (fSlot);
+				m_cells.Add ((UICell)floorCell);
+			}
 		}
 
 		LayoutRebuilder.ForceRebuildLayoutImmediate (m_contentParent.GetComponent<RectTransform>());

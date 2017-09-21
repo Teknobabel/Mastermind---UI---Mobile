@@ -12,6 +12,8 @@ public class PlanMissionMenu : BaseMenu {
 	m_selectHenchmenCellGO,
 	m_traitCellGO,
 	m_assetCellGO,
+	m_effectCellGO,
+	m_floorMinimalCellGO,
 	m_startMissionCellGO,
 	m_cancelMissionCellGO,
 	m_repeatMissionCellGO,
@@ -197,18 +199,61 @@ public class PlanMissionMenu : BaseMenu {
 				GameObject assetCellGO = (GameObject)Instantiate (m_assetCellGO, m_contentParent);
 				Cell_Asset assetCell = (Cell_Asset)assetCellGO.GetComponent<Cell_Asset> ();
 				m_cells.Add (assetCell);
-//				assetCell.m_headerText.text = "Asset: " + a.m_name;
-//
+
 				if (assets.Contains (a)) {
 					assets.Remove (a);
 					assetCell.SetAsset (a, Cell_Asset.AssetState.Positive);
-//					assetCell.m_headerText.color = Color.green;
 				} else {
 
 					assetCell.SetAsset (a);
 				}
 			}
 		}
+
+		// if mission has been compiled, display any required floors
+
+		if (m_missionPlan.m_requiredFloors.Count > 0) {
+
+			foreach (Floor floor in m_missionPlan.m_requiredFloors) {
+
+				GameObject floorCellGO = (GameObject)Instantiate (m_floorMinimalCellGO, m_contentParent);
+				Cell_Floor_Minimal floorCell = (Cell_Floor_Minimal)floorCellGO.GetComponent<Cell_Floor_Minimal> ();
+				m_cells.Add ((UICell)floorCell);
+
+				bool hasFloor = false;
+
+				foreach (Lair.FloorSlot fSlot in m_missionPlan.m_matchingFloors) {
+
+					if (fSlot.m_floor.m_name == floor.m_name) {
+
+						hasFloor = true;
+						break;
+					}
+				}
+
+				if (hasFloor) {
+
+					floorCell.SetFloor (floor, Cell_Floor_Minimal.FloorState.Positive);
+				} else {
+					floorCell.SetFloor (floor);
+				}
+
+			}
+		}
+
+		// display any active effects
+
+		if (m_missionPlan.m_effects.Count > 0) {
+
+			foreach (EffectPool.EffectSlot eSlot in m_missionPlan.m_effects)
+			{
+				GameObject effectCellGO = (GameObject)Instantiate (m_effectCellGO, m_contentParent);
+				Cell_Effect effectCell = (Cell_Effect)effectCellGO.GetComponent<Cell_Effect> ();
+				effectCell.SetEffect (eSlot.m_effect);
+				m_cells.Add ((UICell)effectCell);
+			}
+		}
+
 
 		if (m_missionPlan.m_currentMission != null) {
 
