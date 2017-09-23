@@ -135,11 +135,14 @@ public class Lair_HomeMenu : BaseMenu {
 			if (fSlot.m_id == floorSlotID) {
 
 				fSlot.m_missionPlan.m_missionOptions.Clear ();
+				fSlot.m_missionPlan.m_missionOptions.Add (fSlot);
 
-				foreach (Mission m in fSlot.m_floor.m_missions) {
-
-					fSlot.m_missionPlan.m_missionOptions.Add (m);
-				}
+//				fSlot.m_missionPlan.m_missionOptions.Clear ();
+//
+//				foreach (Mission m in fSlot.m_floor.m_missions) {
+//
+//					fSlot.m_missionPlan.m_missionOptions.Add (m);
+//				}
 
 				fSlot.m_missionPlan.m_maxActorSlots = fSlot.m_numActorSlots;
 

@@ -158,28 +158,10 @@ public class World_HomeMenu : BaseMenu {
 						// create site info cell
 
 						GameObject siteInfo = (GameObject)Instantiate (m_siteInfoCellGO, m_worldListParent);
-						UICell siteInfoCell = (UICell)siteInfo.GetComponent<UICell> ();
-						siteInfoCell.m_headerText.text = s.m_siteName;
-						siteInfoCell.m_bodyText.text = s.m_type.ToString ();
+						Cell_Site siteInfoCell = (Cell_Site)siteInfo.GetComponent<Cell_Site> ();
+						siteInfoCell.SetSite (s);
 
-						m_cells.Add (siteInfoCell);
-
-						// create site alert cell
-
-						GameObject siteAlert = (GameObject)Instantiate (m_siteAlertCellGO, m_worldListParent);
-						UICell siteAlertCell = (UICell)siteAlert.GetComponent<UICell> ();
-						m_cells.Add (siteAlertCell);
-
-						for (int i = 0; i < siteAlertCell.m_rawImages.Length; i++) {
-
-							if (i >= s.m_maxAlertLevel) {
-
-								siteAlertCell.m_rawImages [i].gameObject.SetActive (false);
-							} else if (i < s.currentAlertLevel) {
-
-								siteAlertCell.m_rawImages [i].texture = siteAlertCell.m_sprites [0].texture;
-							}
-						}
+						m_cells.Add ((UICell)siteInfoCell);
 
 						// create site trait cells
 

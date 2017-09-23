@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_missionOverviewCellGO: {fileID: 1885019867969946, guid: d4271a75e5e194749a7ae81b70dff668,
     type: 2}
-  m_selectMissionCellGO: {fileID: 1885019867969946, guid: 1ea7eadd962c04f65a327218c98cdce8,
+  m_selectMissionCellGO: {fileID: 1662217278989262, guid: 6b0031f48fdd64f3abeebb78c2cc24d5,
     type: 2}
   m_selectSiteCellGO: {fileID: 1576693542216804, guid: 7eb54e8e0b06246938c90173a0f42f9f,
     type: 2}

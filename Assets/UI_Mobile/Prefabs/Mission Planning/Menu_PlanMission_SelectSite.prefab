@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_regionHeaderCellGO: {fileID: 1575044260185468, guid: 28ad9d415cdb4441197f0674a1012091,
     type: 2}
-  m_siteInfoCellGO: {fileID: 1038807528184354, guid: 0cbf77f482dc84aa2861113a874eb0d5,
+  m_siteInfoCellGO: {fileID: 1880731157427116, guid: 2c6e5314aed724fbbaf1c95516adeaa3,
     type: 2}
   m_siteAlertCellGO: {fileID: 1170532840082482, guid: 480a10111d6044ac19e843b300b5363e,
     type: 2}

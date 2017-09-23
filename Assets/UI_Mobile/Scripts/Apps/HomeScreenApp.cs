@@ -117,7 +117,7 @@ public class HomeScreenApp : BaseApp {
 			numPages++;
 		}
 
-		acMenu.Initialize ();
+		acMenu.Initialize (this);
 
 		ScrollRectSnap srt = (ScrollRectSnap) homeScreenGO.GetComponent<ScrollRectSnap> ();
 		srt.screens = numPages;

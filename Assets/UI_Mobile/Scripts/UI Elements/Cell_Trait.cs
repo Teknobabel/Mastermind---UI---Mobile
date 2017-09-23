@@ -35,6 +35,4 @@ public class Cell_Trait : UICell {
 	{
 		m_headerText.text = "Trait: " + st.m_name;
 	}
-
-
 }

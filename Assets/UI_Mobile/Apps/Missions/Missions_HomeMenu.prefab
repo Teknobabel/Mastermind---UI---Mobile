@@ -309,6 +309,7 @@ MonoBehaviour:
   - {fileID: 114845061291068426}
   - {fileID: 114482879991966876}
   - {fileID: 114697666105603980}
+  m_sentEvent: 3
   m_buttonActiveStateColor: {r: 0, g: 0, b: 0, a: 1}
   m_buttonTextActiveStateColor: {r: 1, g: 1, b: 1, a: 1}
   m_buttonInactiveStateColor: {r: 1, g: 1, b: 1, a: 1}
@@ -826,7 +827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_appNameText: {fileID: 114669898973760328}
-  m_missionCellGO: {fileID: 1885019867969946, guid: d4271a75e5e194749a7ae81b70dff668,
+  m_missionCellGO: {fileID: 1662217278989262, guid: 6b0031f48fdd64f3abeebb78c2cc24d5,
     type: 2}
   m_noMissionsCellGO: {fileID: 1456476320303838, guid: 050f88d26b9b941d0bd156f5f6f24203,
     type: 2}

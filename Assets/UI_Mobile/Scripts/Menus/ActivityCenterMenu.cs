@@ -5,7 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class ActivityCenterMenu : MonoBehaviour, IObserver {
+public class ActivityCenterMenu : BaseMenu, IObserver {
 
 	public Transform
 	m_scrollViewParent;
@@ -15,17 +15,18 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 	m_activityCell,
 	m_activityCellWithIcon;
 
-	private List<GameObject> m_cells = new List<GameObject>();
+//	private List<GameObject> m_cells = new List<GameObject>();
 
 	// Use this for initialization
-	void Start () {
-		
-	}
+//	void Start () {
+//		
+//	}
 
-	public void Initialize ()
+	public override void Initialize (IApp parentApp)
 	{
-		GameController.instance.AddObserver (this);
+		base.Initialize (parentApp);
 
+		GameController.instance.AddObserver (this);
 		Dictionary<int, List<NotificationCenter.Notification>> feed = GameController.instance.GetPlayerNotifications(0);
 		SetActivity (feed);
 	}
@@ -34,9 +35,9 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 	{
 		while (m_cells.Count > 0) {
 
-			GameObject go = m_cells [0];
+			UICell go = m_cells [0];
 			m_cells.RemoveAt (0);
-			Destroy (go);
+			Destroy (go.gameObject);
 		}
 
 		foreach(KeyValuePair<int, List<NotificationCenter.Notification>> entry in activityList.Reverse())
@@ -44,7 +45,7 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 			GameObject header = (GameObject)Instantiate (m_activityHeader, m_scrollViewParent);
 			UICell headerCell = (UICell)header.GetComponent<UICell> ();
 			headerCell.m_headerText.text = "Turn " + entry.Key.ToString ();
-			m_cells.Add (header);
+			m_cells.Add (headerCell);
 
 			List<NotificationCenter.Notification> sList = entry.Value;
 
@@ -64,7 +65,7 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 					b.onClick.AddListener (delegate {
 						NotificationTapped(s.m_location);});
 
-					m_cells.Add (cellGO);
+					m_cells.Add ((UICell)cell);
 
 					if (entry.Key == activityList.Count-1) {
 
@@ -77,7 +78,7 @@ public class ActivityCenterMenu : MonoBehaviour, IObserver {
 					UICell cell = (UICell)cellGO.GetComponent<UICell> ();
 					cell.m_bodyText.text = s.m_title + "\n";
 					cell.m_bodyText.text += s.m_message;
-					m_cells.Add (cellGO);
+					m_cells.Add (cell);
 
 					if (entry.Key == activityList.Count-1) {
 

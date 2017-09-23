@@ -93,34 +93,22 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 					// create site info cell
 
 					GameObject siteInfo = (GameObject)Instantiate (m_siteInfoCellGO, m_contentParent);
-					UICell siteInfoCell = (UICell)siteInfo.GetComponent<UICell> ();
-					siteInfoCell.m_headerText.text = s.m_siteName;
-					siteInfoCell.m_bodyText.text = s.m_type.ToString ();
-					m_cells.Add (siteInfoCell);
+					Cell_Site siteCell = (Cell_Site)siteInfo.GetComponent<Cell_Site> ();
+					siteCell.SetSite (s);
 
 					if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site) {
 
-						Button b = siteInfoCell.m_buttons [0];
+						Button b = siteCell.m_buttons [0];
+						b.interactable = true;
 						b.onClick.AddListener (delegate {
-							SiteSelected (s);
+							SiteSelected(s);
 						});
-					}
 
-					// create site alert cell
-
-					GameObject siteAlert = (GameObject)Instantiate (m_siteAlertCellGO, m_contentParent);
-					UICell siteAlertCell = (UICell)siteAlert.GetComponent<UICell> ();
-					m_cells.Add (siteAlertCell);
-
-					for (int i = 0; i < siteAlertCell.m_rawImages.Length; i++) {
-
-						if (i >= s.m_maxAlertLevel) {
-
-							siteAlertCell.m_rawImages [i].gameObject.SetActive (false);
-						} else if (i < s.currentAlertLevel) {
-
-							siteAlertCell.m_rawImages [i].texture = siteAlertCell.m_sprites [0].texture;
-						}
+						b = siteCell.m_buttons [1];
+						b.interactable = true;
+						b.onClick.AddListener (delegate {
+							SiteSelected(s);
+						});
 					}
 
 					// create site trait cells

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomeScreenMenu : MonoBehaviour, IUIObserver {
+public class HomeScreenMenu : BaseMenu, IUIObserver {
 
 	public Transform
 	m_contentParent;

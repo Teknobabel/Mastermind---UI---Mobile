@@ -122,33 +122,22 @@ public class PlanMissionMenu : BaseMenu {
 		if (m_missionPlan.m_currentMission != null) {
 
 			GameObject selectMissionCellGO = (GameObject)Instantiate (m_selectMissionCellGO, m_contentParent);
-			UICell selectMissionCell = (UICell)selectMissionCellGO.GetComponent<UICell> ();
-			m_cells.Add (selectMissionCell);
-
-			selectMissionCell.m_headerText.text = m_missionPlan.m_currentMission.m_name;
-			selectMissionCell.m_bodyText.text = m_missionPlan.m_currentMission.m_description;
-
-			Button b = selectMissionCell.m_buttons [0];
+			Cell_Mission selectMissionCell = (Cell_Mission)selectMissionCellGO.GetComponent<Cell_Mission> ();
+			selectMissionCell.SetMission (m_missionPlan);
+			m_cells.Add ((UICell)selectMissionCell);
 
 			if (m_missionPlan.m_state == MissionPlan.State.Planning && m_missionPlan.m_missionOptions.Count > 0) {
 
+				Button b = selectMissionCell.m_buttons [0];
+				b.onClick.AddListener (delegate {
+					SelectMissionButtonPressed ();
+				});
+				b = selectMissionCell.m_buttons [1];
 				b.onClick.AddListener (delegate {
 					SelectMissionButtonPressed ();
 				});
 
-			} else {
-				b.interactable = false;
-//				b.gameObject.SetActive (false);
-			}
-
-			// display mission stats cell
-
-			GameObject statsCellGO = (GameObject)Instantiate (m_missionStatsCompiledCellGO, m_contentParent);
-			UICell statsCell = (UICell)statsCellGO.GetComponent<UICell> ();
-			statsCell.m_text[0].text = m_missionPlan.m_currentMission.m_cost.ToString () + " CP";
-			statsCell.m_text[1].text = m_missionPlan.m_currentMission.m_duration.ToString () + " Turns";
-			statsCell.m_text [2].text = m_missionPlan.m_successChance.ToString () + "%";
-			m_cells.Add (statsCell);
+			} 
 
 		} else {
 

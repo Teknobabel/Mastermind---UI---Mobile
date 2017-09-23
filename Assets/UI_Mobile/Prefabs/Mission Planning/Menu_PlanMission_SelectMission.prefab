@@ -242,13 +242,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606cbc2efe2db4a5a9007918aea65dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_missionCell: {fileID: 1885019867969946, guid: 1ea7eadd962c04f65a327218c98cdce8,
+  m_missionCell: {fileID: 1662217278989262, guid: 6b0031f48fdd64f3abeebb78c2cc24d5,
     type: 2}
   m_missionStatsCell: {fileID: 1509168378873162, guid: 90ce94ccb5130483b8cf7042d5947814,
     type: 2}
   m_traitCell: {fileID: 1145774830237794, guid: 15406cd9bd2f14241bd1371cc1e15f5c,
     type: 2}
   m_separatorCell: {fileID: 1104989579354144, guid: 54944e6292d1c4f7fa67e39d4afb4200,
+    type: 2}
+  m_headerCell: {fileID: 1575044260185468, guid: fefac4bbf778c469ea7c92f2c707cacb,
+    type: 2}
+  m_floorCell: {fileID: 1412014337009740, guid: 99a1d4af43bd5441193b9de31239bfba,
     type: 2}
   m_contentParent: {fileID: 224861919079993834}
 --- !u!114 &114833676664676938

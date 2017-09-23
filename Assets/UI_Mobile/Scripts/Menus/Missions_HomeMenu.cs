@@ -140,13 +140,15 @@ public class Missions_HomeMenu : BaseMenu {
 
 		foreach (Lair.FloorSlot fSlot in lair.floorSlots) {
 
-			if (fSlot.m_state != Lair.FloorSlot.FloorState.Empty && fSlot.m_state != Lair.FloorSlot.FloorState.MissionInProgress) {
+			newPlan.m_missionOptions.Add (fSlot);
 
-				foreach (Mission m in fSlot.m_floor.m_missions) {
-
-					newPlan.m_missionOptions.Add (m);
-				}
-			}
+//			if (fSlot.m_state != Lair.FloorSlot.FloorState.Empty && fSlot.m_state != Lair.FloorSlot.FloorState.MissionInProgress) {
+//
+//				foreach (Mission m in fSlot.m_floor.m_missions) {
+//
+//					newPlan.m_missionOptions.Add (m);
+//				}
+//			}
 		}
 
 		((MissionsApp)(m_parentApp)).planMissionMenu.missionPlan = newPlan;
@@ -170,20 +172,16 @@ public class Missions_HomeMenu : BaseMenu {
 			foreach (MissionPlan mp in missions) {
 
 				GameObject missionCellGO = (GameObject)Instantiate (m_missionCellGO, m_contentParent);
-				UICell missionCell = (UICell)missionCellGO.GetComponent<UICell> ();
-				missionCell.m_headerText.text = mp.m_currentMission.m_name;
-				missionCell.m_bodyText.text = mp.m_turnNumber.ToString () + " / " + mp.m_currentMission.m_duration.ToString () + " Turns";
+				Cell_Mission missionCell = (Cell_Mission)missionCellGO.GetComponent<Cell_Mission> ();
+				missionCell.SetMission (mp);
 				m_cells.Add (missionCell);
-
-				if (mp.m_new) {
-
-					missionCell.m_rectTransforms [1].gameObject.SetActive (true);
-				}
 
 				Button b = missionCell.m_buttons [0];
 				b.onClick.AddListener (delegate {
 					MissionButtonPressed (mp);
 				});
+
+				LayoutRebuilder.ForceRebuildLayoutImmediate (m_contentParent.GetComponent<RectTransform>());
 			}
 		}
 	}
