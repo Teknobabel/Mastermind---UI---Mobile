@@ -37,7 +37,7 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 	m_observers = new List<IUIObserver> ();
 
 	private InfoPanelType 
-	m_currentPanel = InfoPanelType.None;
+	m_currentPanel = InfoPanelType.Traits;
 
 	protected int m_henchmenID = -1;
 
@@ -48,7 +48,6 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 		base.Initialize (parentApp);
 
 		m_infoPanelToggle.AddObserver (this);
-		m_infoPanelToggle.ToggleButtonClicked (0);
 		this.gameObject.SetActive (false);
 	}
 
@@ -168,15 +167,53 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 
 	public void FireButtonPressed()
 	{
-		string header = "Fire Henchmen";
-		string message = "Are you sure you want to fire this henchmen? Fired henchmen will be available for hire again in the future.";
+		// check if henchmen is on a mission, block if so
 
-		MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
-		Button b1 = MobileUIEngine.instance.alertDialogue.AddButton ("Fire Henchmen");
-		b1.onClick.AddListener(delegate { FireHenchmen ();});
-		Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Cancel");
-		b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
-		m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+		bool onMission = false;
+
+		List<Player.ActorSlot> hiredHenchmen = GameController.instance.GetHiredHenchmen (0);
+
+		foreach (Player.ActorSlot aSlot in hiredHenchmen) {
+
+			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty && aSlot.m_actor.id == m_henchmenID) {
+//				Debug.Log (aSlot.m_actor.m_actorName);
+//				Debug.Log (aSlot.m_state);
+				if (aSlot.m_state == Player.ActorSlot.ActorSlotState.OnMission) {
+
+					onMission = true;
+					break;
+				}
+			}
+		}
+
+		if (onMission) {
+
+			string header = "Can't Fire Henchmen";
+			string message = "This Henchmen is currently on a Mission. Cancel the Mission if you want to fire this Henchmen.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+		} else {
+			
+			string header = "Fire Henchmen";
+			string message = "Are you sure you want to fire this henchmen? Fired henchmen will be available for hire again in the future.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b1 = MobileUIEngine.instance.alertDialogue.AddButton ("Fire Henchmen");
+			b1.onClick.AddListener (delegate {
+				FireHenchmen ();
+			});
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Cancel");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+		}
 	}
 
 	public void FireHenchmen ()
@@ -235,37 +272,18 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 		}
 	}
 
-	private void SetInfoPanel (InfoPanelType pType)
+	public override void DisplayContent ()
 	{
-		
+		base.DisplayContent ();
+
 		switch (m_currentPanel) {
-		case InfoPanelType.Traits:
-			m_infoPanels [0].gameObject.SetActive (false);
-			break;
-		case InfoPanelType.History:
-			m_infoPanels [1].gameObject.SetActive (false);
-			break;
-		case InfoPanelType.Info:
-			m_infoPanels [2].gameObject.SetActive (false);
-			break;
 
-		}
-
-		switch (pType) {
 		case InfoPanelType.Traits:
 			m_infoPanels [0].gameObject.SetActive (true);
 
-			// remove old trait cells
-
-			while (m_cells.Count > 0) {
-				UICell c = m_cells [0];
-				m_cells.RemoveAt (0);
-				Destroy (c.gameObject);
-			}
-
 			// create new trait cells
 
-//			Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
+			//			Henchmen h = GetDummyData.instance.GetHenchmen (m_henchmenID);
 			Actor h = GameController.instance.GetActor (m_henchmenID);
 
 			if (h != null) {
@@ -289,13 +307,6 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 			Dictionary<int, List<NotificationCenter.Notification>> notifications = GameController.instance.GetHenchmenNotifications (m_henchmenID);
 
 			// display history
-
-			while (m_cells.Count > 0) {
-
-				UICell go = m_cells [0];
-				m_cells.RemoveAt (0);
-				Destroy (go.gameObject);
-			}
 
 			foreach(KeyValuePair<int, List<NotificationCenter.Notification>> entry in notifications.Reverse())
 			{
@@ -329,16 +340,27 @@ public class ContactsDetailViewMenu : BaseMenu, IUISubject, IUIObserver {
 			break;
 
 		}
+	}
+
+	private void SetInfoPanel (InfoPanelType pType)
+	{
+		
+		switch (m_currentPanel) {
+		case InfoPanelType.Traits:
+			m_infoPanels [0].gameObject.SetActive (false);
+			break;
+		case InfoPanelType.History:
+			m_infoPanels [1].gameObject.SetActive (false);
+			break;
+		case InfoPanelType.Info:
+			m_infoPanels [2].gameObject.SetActive (false);
+			break;
+
+		}
 
 		m_currentPanel = pType;
 
-//		for (int i = 0; i < m_infoPanels.Length; i++) {
-//
-//			if (i == panelNum) {
-//				m_infoPanels [i].gameObject.SetActive (true);
-//			} else {
-//				m_infoPanels [i].gameObject.SetActive (false);
-//			}
-//		}
+		DisplayContent ();
+
 	}
 }

@@ -57,6 +57,8 @@ public class Alert_Generic : BaseMenu {
 		buttonCell.m_headerText.text = buttonName;
 		m_cells.Add (buttonCell);
 		return buttonCell.m_buttons [0];
+
+//		LayoutRebuilder.ForceRebuildLayoutImmediate (m_contentParent.GetComponent<RectTransform>());
 	}
 
 	public void DismissButtonTapped ()

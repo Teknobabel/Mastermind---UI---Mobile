@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: App_Settings
   m_EditorClassIdentifier: 
   m_name: SETTINGS
-  m_appType: 0
+  m_appType: 8
   m_icon: {fileID: 21300000, guid: 0ea7a9788de10429ba29243c22e55cd3, type: 3}
   m_icon_Pressed: {fileID: 21300000, guid: 6ce584e271e44404b991027a429ed758, type: 3}
   m_wantsSystemNavBar: 1

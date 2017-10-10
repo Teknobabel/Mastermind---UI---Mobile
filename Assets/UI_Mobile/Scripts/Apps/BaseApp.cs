@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class BaseApp : ScriptableObject, IApp {
+public class BaseApp : ScriptableObject, IApp, IUISubject {
 
 	public string m_name;
 	public EventLocation m_appType = EventLocation.None;
@@ -16,6 +16,9 @@ public class BaseApp : ScriptableObject, IApp {
 	protected AppIcon m_appIconInstance;
 	protected BaseMenu m_homeMenu;
 
+	private List<IUIObserver>
+	m_observers = new List<IUIObserver> ();
+
 	public virtual void InitializeApp ()
 	{
 		Debug.Log ("Initializing " + m_name);
@@ -23,22 +26,39 @@ public class BaseApp : ScriptableObject, IApp {
 
 	public virtual void EnterApp ()
 	{
-		if (m_wantsSystemNavBar) {
-			
-			// system nav bar slides up
+//		if (m_wantsSystemNavBar) {
+//			
+//			if (!MobileUIEngine.instance.systemNavBar.isActive) {
+//				
+//				// system nav bar slides up
+//
+//				MobileUIEngine.instance.systemNavBar.SetActiveState (true);
+//				RectTransform sysNavRT = MobileUIEngine.instance.systemNavBar.GetComponent<RectTransform> ();
+//				sysNavRT.anchoredPosition = new Vector2 (0, sysNavRT.rect.height * -1);
+//				sysNavRT.gameObject.SetActive (true);
+//				DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (0.35f);
+//			}
+//
+//		} else {
+//
+////			if (MobileUIEngine.instance.systemNavBar.isActive) {
+//
+//				RectTransform sysNavRT = MobileUIEngine.instance.systemNavBar.GetComponent<RectTransform> ();
+//			DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, sysNavRT.rect.height * -1), 0.25f).SetDelay (0.35f).OnComplete (OnExitComplete);
+////			}
+//
+////			if (MobileUIEngine.instance.systemNavBar != null) {
+////				MobileUIEngine.instance.systemNavBar.gameObject.SetActive (false);
+////			}
+//		}
 
-			RectTransform sysNavRT = MobileUIEngine.instance.systemNavBar.GetComponent<RectTransform> ();
-			sysNavRT.anchoredPosition = new Vector2 (0, sysNavRT.rect.height * -1);
-			sysNavRT.gameObject.SetActive (true);
-			DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (0.35f);
-
-		} else {
-
-			if (MobileUIEngine.instance.systemNavBar != null) {
-				MobileUIEngine.instance.systemNavBar.gameObject.SetActive (false);
-			}
-		}
+		Notify ((IUISubject)this, UIEvent.App_Enter);
 	}
+
+//	public void OnExitComplete ()
+//	{
+//		MobileUIEngine.instance.systemNavBar.SetActiveState (false);
+//	}
 
 	public virtual void UpdateApp ()
 	{
@@ -66,11 +86,7 @@ public class BaseApp : ScriptableObject, IApp {
 			}
 		}
 
-		if (m_wantsSystemNavBar) {
-			
-			RectTransform sysNavRT = MobileUIEngine.instance.systemNavBar.GetComponent<RectTransform> ();
-			DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, sysNavRT.rect.height * -1), 0.25f).SetDelay (0.35f);
-		}
+		Notify ((IUISubject)this, UIEvent.App_Exit);
 	}
 
 	public virtual void HoldApp ()
@@ -80,7 +96,7 @@ public class BaseApp : ScriptableObject, IApp {
 
 	public virtual void AppReturn ()
 	{
-
+		Notify ((IUISubject)this, UIEvent.App_Return);
 	}
 
 	public virtual void PushMenu (IMenu menu)
@@ -115,6 +131,27 @@ public class BaseApp : ScriptableObject, IApp {
 
 				returningMenu.OnReturn ();
 			}
+		}
+	}
+
+	public void AddObserver (IUIObserver observer)	
+	{
+		m_observers.Add (observer);
+	}
+
+	public void RemoveObserver (IUIObserver observer)
+	{
+		if (m_observers.Contains(observer))
+		{
+			m_observers.Remove(observer);
+		}
+	}
+
+	public void Notify (IUISubject subject, UIEvent thisUIEvent)
+	{
+		for (int i=0; i < m_observers.Count; i++)
+		{
+			m_observers[i].OnNotify(subject, thisUIEvent);
 		}
 	}
 

@@ -136,31 +136,6 @@ public class HomeScreenApp : BaseApp {
 
 		base.InitializeApp ();
 
-		// instantiate toast alert
-
-		GameObject toastGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_toastGO, Vector3.zero, Quaternion.identity);
-		toastGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		Alert_Toast toast  = (Alert_Toast)toastGO.GetComponent<Alert_Toast> ();
-		//		toastGO.Initialize ();
-		MobileUIEngine.instance.toast = toast;
-		MobileUIEngine.instance.toast.gameObject.SetActive (false);
-
-		// instantiate system nav bar
-
-		GameObject sysNavGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_systemNavBarGO, Vector3.zero, Quaternion.identity);
-		sysNavGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		SystemNavBar sysNavBar  = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
-		sysNavBar.Initialize ();
-		MobileUIEngine.instance.systemNavBar = sysNavBar;
-		MobileUIEngine.instance.systemNavBar.SetActiveState (false);
-
-		// instantiate generic alert dialogue
-
-		GameObject alertGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_alertDialogueGO, Vector3.zero, Quaternion.identity);
-		alertGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		Alert_Generic alert  = (Alert_Generic)alertGO.GetComponent<Alert_Generic> ();
-		alert.Initialize (this);
-		MobileUIEngine.instance.alertDialogue = alert;
 	}
 
 	public void NewTurnStarted ()

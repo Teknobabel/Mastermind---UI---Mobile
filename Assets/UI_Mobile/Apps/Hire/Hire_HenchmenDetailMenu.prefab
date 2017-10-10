@@ -1115,7 +1115,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1574,6 +1574,7 @@ MonoBehaviour:
   m_buttons:
   - {fileID: 114609438087637702}
   - {fileID: 114528230374820032}
+  m_sentEvent: 3
   m_buttonActiveStateColor: {r: 0, g: 0, b: 0, a: 1}
   m_buttonTextActiveStateColor: {r: 1, g: 1, b: 1, a: 1}
   m_buttonInactiveStateColor: {r: 1, g: 1, b: 1, a: 1}

@@ -157,6 +157,10 @@ MonoBehaviour:
   m_appNameText: {fileID: 114551592367316072}
   m_floorCellGO: {fileID: 1798897752933608, guid: a5c6c2bd250cf43d29e566129d317e50,
     type: 2}
+  m_buildFacilityCellGO: {fileID: 1532754729981420, guid: 74ef0d5d2148c48fa96dca0298339452,
+    type: 2}
+  m_missionCell: {fileID: 1662217278989262, guid: 6b0031f48fdd64f3abeebb78c2cc24d5,
+    type: 2}
   m_contentParent: {fileID: 224028096404315660}
 --- !u!114 &114327302981066026
 MonoBehaviour:

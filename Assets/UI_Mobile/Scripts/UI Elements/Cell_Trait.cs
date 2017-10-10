@@ -9,7 +9,7 @@ public class Cell_Trait : UICell {
 		None,
 		Positive,
 		Negative,
-
+		Disabled,
 	}
 
 	public void SetTrait (Trait trait)
@@ -28,6 +28,8 @@ public class Cell_Trait : UICell {
 		} else if (state == TraitState.Negative) {
 
 			m_headerText.color = Color.red;
+		} else if (state == TraitState.Disabled) {
+			m_headerText.color = Color.gray;
 		}
 	}
 

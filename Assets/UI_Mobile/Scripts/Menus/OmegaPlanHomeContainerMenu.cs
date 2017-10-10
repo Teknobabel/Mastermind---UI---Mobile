@@ -67,6 +67,31 @@ public class OmegaPlanHomeContainerMenu : BaseMenu, IUIObserver {
 		}
 
 		this.gameObject.SetActive (true);
+
+		// display first time help popup if enabled
+
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_OmegaPlan);
+
+		if (helpEnabled == 1 && firstTimeEnabled == 1) {
+
+			string header = "Omega Plan App";
+			string message = "Your Omega Plan has 3 Phases, which each contain 3 Missions. Complete all 3 Phases to ensure world domination. You'll need Henchmen to carry out your orders and do" +
+				" the dirty work.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_OmegaPlan, 0);
+
+		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_OmegaPlan, 0);
+		}
 	}
 
 	public override void OnExit (bool animate)

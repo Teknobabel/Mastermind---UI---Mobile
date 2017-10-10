@@ -58,6 +58,30 @@ public class Missions_HomeMenu : BaseMenu {
 		//			rt.anchoredPosition = Vector2.zero;
 		//
 		//		}
+
+		// display first time help popup if enabled
+
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_Missions);
+
+		if (helpEnabled == 1 && firstTimeEnabled == 1) {
+
+			string header = "Missions App";
+			string message = "See all Missions currently being carried out by your Henchmen, or start planning a new one.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Missions, 0);
+
+		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Missions, 0);
+		}
 	}
 
 	public override void OnExit (bool animate)

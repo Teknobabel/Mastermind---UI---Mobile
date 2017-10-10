@@ -81,6 +81,30 @@ public class PlanMissionMenu : BaseMenu {
 
 		base.OnEnter (animate);
 
+		// display first time help popup if enabled
+
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_PlanMission);
+
+		if (helpEnabled == 1 && firstTimeEnabled == 1) {
+
+			string header = "Planning Missions";
+			string message = "Planning a Mission usually requires you to choose a Mission, a Target, and a Henchmen to carry it out. Each Mission will require certain Traits, the more matching " +
+				"traits your Henchmen has, the greater the chance of success.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_PlanMission, 0);
+
+		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_PlanMission, 0);
+		}
 	}
 
 	public override void OnExit (bool animate)
@@ -123,7 +147,7 @@ public class PlanMissionMenu : BaseMenu {
 
 			GameObject selectMissionCellGO = (GameObject)Instantiate (m_selectMissionCellGO, m_contentParent);
 			Cell_Mission selectMissionCell = (Cell_Mission)selectMissionCellGO.GetComponent<Cell_Mission> ();
-			selectMissionCell.SetMission (m_missionPlan);
+			selectMissionCell.SetMission (m_missionPlan, false);
 			m_cells.Add ((UICell)selectMissionCell);
 
 			if (m_missionPlan.m_state == MissionPlan.State.Planning && m_missionPlan.m_missionOptions.Count > 0) {
@@ -448,7 +472,7 @@ public class PlanMissionMenu : BaseMenu {
 					b3.interactable = false;
 				}
 
-			} else {
+			} else if (m_missionPlan.m_state == MissionPlan.State.Planning)  {
 
 				GameObject selectHenchmenCellGO = (GameObject)Instantiate (m_emptyHenchmenCellGO, m_contentParent);
 				UICell selectHenchmenCell = (UICell)selectHenchmenCellGO.GetComponent<UICell> ();

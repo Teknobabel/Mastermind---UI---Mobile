@@ -10,36 +10,42 @@ public class Settings_HomeMenu : BaseMenu {
 	m_toggleFilled;
 
 	public UICell 
-	m_tutorialToggleCell;
+	m_tutorialToggleCell,
+	m_helpEnabledToggleCell;
 
-	private bool m_tutorialEnabled = true;
+//	private int m_tutorialEnabled = -1;
 
 	// Use this for initialization
 	void Start () {
 
-		if (PlayerPrefs.HasKey ("PlayTutorial")) {
+		int tutorialEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.PlayTutorial);
 
-			int playTutorial = PlayerPrefs.GetInt ("PlayTutorial");
+		if (tutorialEnabled == 0) {
 
-			if (playTutorial == 0) {
+			m_tutorialToggleCell.m_image.texture = m_toggleEmpty;
 
-				m_tutorialToggleCell.m_image.texture = m_toggleEmpty;
-				m_tutorialEnabled = false;
+		} else if (tutorialEnabled == 1) {
 
-			} else {
+			m_tutorialToggleCell.m_image.texture = m_toggleFilled;
 
-				m_tutorialToggleCell.m_image.texture = m_toggleFilled;
-				m_tutorialEnabled = true;
+		}
 
-			}
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+
+		if (helpEnabled == 0) {
+
+			m_helpEnabledToggleCell.m_image.texture = m_toggleEmpty;
+
+		} else if (helpEnabled == 1) {
+
+			m_helpEnabledToggleCell.m_image.texture = m_toggleFilled;
+
 		}
 	}
 
 	public override void Initialize (IApp parentApp)
 	{
 		base.Initialize (parentApp);
-
-//		m_appNameText.text = parentApp.Name;
 		this.gameObject.SetActive (false);
 	}
 	
@@ -136,21 +142,39 @@ public class Settings_HomeMenu : BaseMenu {
 
 	public void TutorialButtonClicked ()
 	{
-		if (m_tutorialEnabled) 
-		{
+		int tutorialEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.PlayTutorial);
 
-			m_tutorialEnabled = false;
+		if (tutorialEnabled == 1) 
+		{
 			m_tutorialToggleCell.m_image.texture = m_toggleEmpty;
 
-			PlayerPrefs.SetInt ("PlayTutorial", 0);
-			PlayerPrefs.Save();
-		} else {
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.PlayTutorial, 0);
 
-			m_tutorialEnabled = true;
+		} else if (tutorialEnabled == 0) {
+			
 			m_tutorialToggleCell.m_image.texture = m_toggleFilled;
 
-			PlayerPrefs.SetInt ("PlayTutorial", 1);
-			PlayerPrefs.Save();
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.PlayTutorial, 1);
+
+		}
+	}
+
+	public void EnableHelpButtonClicked ()
+	{
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+
+		if (helpEnabled == 1) 
+		{
+			m_helpEnabledToggleCell.m_image.texture = m_toggleEmpty;
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.HelpEnabled, 0);
+
+		} else if (helpEnabled == 0) {
+
+			m_helpEnabledToggleCell.m_image.texture = m_toggleFilled;
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.HelpEnabled, 1);
+
 		}
 	}
 
@@ -161,16 +185,6 @@ public class Settings_HomeMenu : BaseMenu {
 
 	public void OnExitComplete ()
 	{
-
-//		while (m_cells.Count > 0) {
-//
-//			UICell c = m_cells [0];
-//			m_cells.RemoveAt (0);
-//			Destroy (c.gameObject);
-//		}
-//
-//		RectTransform rt = gameObject.GetComponent<RectTransform> ();
-//		rt.anchoredPosition = Vector2.zero;
 
 		this.gameObject.SetActive (false);
 	}

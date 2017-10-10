@@ -9,7 +9,9 @@ public class Lair_HomeMenu : BaseMenu {
 	m_appNameText;
 
 	public GameObject
-	m_floorCellGO;
+	m_floorCellGO,
+	m_buildFacilityCellGO,
+	m_missionCell;
 
 	public Transform
 		m_contentParent;
@@ -55,6 +57,30 @@ public class Lair_HomeMenu : BaseMenu {
 //			rt.anchoredPosition = Vector2.zero;
 //
 //		}
+
+		// display first time help popup if enabled
+
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_Lair);
+
+		if (helpEnabled == 1 && firstTimeEnabled == 1) {
+
+			string header = "Lair App";
+			string message = "Each Facility in your Lair gives you access to Missions. Build more Facilities to unlock new Missions, and hire Henchmen to carry them out.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Lair, 0);
+
+		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Lair, 0);
+		}
 	}
 
 	public override void OnExit (bool animate)
@@ -136,6 +162,7 @@ public class Lair_HomeMenu : BaseMenu {
 
 				fSlot.m_missionPlan.m_missionOptions.Clear ();
 				fSlot.m_missionPlan.m_missionOptions.Add (fSlot);
+				fSlot.m_missionPlan.m_displayAdvancedFloors = true;
 
 //				fSlot.m_missionPlan.m_missionOptions.Clear ();
 //
@@ -151,6 +178,27 @@ public class Lair_HomeMenu : BaseMenu {
 				break;
 			}
 		}
+	}
+
+	public void BuildNewFloorButtonClicked ()
+	{
+		Lair l = GameController.instance.GetLair (0);
+
+		if (l.builder.m_missionPlan.m_state != MissionPlan.State.Active) {
+			
+			l.builder.m_missionPlan.m_missionOptions.Clear ();
+			l.builder.m_missionPlan.m_missionOptions.Add (l.builder);
+			l.builder.m_missionPlan.m_maxActorSlots = l.builder.m_numActorSlots;
+
+
+
+		} 
+//		else {
+//
+//		}
+
+		((LairApp)(m_parentApp)).planMissionMenu.missionPlan = l.builder.m_missionPlan;
+		m_parentApp.PushMenu (((LairApp)(m_parentApp)).planMissionMenu);
 	}
 
 	public override void DisplayContent ()
@@ -173,6 +221,31 @@ public class Lair_HomeMenu : BaseMenu {
 				floorCell.m_buttons [0].onClick.AddListener (delegate {
 					FloorButtonClicked (fSlot.m_id);
 				});
+
+			} else if (i == l.floorSlots.Count && i < l.maxFloors) {
+
+				if (l.builder.m_missionPlan.m_state != MissionPlan.State.Active) {
+					
+					GameObject buildFacilityGO = (GameObject)Instantiate (m_buildFacilityCellGO, m_contentParent);
+					UICell buildFacilityCell = (UICell)buildFacilityGO.GetComponent<UICell> ();
+					m_cells.Add (buildFacilityCell);
+
+					buildFacilityCell.m_buttons [0].onClick.AddListener (delegate {
+						BuildNewFloorButtonClicked ();
+					});
+
+				} else {
+
+					GameObject buildMissionGO = (GameObject)Instantiate (m_missionCell, m_contentParent);
+					Cell_Mission buildMissionCell = (Cell_Mission)buildMissionGO.GetComponent<Cell_Mission> ();
+					buildMissionCell.SetMission (l.builder.m_missionPlan);
+					m_cells.Add ((UICell)buildMissionCell);
+
+					buildMissionCell.m_buttons [0].onClick.AddListener (delegate {
+						BuildNewFloorButtonClicked ();
+					});
+				}
+
 			} else {
 
 				GameObject floorGO = (GameObject)Instantiate (m_floorCellGO, m_contentParent);

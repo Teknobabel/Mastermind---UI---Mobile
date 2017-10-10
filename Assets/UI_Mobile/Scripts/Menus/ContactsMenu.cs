@@ -68,6 +68,30 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 			rt.anchoredPosition = Vector2.zero;
 
 		}
+
+		// display first time help popup if enabled
+
+		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts);
+
+		if (helpEnabled == 1 && firstTimeEnabled == 1) {
+
+			string header = "Contacts App";
+			string message = "Any Henchmen you've hired will be displayed here. You can check their Traits, see which Missions they're on, or remove them from service.";
+
+			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+			b2.onClick.AddListener (delegate {
+				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+			});
+			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts, 0);
+
+		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
+
+			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts, 0);
+		}
 	}
 
 	public override void OnExit (bool animate)

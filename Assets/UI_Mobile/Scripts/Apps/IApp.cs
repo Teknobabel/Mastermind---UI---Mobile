@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public interface IApp {
 
 	string Name { get; set;}

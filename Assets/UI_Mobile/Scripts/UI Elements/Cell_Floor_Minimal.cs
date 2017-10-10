@@ -9,7 +9,7 @@ public class Cell_Floor_Minimal : UICell {
 		None,
 		Positive,
 		Negative,
-
+		Disabled,
 	}
 
 	public void SetFloor (Floor floor)
@@ -28,6 +28,10 @@ public class Cell_Floor_Minimal : UICell {
 		} else if (state == FloorState.Negative) {
 
 			m_headerText.color = Color.red;
+
+		} else if (state == FloorState.Disabled) {
+
+			m_headerText.color = Color.grey;
 		}
 	}
 }

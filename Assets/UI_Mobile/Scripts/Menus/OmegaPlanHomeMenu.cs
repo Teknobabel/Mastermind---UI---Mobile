@@ -124,6 +124,7 @@ public class OmegaPlanHomeMenu : BaseMenu {
 //				DOTween.To (() => c.m_image.transform.localScale, x => c.m_image.transform.localScale = x, new Vector3 (1, 1, 1), 0.5f).SetEase(Ease.OutCirc).SetDelay (0.75f + (i * 0.09f));
 //			}
 //		}
+
 	}
 
 //	public override void OnExit (bool animate)

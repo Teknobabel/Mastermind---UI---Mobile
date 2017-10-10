@@ -9,12 +9,12 @@ public class Cell_Asset : UICell {
 		None,
 		Positive,
 		Negative,
-
+		Disabled
 	}
 
 	public void SetAsset (Asset asset)
 	{
-		m_headerText.text = asset.m_name;
+		m_headerText.text = "Asset: " + asset.m_name;
 	}
 
 	public void SetAsset(Site.AssetSlot assetSlot)
@@ -39,10 +39,10 @@ public class Cell_Asset : UICell {
 
 			List<Asset> assetsNeededForOP = (GameController.instance.GetOmegaPlan (0)).m_omegaPlan.GetNeededAssets ();
 
-			if (assetsNeededForOP.Contains (assetSlot.m_asset)) {
-
-				m_rectTransforms [2].gameObject.SetActive (true);
-			}
+//			if (assetsNeededForOP.Contains (assetSlot.m_asset)) {
+//
+//				m_rectTransforms [2].gameObject.SetActive (true);
+//			}
 		}
 	}
 
@@ -57,6 +57,10 @@ public class Cell_Asset : UICell {
 		} else if (state == AssetState.Negative) {
 
 			m_headerText.color = Color.red;
+
+		} else if (state == AssetState.Disabled) {
+
+			m_headerText.color = Color.grey;
 		}
 	}
 
@@ -71,6 +75,10 @@ public class Cell_Asset : UICell {
 		} else if (state == AssetState.Negative) {
 
 			m_headerText.color = Color.red;
+
+		} else if (state == AssetState.Disabled) {
+
+			m_headerText.color = Color.grey;
 		}
 	}
 }

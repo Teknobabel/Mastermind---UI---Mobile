@@ -773,6 +773,7 @@ MonoBehaviour:
   - {fileID: 114639453177219284}
   - {fileID: 114541382218926760}
   - {fileID: 114060592744076076}
+  m_sentEvent: 3
   m_buttonActiveStateColor: {r: 0, g: 0, b: 0, a: 1}
   m_buttonTextActiveStateColor: {r: 1, g: 1, b: 1, a: 1}
   m_buttonInactiveStateColor: {r: 1, g: 1, b: 1, a: 1}
@@ -952,7 +953,7 @@ MonoBehaviour:
   m_upkeepCost: {fileID: 114446844681710582}
   m_traitCellGO: {fileID: 1145774830237794, guid: c8e92ef3dfeb742eeb92cc8c495ed757,
     type: 2}
-  m_activityHeader: {fileID: 1575044260185468, guid: 28ad9d415cdb4441197f0674a1012091,
+  m_activityHeader: {fileID: 1575044260185468, guid: fefac4bbf778c469ea7c92f2c707cacb,
     type: 2}
   m_activityCell: {fileID: 1622127230023270, guid: d1013e1f8736b4dd4a4e246c5da257fe,
     type: 2}

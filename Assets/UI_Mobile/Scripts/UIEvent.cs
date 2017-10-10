@@ -10,4 +10,8 @@ public enum UIEvent {
 	UI_ToggleButtonPressed,
 	UI_World_SiteTypeTogglePressed,
 	UI_World_AssetTypeTogglePressed,
+	App_Enter,
+	App_Exit,
+	App_Hold,
+	App_Return,
 }

@@ -34,11 +34,15 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 	private Alert_Generic m_alertDialogue;
 
+	private SettingsManager m_settingsManager;
+
 	private IApp 
 	m_turnProcessingApp,
 	m_homeScreenApp;
 
-	public bool m_doTutorial = false;
+	public bool 
+	m_doTutorial = false,
+	m_resetPlayerPrefs = false;
 
 	void Awake() {
 		Application.targetFrameRate = 60;
@@ -54,11 +58,15 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 		// initialize player prefs
 
-		if (!PlayerPrefs.HasKey ("PlayTutorial")) {
+		m_settingsManager = new SettingsManager ();
 
-			PlayerPrefs.SetInt ("PlayTutorial", 0);
-			PlayerPrefs.Save ();
+		if (m_resetPlayerPrefs) {
+
+			m_settingsManager.ResetPlayerPrefs ();
 		}
+
+		m_settingsManager.Initialize ();
+
 	}
 
 	void Start () {
@@ -87,11 +95,34 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 			// instantiate home screen
 			startApp = (IApp)ScriptableObject.Instantiate(m_homeScreen);
 			startApp.InitializeApp ();
+			m_appList.Add (((BaseApp)startApp).m_appType, startApp);
 
-			if (!m_appList.ContainsKey (((BaseApp)startApp).m_appType)) {
-				m_appList.Add (((BaseApp)startApp).m_appType, startApp);
-			}
 			m_homeScreenApp = startApp;
+
+			// instantiate toast alert
+
+			GameObject toastGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_toastGO, Vector3.zero, Quaternion.identity);
+			toastGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+			Alert_Toast toast  = (Alert_Toast)toastGO.GetComponent<Alert_Toast> ();
+			m_toast = toast;
+			m_toast.gameObject.SetActive (false);
+
+			// instantiate system nav bar
+
+			GameObject sysNavGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_systemNavBarGO, Vector3.zero, Quaternion.identity);
+			sysNavGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+			SystemNavBar sysNavBar  = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
+			sysNavBar.Initialize ();
+			m_systemNavBar = sysNavBar;
+			m_systemNavBar.SetActiveState (false);
+
+			// instantiate generic alert dialogue
+
+			GameObject alertGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_alertDialogueGO, Vector3.zero, Quaternion.identity);
+			alertGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+			Alert_Generic alert  = (Alert_Generic)alertGO.GetComponent<Alert_Generic> ();
+			alert.Initialize (m_homeScreenApp);
+			m_alertDialogue = alert;
 
 			// instantitae turn processing screen
 
@@ -120,6 +151,24 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 		newApp.EnterApp ();
 
+	}
+
+	public void SwitchApps (IApp newApp)
+	{
+		if (m_appStack.Count > 0) {
+
+			IApp oldApp = m_appStack [m_appStack.Count - 1];
+
+			Debug.Log ("Popping App: " + oldApp.Name);
+
+			m_appStack.RemoveAt (m_appStack.Count - 1);
+			oldApp.ExitApp ();
+		}
+
+		Debug.Log ("Pushing App: " + newApp.Name);
+		m_appStack.Add (newApp);
+
+		newApp.EnterApp ();
 	}
 
 	public void PopApp ()
@@ -211,10 +260,12 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 		}
 	}
 
+//	public List<IApp> appStack {get{ return m_appStack;}}
 	public SystemNavBar systemNavBar {get{ return m_systemNavBar; } set { m_systemNavBar = value; }}
 	public Alert_Toast toast {get{ return m_toast; } set { m_toast = value; }}
 	public Alert_Generic alertDialogue {get{ return m_alertDialogue; } set { m_alertDialogue = value;}}
 	public IApp turnProcessingApp {get{ return m_turnProcessingApp; }}
 	public IApp homeScreenApp {get{ return m_homeScreenApp; }}
 	public Dictionary<EventLocation, IApp> appList {get{ return m_appList; } set{ m_appList = value; }}
+	public SettingsManager settingsManager {get{ return m_settingsManager; }}
 }
