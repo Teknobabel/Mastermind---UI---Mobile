@@ -35,6 +35,6 @@ public class Cell_Trait : UICell {
 
 	public void SetSiteTrait (SiteTrait st)
 	{
-		m_headerText.text = "Trait: " + st.m_name;
+		m_headerText.text = "Policy: " + st.m_name;
 	}
 }

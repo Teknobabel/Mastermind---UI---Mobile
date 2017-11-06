@@ -22,7 +22,8 @@ public class World_HomeMenu : BaseMenu {
 	m_siteAssetCellGO,
 	m_siteTraitCellGO,
 	m_separatorCellGO,
-	m_filterOptionsCellGO;
+	m_filterOptionsCellGO,
+	m_agentCellGO;
 
 	public Transform
 	m_worldListParent;
@@ -189,12 +190,17 @@ public class World_HomeMenu : BaseMenu {
 
 						// create site trait cells
 
-						foreach (Trait t in s.traits) {
+						foreach (SiteTrait t in s.traits) {
 
 							GameObject siteTrait = (GameObject)Instantiate (m_siteTraitCellGO, m_worldListParent);
 							Cell_Trait siteTraitCell = (Cell_Trait)siteTrait.GetComponent<Cell_Trait> ();
-							siteTraitCell.SetTrait (t);
+							siteTraitCell.SetSiteTrait (t);
 							m_cells.Add (siteTraitCell);
+
+							Button b = siteTraitCell.m_buttons [0];
+							b.onClick.AddListener (delegate {
+								SiteTraitButtonPressed (t);
+							});
 						}
 
 						// create site asset cells
@@ -205,6 +211,19 @@ public class World_HomeMenu : BaseMenu {
 							Cell_Asset siteAssetCell = (Cell_Asset)siteAsset.GetComponent<Cell_Asset> ();
 							siteAssetCell.SetAsset (aSlot);
 							m_cells.Add (siteAssetCell);
+						}
+
+						// display any Agents located at this Site
+
+						foreach (Player.ActorSlot aSlot in s.agents) {
+
+							if (aSlot.m_visibilityState == Player.ActorSlot.VisibilityState.Visible)
+							{
+								GameObject aCell = (GameObject)Instantiate (m_agentCellGO, m_worldListParent);
+								Cell_Actor c = (Cell_Actor)aCell.GetComponent<Cell_Actor> ();
+								m_cells.Add ((UICell)c);
+								c.SetActor (aSlot);
+							}
 						}
 
 						GameObject separatorCellGO = (GameObject)Instantiate (m_separatorCellGO, m_worldListParent);
@@ -219,6 +238,12 @@ public class World_HomeMenu : BaseMenu {
 	public void FilterButtonPressed ()
 	{
 		m_parentApp.PushMenu (((WorldApp)m_parentApp).filterMenu);
+	}
+
+	public void SiteTraitButtonPressed (SiteTrait trait)
+	{
+		((WorldApp)m_parentApp).detailMenu.trait = trait;
+		m_parentApp.PushMenu (((WorldApp)m_parentApp).detailMenu);
 	}
 
 	public AssetTypeFilter assetFilterType {get{ return m_assetFilterType; }set{m_assetFilterType = value; }}

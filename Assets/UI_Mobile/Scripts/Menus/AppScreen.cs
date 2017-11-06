@@ -10,9 +10,12 @@ public class AppScreen : BaseMenu, IObserver {
 	m_currentCommandPoolText,
 	m_CommandPoolUpkeepText;
 
+	public IntelPanel m_intelPanel;
+
 	public override void Initialize (IApp parentApp)
 	{
 		base.Initialize (parentApp);
+		m_intelPanel.Initialize ();
 	}
 
 	public void Initialize (List<IApp> apps, GameObject appIcon, IApp parentApp)
@@ -33,7 +36,7 @@ public class AppScreen : BaseMenu, IObserver {
 		GameController.instance.AddObserver (this);
 
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
-		m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+		m_currentCommandPoolText.text = cp.m_currentPool.ToString () + "/" + cp.m_basePool.ToString();
 
 		UpdateUpkeep ();
 
@@ -64,11 +67,44 @@ public class AppScreen : BaseMenu, IObserver {
 		m_parentApp.PushMenu (((HomeScreenApp)(m_parentApp)).cpBreakdownMenu);
 	}
 
+//	private void UpdateUpkeep ()
+//	{
+//		string upkeep = "-";
+//
+//		int upkeepCost = 0;
+//
+//		List<Player.ActorSlot> henchmen = GameController.instance.GetHiredHenchmen (0);
+//
+//		foreach (Player.ActorSlot aSlot in henchmen) {
+//
+//			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+//
+//				upkeepCost += aSlot.m_actor.m_turnCost;
+//			}
+//		}
+//
+//		// check for having too many assets
+//
+//		upkeepCost += GameController.instance.GetAssetUpkeep (0);
+//
+//		if (upkeepCost > 0) {
+//
+//			upkeep += upkeepCost.ToString () + "/TURN";
+//
+//		} else {
+//
+//			upkeep = "";
+//		}
+//
+//		m_CommandPoolUpkeepText.text = upkeep;
+//	}
+
 	private void UpdateUpkeep ()
 	{
-		string upkeep = "-";
+		string upkeep = "";
 
 		int upkeepCost = 0;
+		int income = GameController.instance.game.playerList [0].commandPool.m_income;
 
 		List<Player.ActorSlot> henchmen = GameController.instance.GetHiredHenchmen (0);
 
@@ -84,14 +120,16 @@ public class AppScreen : BaseMenu, IObserver {
 
 		upkeepCost += GameController.instance.GetAssetUpkeep (0);
 
-		if (upkeepCost > 0) {
+//		if (upkeepCost > 0) {
+//
+//			upkeep += upkeepCost.ToString () + "/TURN";
+//
+//		} else {
+//
+//			upkeep = "";
+//		}
 
-			upkeep += upkeepCost.ToString () + "/TURN";
-
-		} else {
-
-			upkeep = "";
-		}
+		upkeep += (income - upkeepCost).ToString() + "/TURN";
 
 		m_CommandPoolUpkeepText.text = upkeep;
 	}
@@ -103,7 +141,7 @@ public class AppScreen : BaseMenu, IObserver {
 		case GameEvent.Player_CommandPoolChanged:
 
 			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
-			m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+			m_currentCommandPoolText.text = cp.m_currentPool.ToString () + "/" + cp.m_basePool.ToString();
 
 			break;
 		case GameEvent.Player_AssetsChanged:

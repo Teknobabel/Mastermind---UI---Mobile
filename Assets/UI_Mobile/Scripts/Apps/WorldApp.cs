@@ -6,6 +6,7 @@ using UnityEngine;
 public class WorldApp : BaseApp {
 
 	private World_FilterMenu m_filterMenu;
+	private World_DetailMenu m_detailMenu;
 
 	public override void InitializeApp ()
 	{
@@ -19,6 +20,11 @@ public class WorldApp : BaseApp {
 		m_filterMenu = (World_FilterMenu)filterMenuGO.GetComponent<World_FilterMenu>();
 		m_filterMenu.Initialize (this);
 		m_filterMenu.parentMenu = (World_HomeMenu) m_homeMenu;
+
+		GameObject detailMenuGO = (GameObject)GameObject.Instantiate (m_menuBank[2], Vector3.zero, Quaternion.identity);
+		detailMenuGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		m_detailMenu = (World_DetailMenu)detailMenuGO.GetComponent<World_DetailMenu>();
+		m_detailMenu.Initialize (this);
 
 		base.InitializeApp ();
 	}
@@ -45,4 +51,5 @@ public class WorldApp : BaseApp {
 	//	}
 
 	public World_FilterMenu filterMenu {get{ return m_filterMenu; }}
+	public World_DetailMenu detailMenu {get{ return m_detailMenu; }}
 }

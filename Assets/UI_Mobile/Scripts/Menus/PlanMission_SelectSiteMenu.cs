@@ -70,7 +70,7 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 
 				bool validSite = true;
 
-
+				Debug.Log (m_missionPlan.m_currentMission.m_targetType);
 				if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
 
 					validSite = false;
@@ -95,6 +95,7 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 					GameObject siteInfo = (GameObject)Instantiate (m_siteInfoCellGO, m_contentParent);
 					Cell_Site siteCell = (Cell_Site)siteInfo.GetComponent<Cell_Site> ();
 					siteCell.SetSite (s);
+					m_cells.Add (siteCell);
 
 					if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site) {
 
@@ -137,6 +138,7 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 						GameObject siteAsset = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
 						Cell_Asset siteAssetCell = (Cell_Asset)siteAsset.GetComponent<Cell_Asset> ();
 						siteAssetCell.SetAsset (aSlot);
+						m_cells.Add (siteAssetCell);
 					
 						if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
 
@@ -146,8 +148,6 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 								AssetSelected (aSlot, s);
 							});
 						}
-
-						m_cells.Add (siteAssetCell);
 					}
 				}
 			}

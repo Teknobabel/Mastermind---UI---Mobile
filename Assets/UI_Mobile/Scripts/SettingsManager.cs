@@ -86,6 +86,7 @@ public class SettingsManager {
 	public void SetPref (PlayerPrefKeys key, int value)
 	{
 		m_prefList [key] = value;
+		PlayerPrefs.SetInt (key.ToString (), value);
 		PlayerPrefs.Save ();
 	}
 
