@@ -23,7 +23,8 @@ public class World_HomeMenu : BaseMenu {
 	m_siteTraitCellGO,
 	m_separatorCellGO,
 	m_filterOptionsCellGO,
-	m_agentCellGO;
+	m_agentCellGO,
+	m_noSitesCellGO;
 
 	public Transform
 	m_worldListParent;
@@ -94,44 +95,11 @@ public class World_HomeMenu : BaseMenu {
 	{
 		base.DisplayContent ();
 
-		// display filter options button
-
-		GameObject filterButtonGO = (GameObject)Instantiate (m_filterOptionsCellGO, m_worldListParent);
-		UICell filterButton = (UICell)filterButtonGO.GetComponent<UICell> ();
-		m_cells.Add (filterButton);
-
-		// update text with current number of enabled filters
-
-		string filterText = "Filter Options";
-		int numFilters = 0;
-
-		if (m_assetFilterType != AssetTypeFilter.AllAssets) {
-			numFilters++;
-		}
-
-		if (m_siteTypeFilter != Site.Type.None) {
-			numFilters++;
-		}
-
-		switch (numFilters) {
-
-		case 1:
-			filterText += "\n(1 Filter Enabled)";
-			break;
-		case 2:
-			filterText += "\n(2 Filters Enabled)";
-			break;
-		}
-
-		filterButton.m_headerText.text = filterText;
-
-		filterButton.m_buttons[0].onClick.AddListener (delegate {
-			FilterButtonPressed ();
-		});
-
 		List<Asset> assetsNeededForOP = (GameController.instance.GetOmegaPlan (0)).m_omegaPlan.GetNeededAssets ();
 
 		List<Region> regionList = GameController.instance.GetWorld ();
+
+		bool emptyList = true;
 
 		foreach (Region r in regionList) {
 
@@ -141,6 +109,7 @@ public class World_HomeMenu : BaseMenu {
 //			Cell_Header headerCell = (Cell_Header)header.GetComponent<Cell_Header> ();
 //			headerCell.SetHeader(r.m_regionName);
 //			m_cells.Add (headerCell);
+
 
 			foreach (Site s in r.sites) {
 
@@ -178,8 +147,10 @@ public class World_HomeMenu : BaseMenu {
 						}
 					}
 
-					if (displaySite) {
+					if (displaySite && s.visibility != Site.VisibilityState.Hidden) {
 					
+						emptyList = false;
+
 						// create site info cell
 
 						GameObject siteInfo = (GameObject)Instantiate (m_siteInfoCellGO, m_worldListParent);
@@ -233,6 +204,55 @@ public class World_HomeMenu : BaseMenu {
 				}
 			}
 		}
+
+		if (emptyList) {
+
+			// display an info cell if the list is empty
+
+			GameObject emptyListCellGO = (GameObject)Instantiate (m_noSitesCellGO, m_worldListParent);
+			UICell emptyListCell = (UICell)emptyListCellGO.GetComponent<UICell> ();
+			m_cells.Add (emptyListCell);
+
+		} else {
+
+			// display filter options button
+
+			GameObject filterButtonGO = (GameObject)Instantiate (m_filterOptionsCellGO, m_worldListParent);
+			UICell filterButton = (UICell)filterButtonGO.GetComponent<UICell> ();
+			m_cells.Add (filterButton);
+
+			// update text with current number of enabled filters
+
+			string filterText = "Filter Options";
+			int numFilters = 0;
+
+			if (m_assetFilterType != AssetTypeFilter.AllAssets) {
+				numFilters++;
+			}
+
+			if (m_siteTypeFilter != Site.Type.None) {
+				numFilters++;
+			}
+
+			switch (numFilters) {
+
+			case 1:
+				filterText += "\n(1 Filter Enabled)";
+				break;
+			case 2:
+				filterText += "\n(2 Filters Enabled)";
+				break;
+			}
+
+			filterButton.m_headerText.text = filterText;
+
+			filterButton.m_buttons[0].onClick.AddListener (delegate {
+				FilterButtonPressed ();
+			});
+
+
+		}
+
 	}
 
 	public void FilterButtonPressed ()

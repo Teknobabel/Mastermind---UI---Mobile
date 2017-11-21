@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: App_Tutorial
   m_EditorClassIdentifier: 
   m_name: Tutorial
+  m_appType: 0
   m_icon: {fileID: 0}
   m_icon_Pressed: {fileID: 0}
   m_wantsSystemNavBar: 0
@@ -20,6 +21,5 @@ MonoBehaviour:
   - {fileID: 1548472085988410, guid: 52ebab74cf1e149b384d5888ec3cae51, type: 2}
   - {fileID: 1548472085988410, guid: 1894e5357b65144de9d98dac127a1732, type: 2}
   - {fileID: 1548472085988410, guid: 10abc0c0fcc824e6c82a16d2f80e3d3a, type: 2}
-  - {fileID: 1548472085988410, guid: 38118c2e6c32649ebb88a7bbe838e538, type: 2}
   m_appUnlockOverlayGO: {fileID: 1156776070919844, guid: 8648d09bd4e214476971db6e1a628c66,
     type: 2}

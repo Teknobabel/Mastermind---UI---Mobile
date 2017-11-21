@@ -5,7 +5,9 @@ using DG.Tweening;
 
 public class TurnProcessing_HomeMenu : BaseMenu {
 
-	private List<MissionSummary> m_completedMissions = new List<MissionSummary> ();
+//	private List<MissionSummary> m_completedMissions = new List<MissionSummary> ();
+
+	private List<Player.EventSummaryAlert> m_thisTurnsAlerts = new List<Player.EventSummaryAlert> ();
 
 	public override void Initialize (IApp parentApp)
 	{
@@ -24,10 +26,13 @@ public class TurnProcessing_HomeMenu : BaseMenu {
 
 		Player player = GameController.instance.game.playerList [0];
 
-		m_completedMissions = player.missionsCompletedThisTurn;
+//		m_completedMissions = player.missionsCompletedThisTurn;
 
-		if (m_completedMissions.Count > 0) {
+		m_thisTurnsAlerts = player.thisTurnsAlerts;
 
+//		if (m_completedMissions.Count > 0) {
+
+		if (m_thisTurnsAlerts.Count > 0) {
 			Vector3 v = this.gameObject.transform.position;
 			DOTween.To (() => this.gameObject.transform.position, x => this.gameObject.transform.position = x, new Vector3 (v.x,v.y,v.z), 0.25f).SetDelay (2.0f).OnComplete(ShowNextMissionSummary);
 
@@ -39,12 +44,17 @@ public class TurnProcessing_HomeMenu : BaseMenu {
 
 	private void ShowNextMissionSummary ()
 	{
-		if (m_completedMissions.Count > 0) {
+//		if (m_completedMissions.Count > 0) {
+		if (m_thisTurnsAlerts.Count > 0) {
 
-			MissionSummary ms = m_completedMissions [0];
-			m_completedMissions.RemoveAt (0);
+//			MissionSummary ms = m_completedMissions [0];
+//			m_completedMissions.RemoveAt (0);
 
-			((TurnProcessingApp)m_parentApp).missionReport.missionSummary = ms;
+			Player.EventSummaryAlert eventSummary = m_thisTurnsAlerts [0];
+			m_thisTurnsAlerts.RemoveAt (0);
+
+//			((TurnProcessingApp)m_parentApp).missionReport.missionSummary = ms;
+			((TurnProcessingApp)m_parentApp).missionReport.eventSummary = eventSummary;
 			m_parentApp.PushMenu (((TurnProcessingApp)m_parentApp).missionReport);
 
 		} else {
@@ -57,7 +67,8 @@ public class TurnProcessing_HomeMenu : BaseMenu {
 	{
 		base.OnReturn ();
 
-		if (m_completedMissions.Count > 0) {
+//		if (m_completedMissions.Count > 0) {
+		if (m_thisTurnsAlerts.Count > 0) {
 
 			Vector3 v = this.gameObject.transform.position;
 			DOTween.To (() => this.gameObject.transform.position, x => this.gameObject.transform.position = x, new Vector3 (v.x,v.y,v.z), 0.25f).SetDelay (1.0f).OnComplete(ShowNextMissionSummary);

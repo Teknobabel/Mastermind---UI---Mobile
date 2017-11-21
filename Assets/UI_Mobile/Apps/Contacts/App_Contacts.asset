@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e165b3dc8de1b4fceb2f23eed3590bcb, type: 3}
   m_Name: App_Contacts
   m_EditorClassIdentifier: 
-  m_name: CONTACTS
+  m_name: Contacts
   m_appType: 5
-  m_icon: {fileID: 21300000, guid: 1c20193703a4c46b3b262dd419d85dd4, type: 3}
-  m_icon_Pressed: {fileID: 21300000, guid: 7213a9a21b3814f559bc3ff6da0ffdea, type: 3}
+  m_icon: {fileID: 21300000, guid: 4cfe03e1fa7394d919a57b23320c9a99, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: 4cfe03e1fa7394d919a57b23320c9a99, type: 3}
   m_wantsSystemNavBar: 1
   m_menuBank:
   - {fileID: 1915136520063420, guid: f0e486ddda8bd426294ebc8233e803c7, type: 2}

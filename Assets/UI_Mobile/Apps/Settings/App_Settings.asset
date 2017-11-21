@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa61a1a0092a4d408c8d7f871929c5f, type: 3}
   m_Name: App_Settings
   m_EditorClassIdentifier: 
-  m_name: SETTINGS
+  m_name: Settings
   m_appType: 8
-  m_icon: {fileID: 21300000, guid: 0ea7a9788de10429ba29243c22e55cd3, type: 3}
-  m_icon_Pressed: {fileID: 21300000, guid: 6ce584e271e44404b991027a429ed758, type: 3}
+  m_icon: {fileID: 21300000, guid: bec41f8db7df1466d944797d63d9adf6, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: bec41f8db7df1466d944797d63d9adf6, type: 3}
   m_wantsSystemNavBar: 1
   m_menuBank:
   - {fileID: 1157526121899024, guid: a0f4cba1ba17a44e3ada8793a2741f56, type: 2}

@@ -10,12 +10,23 @@ public class AppScreen : BaseMenu, IObserver {
 	m_currentCommandPoolText,
 	m_CommandPoolUpkeepText;
 
-	public IntelPanel m_intelPanel;
-
 	public override void Initialize (IApp parentApp)
 	{
 		base.Initialize (parentApp);
-		m_intelPanel.Initialize ();
+	}
+
+	private void SetGridCellSize ()
+	{
+		GridLayoutGroup glg = m_gridView.GetComponent<GridLayoutGroup> ();
+
+		float horizontalGutters = (glg.spacing.x *3) + glg.padding.right + glg.padding.left;
+		float verticalGutters = (glg.spacing.y * 3) + glg.padding.top + glg.padding.bottom;
+
+		float width = m_gridView.rect.width - horizontalGutters;
+		float height = m_gridView.rect.height - verticalGutters;
+//		Debug.Log (m_gridView.rect);
+		Vector2 newSize = new Vector2(Mathf.Round( width / 2), Mathf.Round( height / 3));
+		m_gridView.GetComponent<GridLayoutGroup>().cellSize = newSize;
 	}
 
 	public void Initialize (List<IApp> apps, GameObject appIcon, IApp parentApp)
@@ -34,6 +45,10 @@ public class AppScreen : BaseMenu, IObserver {
 		Initialize (parentApp);
 
 		GameController.instance.AddObserver (this);
+
+		// set grid cell size
+
+		Invoke("SetGridCellSize", 0.01f);
 
 		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
 		m_currentCommandPoolText.text = cp.m_currentPool.ToString () + "/" + cp.m_basePool.ToString();

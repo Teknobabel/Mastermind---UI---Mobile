@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338000bca99134049a77fae0853d3523, type: 3}
   m_Name: App_Missions
   m_EditorClassIdentifier: 
-  m_name: MISSIONS
+  m_name: Missions
   m_appType: 2
-  m_icon: {fileID: 21300000, guid: b915d6fd8637b469b988340d2228d827, type: 3}
-  m_icon_Pressed: {fileID: 21300000, guid: b983e0126bd7b4923bd0478abbe6ef43, type: 3}
+  m_icon: {fileID: 21300000, guid: 045801869d1f740918a3930c11f3d9c4, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: 045801869d1f740918a3930c11f3d9c4, type: 3}
   m_wantsSystemNavBar: 1
   m_menuBank:
   - {fileID: 1810239623972364, guid: b98777bc7c123492eb3ad312acee110f, type: 2}

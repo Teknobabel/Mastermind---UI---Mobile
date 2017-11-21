@@ -18,15 +18,18 @@ public class TutorialMenu : Tutorial_BaseMenu {
 
 
 	public RectTransform[]
-	m_panels;
+		m_panels;
 
 	public RawImage[]
 		m_rawImages;
 
 	public Image[]
-	m_images;
+		m_images;
 
+	public Text[]
+		m_text;
 
+	public Tutorial_AppUnlockOverlayMenu m_alert;
 
 
 	// Use this for initialization
@@ -34,7 +37,12 @@ public class TutorialMenu : Tutorial_BaseMenu {
 
 	}
 
+	public override void Initialize (IApp parentApp)
+	{
+		base.Initialize (parentApp);
 
+		m_alert.Initialize (parentApp);
+	}
 
 	void Update ()
 	{
@@ -49,7 +57,12 @@ public class TutorialMenu : Tutorial_BaseMenu {
 
 			if (m_currentHoldTime == m_holdTime) {
 
-				DismissButtonClicked ();
+				m_parentApp.PushMenu (m_alert);
+
+
+//				DismissButtonClicked ();
+
+
 			} else if (m_currentProgressText.Count > 0) {
 
 				ProgressText p = m_currentProgressText [0];
@@ -71,52 +84,83 @@ public class TutorialMenu : Tutorial_BaseMenu {
 		this.gameObject.SetActive (true);
 //
 //		// slide in animation
-		if (animate && m_headerText != null) {
+		if (animate) {
 //
 //			// fade in background
-			Color headerColor = m_headerText.color;
-			headerColor.a = 0;
-			m_headerText.color = headerColor;
-			headerColor.a = 1;
+//			Color headerColor = m_headerText.color;
+//			headerColor.a = 0;
+//			m_headerText.color = headerColor;
+//			headerColor.a = 1;
+//
+//			Color bodyColor = m_bodyText.color;
+//			bodyColor.a = 0;
+//			m_bodyText.color = bodyColor;
+//			bodyColor.a = 1;
+//
+//			Color thumbColor = m_rawImages [0].color;
+//			thumbColor.a = 0;
+//			m_rawImages [0].color = thumbColor;
+//			thumbColor.a = 1;
 
-			Color bodyColor = m_bodyText.color;
-			bodyColor.a = 0;
-			m_bodyText.color = bodyColor;
-			bodyColor.a = 1;
+			foreach (Text t in m_text) {
 
-			Color thumbColor = m_rawImages [0].color;
-			thumbColor.a = 0;
-			m_rawImages [0].color = thumbColor;
-			thumbColor.a = 1;
+				Color c = t.color;
+				c.a = 0;
+				t.color = c;
+			}
 
-			float startColor;
-			Color progressColor = m_images [0].color;
-			startColor = progressColor.a;
-			progressColor.a = 0;
-			m_images [0].color = progressColor;
-			progressColor.a = startColor;
+			foreach (Image i in m_images) {
 
-			Color skipColor = m_skipText.color;
-			skipColor.a = 0;
-			m_skipText.color = skipColor;
-			skipColor.a = 1;
+				Color c = i.color;
+				c.a = 0;
+				i.color = c;
+			}
+
+			foreach (RawImage ri in m_rawImages) {
+
+				Color c = ri.color;
+				c.a = 0;
+				ri.color = c;
+			}
+
+//			float startColor;
+//			Color progressColor = m_images [0].color;
+//			startColor = progressColor.a;
+//			progressColor.a = 0;
+//			m_images [0].color = progressColor;
+//			progressColor.a = startColor;
+
+//			Color skipColor = m_skipText.color;
+//			skipColor.a = 0;
+//			m_skipText.color = skipColor;
+//			skipColor.a = 1;
 			m_skipButton.interactable = false;
 
 
-			m_panels[0].anchoredPosition = new Vector2 (0, -300);
-			m_panels[1].anchoredPosition = new Vector2 (0, -300);
-			m_panels[2].anchoredPosition = new Vector2 (0, -300);
+//			m_panels[0].anchoredPosition = new Vector2 (0, -300);
+//			m_panels[1].anchoredPosition = new Vector2 (0, -300);
+//			m_panels[2].anchoredPosition = new Vector2 (0, -300);
+
+			foreach (RectTransform rt in m_panels) {
+
+				rt.anchoredPosition = new Vector2 (0, -300);
+			}
 
 			DOTween.To (() => m_panels[0].anchoredPosition, x => m_panels[0].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay(1.0f);
 			DOTween.To (() => m_panels [1].anchoredPosition, x => m_panels [1].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (2.5f);
 			DOTween.To (() => m_panels [2].anchoredPosition, x => m_panels [2].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (4.5f);
+			DOTween.To (() => m_panels [3].anchoredPosition, x => m_panels [3].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (6.5f);
+//			DOTween.To (() => m_panels [4].anchoredPosition, x => m_panels [4].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (9.5f);
 
-			DOTween.To (() => m_headerText.color, x => m_headerText.color = x, headerColor, 0.25f).SetDelay(1.0f);
-			DOTween.To (() => m_bodyText.color, x => m_bodyText.color = x, bodyColor, 0.25f).SetDelay(2.5f);
-			DOTween.To (() => m_rawImages [0].color, x => m_rawImages [0].color = x, thumbColor, 0.25f).SetDelay(4.5f);
-			DOTween.To (() => m_images [0].color, x => m_images [0].color = x, progressColor, 0.5f).SetDelay(5.0f);
+			DOTween.To (() => m_text[0].color, x => m_text[0].color = x, Color.black, 0.25f).SetDelay(1.0f);
+			DOTween.To (() => m_text[1].color, x => m_text[1].color = x, Color.black, 0.25f).SetDelay(2.5f);
+			DOTween.To (() => m_text[2].color, x => m_text[2].color = x, Color.black, 0.25f).SetDelay(4.5f);
+			DOTween.To (() => m_text[3].color, x => m_text[3].color = x, Color.black, 0.25f).SetDelay(6.5f);
+			DOTween.To (() => m_rawImages [0].color, x => m_rawImages [0].color = x, Color.black, 0.5f).SetDelay(8.5f);
+			DOTween.To (() => m_images [0].color, x => m_images [0].color = x, Color.black, 0.5f).SetDelay(8.5f);
+			DOTween.To (() => m_images [1].color, x => m_images [1].color = x, Color.grey, 0.5f).SetDelay(8.5f);
 
-			DOTween.To (() => m_skipText.color, x => m_skipText.color = x, skipColor, 0.5f).SetDelay(5.5f).OnComplete(EnableSkipButton);
+			DOTween.To (() =>  m_text[4].color, x =>  m_text[4].color = x, Color.grey, 0.5f).SetDelay(8.5f).OnComplete(EnableSkipButton);
 
 		} else {
 //

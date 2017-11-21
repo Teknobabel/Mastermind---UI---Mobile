@@ -13,7 +13,8 @@ public class ActivityCenterMenu : BaseMenu, IObserver {
 	public GameObject
 	m_activityHeader,
 	m_activityCell,
-	m_activityCellWithIcon;
+	m_activityCellWithIcon,
+	m_playerActivityCell;
 
 //	private List<GameObject> m_cells = new List<GameObject>();
 
@@ -28,6 +29,12 @@ public class ActivityCenterMenu : BaseMenu, IObserver {
 
 		GameController.instance.AddObserver (this);
 		Dictionary<int, List<NotificationCenter.Notification>> feed = GameController.instance.GetPlayerNotifications(0);
+
+		GameObject playerCellGO = (GameObject)Instantiate (m_playerActivityCell, m_scrollViewParent);
+		Cell_PlayerActivity playerCell = (Cell_PlayerActivity)playerCellGO.GetComponent<Cell_PlayerActivity> ();
+		Player player = GameController.instance.game.playerList [0];
+		playerCell.SetPlayer (player);
+
 		SetActivity (feed);
 	}
 

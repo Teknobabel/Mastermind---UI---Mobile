@@ -15,8 +15,10 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 	public GameObject
 	m_systemNavBarGO,
+	m_statusBarGO,
 	m_toastGO,
-	m_alertDialogueGO;
+	m_alertDialogueGO,
+	m_logInMenuGO;
 
 	public ScriptableObject m_tutorial;
 
@@ -70,70 +72,129 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 	}
 
 	void Start () {
-		// initialize dummy data
-
-		GetDummyData.instance.Initialize ();
 
 		IApp startApp;
 
 		int playTutorial = PlayerPrefs.GetInt ("PlayTutorial");
 
-//		if (m_doTutorial) {
-		if (playTutorial == 1) {
+		if (playTutorial == 1 || m_doTutorial) {
 
 			startApp = (IApp)ScriptableObject.Instantiate(m_tutorial);
 			startApp.InitializeApp ();
 
+			PushApp (startApp);
+
+			GameController.instance.AddObserver (this);
+
 		} else {
 
-			Action_StartNewGame newGameAction = new Action_StartNewGame ();
-			GameController.instance.ProcessAction (newGameAction);
+			// create log in screen to gather starting data
 
-			Action_EndPhase progressPhaseAction = new Action_EndPhase ();
-			GameController.instance.ProcessAction (progressPhaseAction);
-			
-			// instantiate home screen
-			startApp = (IApp)ScriptableObject.Instantiate(m_homeScreen);
-			startApp.InitializeApp ();
-			m_appList.Add (((BaseApp)startApp).m_appType, startApp);
-
-			m_homeScreenApp = startApp;
-
-			// instantiate toast alert
-
-			GameObject toastGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_toastGO, Vector3.zero, Quaternion.identity);
-			toastGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-			Alert_Toast toast  = (Alert_Toast)toastGO.GetComponent<Alert_Toast> ();
-			m_toast = toast;
-			m_toast.gameObject.SetActive (false);
-
-			// instantiate system nav bar
-
-			GameObject sysNavGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_systemNavBarGO, Vector3.zero, Quaternion.identity);
-			sysNavGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-			SystemNavBar sysNavBar  = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
-			sysNavBar.Initialize ();
-			m_systemNavBar = sysNavBar;
-			m_systemNavBar.SetActiveState (false);
-
-			// instantiate generic alert dialogue
-
-			GameObject alertGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_alertDialogueGO, Vector3.zero, Quaternion.identity);
-			alertGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-			Alert_Generic alert  = (Alert_Generic)alertGO.GetComponent<Alert_Generic> ();
-			alert.Initialize (m_homeScreenApp);
-			m_alertDialogue = alert;
-
-			// instantitae turn processing screen
-
-			m_turnProcessingApp = (IApp)ScriptableObject.Instantiate(m_turnProcessing);
-			m_turnProcessingApp.InitializeApp ();
+			CreateLogInMenu ();
 
 		}
+	}
 
-		PushApp (startApp);
+//	void Start () {
+//
+//		//		GetDummyData.instance.Initialize ();
+//
+//		IApp startApp;
+//
+//		int playTutorial = PlayerPrefs.GetInt ("PlayTutorial");
+//
+//		if (playTutorial == 1 || m_doTutorial) {
+//
+//			startApp = (IApp)ScriptableObject.Instantiate(m_tutorial);
+//			startApp.InitializeApp ();
+//
+//		} else {
+//
+//			startApp = InitializeNewGame ();
+//
+//		}
+//
+//		PushApp (startApp);
+//
+//		GameController.instance.AddObserver (this);
+//	}
+
+	public void CreateLogInMenu ()
+	{
+		GameObject logInGO = (GameObject)GameObject.Instantiate (m_logInMenuGO, Vector3.zero, Quaternion.identity);
+		logInGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		BaseMenu loginMenu = (BaseMenu)logInGO.GetComponent<BaseMenu> ();
+		loginMenu.OnEnter (true);
+	}
+
+	public void PlayerLoggingIn (NewGamePrefs info)
+	{
+		IApp app = InitializeNewGame (info);
+
+		PushApp (app);
 
 		GameController.instance.AddObserver (this);
+	}
+
+	public IApp InitializeNewGame (NewGamePrefs info)
+	{
+		IApp startApp;
+
+		Action_StartNewGame newGameAction = new Action_StartNewGame ();
+		newGameAction.m_newGamePrefs = info;
+		GameController.instance.ProcessAction (newGameAction);
+
+		Action_EndPhase progressPhaseAction = new Action_EndPhase ();
+		GameController.instance.ProcessAction (progressPhaseAction);
+
+		// instantiate home screen
+		startApp = (IApp)ScriptableObject.Instantiate(m_homeScreen);
+		startApp.InitializeApp ();
+
+		m_appList.Add (((BaseApp)startApp).m_appType, startApp);
+
+		m_homeScreenApp = startApp;
+
+		// instantiate toast alert
+
+		GameObject toastGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_toastGO, Vector3.zero, Quaternion.identity);
+		toastGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		Alert_Toast toast  = (Alert_Toast)toastGO.GetComponent<Alert_Toast> ();
+		m_toast = toast;
+		m_toast.gameObject.SetActive (false);
+
+		// instantiate system nav bar
+
+		GameObject sysNavGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_systemNavBarGO, Vector3.zero, Quaternion.identity);
+		sysNavGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		SystemNavBar sysNavBar  = (SystemNavBar)sysNavGO.GetComponent<SystemNavBar> ();
+		sysNavBar.Initialize ();
+		m_systemNavBar = sysNavBar;
+		m_systemNavBar.SetActiveState (false);
+
+		// instantiate system nav bar
+
+		GameObject statusBarGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_statusBarGO, Vector3.zero, Quaternion.identity);
+		statusBarGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		StatusBar statusBar  = (StatusBar)statusBarGO.GetComponent<StatusBar> ();
+		statusBar.Initialize ();
+//		m_systemNavBar = sysNavBar;
+//		m_systemNavBar.SetActiveState (false);
+
+		// instantiate generic alert dialogue
+
+		GameObject alertGO = (GameObject)GameObject.Instantiate (MobileUIEngine.instance.m_alertDialogueGO, Vector3.zero, Quaternion.identity);
+		alertGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+		Alert_Generic alert  = (Alert_Generic)alertGO.GetComponent<Alert_Generic> ();
+		alert.Initialize (m_homeScreenApp);
+		m_alertDialogue = alert;
+
+		// instantitae turn processing screen
+
+		m_turnProcessingApp = (IApp)ScriptableObject.Instantiate(m_turnProcessing);
+		m_turnProcessingApp.InitializeApp ();
+
+		return startApp;
 	}
 
 	public void PushApp (IApp newApp)

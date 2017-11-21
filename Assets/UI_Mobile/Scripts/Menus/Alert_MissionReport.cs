@@ -15,7 +15,8 @@ public class Alert_MissionReport : BaseMenu {
 	public Text
 	m_headerText;
 
-	private MissionSummary m_missionSummary;
+//	private MissionSummary m_missionSummary;
+	private Player.EventSummaryAlert m_eventSummary;
 //	private List<NotificationCenter.Notification> m_notifications = new List<NotificationCenter.Notification> ();
 
 	public override void Initialize (IApp parentApp)
@@ -31,60 +32,73 @@ public class Alert_MissionReport : BaseMenu {
 
 		gameObject.SetActive (true);
 
-		m_headerText.text = "Mission Report:\n";
-		m_headerText.text += m_missionSummary.m_mission.m_name;
+		if (m_eventSummary.m_eventType == Player.EventSummaryAlert.EventType.MissionComplete) {
+			MissionSummary missionSummary = m_eventSummary.m_missionSummary;
 
-		// create leader cell
+			m_headerText.text = "Mission Report:\n";
+			m_headerText.text += missionSummary.m_mission.m_name;
 
-		if (m_missionSummary.m_participatingActors.Count > 0) {
+			// create leader cell
 
-			Actor leader = m_missionSummary.m_participatingActors [0];
+			if (missionSummary.m_participatingActors.Count > 0) {
 
-			GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent);
-			UICell c = (UICell)hCell.GetComponent<UICell> ();
-			m_cells.Add (c);
+				Actor leader = missionSummary.m_participatingActors [0];
 
-			string nameString = leader.m_actorName;
+				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent);
+				UICell c = (UICell)hCell.GetComponent<UICell> ();
+				m_cells.Add (c);
 
-			string statusString = "";
+				string nameString = leader.m_actorName;
 
-			switch (leader.m_rank) {
+				string statusString = "";
 
-			case 1:
-				statusString += "Novice ";
-				break;
-			case 2:
-				statusString += "Skilled ";
-				break;
-			case 3:
-				statusString += "Veteran ";
-				break;
-			case 4:
-				statusString += "Master ";
-				break;
+				switch (leader.m_rank) {
+
+				case 1:
+					statusString += "Novice ";
+					break;
+				case 2:
+					statusString += "Skilled ";
+					break;
+				case 3:
+					statusString += "Veteran ";
+					break;
+				case 4:
+					statusString += "Master ";
+					break;
+				}
+
+				if (leader.traits.Count > 0) {
+
+					Trait t = leader.traits [0];
+					statusString += t.m_name;
+				}
+
+				c.m_headerText.text = nameString;
+				c.m_bodyText.text = statusString;
 			}
 
-			if (leader.traits.Count > 0) {
 
-				Trait t = leader.traits [0];
-				statusString += t.m_name;
+			// create notification cells
+
+			List<NotificationCenter.Notification> notifications = GameController.instance.GetMissionNotifications (0, missionSummary.m_missionID);
+
+			foreach (NotificationCenter.Notification n in notifications) {
+
+				GameObject cellGO = (GameObject)Instantiate (m_notificationCellGO, m_contentParent);
+				UICell cell = (UICell)cellGO.GetComponent<UICell> ();
+				cell.m_bodyText.text = n.m_title + "\n";
+				cell.m_bodyText.text += n.m_message;
+				m_cells.Add (cell);
 			}
+		} else if (m_eventSummary.m_eventType == Player.EventSummaryAlert.EventType.IntelStolen || m_eventSummary.m_eventType == Player.EventSummaryAlert.EventType.OPPhaseComplete) {
 
-			c.m_headerText.text = nameString;
-			c.m_bodyText.text = statusString;
-		}
-
-
-		// create notification cells
-
-		List<NotificationCenter.Notification> notifications = GameController.instance.GetMissionNotifications (0, m_missionSummary.m_missionID);
-
-		foreach (NotificationCenter.Notification n in notifications) {
+			m_headerText.text = m_eventSummary.m_title;
 
 			GameObject cellGO = (GameObject)Instantiate (m_notificationCellGO, m_contentParent);
 			UICell cell = (UICell)cellGO.GetComponent<UICell> ();
-			cell.m_bodyText.text = n.m_title + "\n";
-			cell.m_bodyText.text += n.m_message;
+			cell.m_bodyText.text = "";
+			cell.m_bodyText.text += m_eventSummary.m_message;
 			m_cells.Add (cell);
 		}
 
@@ -114,5 +128,6 @@ public class Alert_MissionReport : BaseMenu {
 	}
 
 //	public List<NotificationCenter.Notification> notifications {set{ m_notifications = value; }}
-	public MissionSummary missionSummary {set{ m_missionSummary = value;}}
+//	public MissionSummary missionSummary {set{ m_missionSummary = value;}}
+	public Player.EventSummaryAlert eventSummary {set{ m_eventSummary = value;}}
 }

@@ -9,6 +9,7 @@ public class AppIcon : MonoBehaviour {
 	public Text m_appName;
 	public Transform m_alertParent;
 	public Text m_alertCountText;
+	public Button m_button;
 
 	private IApp m_app;
 
@@ -16,10 +17,10 @@ public class AppIcon : MonoBehaviour {
 	{
 		m_appName.text = app.Name;
 		m_appIcon.sprite = app.Icon;
-		Button b = m_appIcon.GetComponent<Button> ();
-		SpriteState ss = b.spriteState;
+
+		SpriteState ss = m_button.spriteState;
 		ss.pressedSprite = app.Icon_Pressed;
-		b.spriteState = ss;
+		m_button.spriteState = ss;
 
 		m_app = app;
 	}

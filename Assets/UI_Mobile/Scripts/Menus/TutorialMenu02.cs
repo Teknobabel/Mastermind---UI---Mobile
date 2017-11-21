@@ -12,6 +12,17 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 
 	public RawImage m_backgroundImage;
 
+	public Tutorial_AppUnlockOverlayMenu m_alert;
+
+	public override void Initialize (IApp parentApp)
+	{
+		base.Initialize (parentApp);
+
+		if (m_alert != null) {
+			m_alert.Initialize (parentApp);
+		}
+	}
+
 	public override void OnEnter (bool animate)
 	{
 		this.gameObject.SetActive (true);
@@ -21,8 +32,8 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 		Color c = m_backgroundImage.color;
 		c.a = 0.5f;
 
-		DOTween.To (() => m_backgroundImage.color, x => m_backgroundImage.color = x, c, 0.5f).SetEase (Ease.OutCirc).SetDelay (1.5f);
-		DOTween.To (() => m_parentMenu.anchoredPosition, x => m_parentMenu.anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetEase (Ease.OutCirc).SetDelay (1.5f);
+		DOTween.To (() => m_backgroundImage.color, x => m_backgroundImage.color = x, c, 0.5f).SetEase (Ease.OutCirc).SetDelay (0.5f);
+		DOTween.To (() => m_parentMenu.anchoredPosition, x => m_parentMenu.anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetEase (Ease.OutCirc).SetDelay (0.5f);
 	}
 
 	public override void OnExit (bool animate)
@@ -62,9 +73,15 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 					unlockedApps.Add ((IApp)so);
 				}
 
-				((TutorialApp)m_parentApp).appOverlay.InitializeOverlay (unlockedApps);
-				m_parentApp.PushMenu (((TutorialApp)m_parentApp).appOverlay);
-//				DismissButtonClicked ();
+				if (m_alert != null) {
+					
+					m_parentApp.PushMenu (m_alert);
+
+				} else {
+
+					DismissButtonClicked ();
+				}
+
 			} else if (m_currentProgressText.Count > 0) {
 
 				ProgressText p = m_currentProgressText [0];

@@ -559,6 +559,8 @@ MonoBehaviour:
     type: 2}
   m_agentCellGO: {fileID: 1622127230023270, guid: 79102d19602c2427592d17fac6209fe3,
     type: 2}
+  m_noSitesCellGO: {fileID: 1456476320303838, guid: 9d7dc22768dd2408b91f5b5072949246,
+    type: 2}
   m_worldListParent: {fileID: 224921411133220738}
 --- !u!114 &114585067431346414
 MonoBehaviour:

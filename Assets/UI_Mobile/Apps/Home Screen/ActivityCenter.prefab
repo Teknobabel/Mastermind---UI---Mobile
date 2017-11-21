@@ -297,6 +297,8 @@ MonoBehaviour:
     type: 2}
   m_activityCellWithIcon: {fileID: 1622127230023270, guid: 4adfee8d9070d4e0e922bba5ed35d924,
     type: 2}
+  m_playerActivityCell: {fileID: 1654757459281070, guid: 0ba012d8d2ffb4975b606d36c5b1b169,
+    type: 2}
 --- !u!114 &114897642867742152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -400,8 +402,8 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
@@ -420,7 +422,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 16, y: -32}
+  m_AnchoredPosition: {x: 16, y: -60}
   m_SizeDelta: {x: -32, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224888903477997730

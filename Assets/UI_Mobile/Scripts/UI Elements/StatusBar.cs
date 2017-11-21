@@ -3,22 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IntelPanel : MonoBehaviour, IObserver {
+public class StatusBar : MonoBehaviour, IObserver {
+
+	public Text
+	m_turnNumber,
+	m_battleryLife;
 
 	public Texture m_intelNormal;
 	public Texture m_intelContested;
 	public Texture m_intelStolen;
-
 	public GameObject m_intelIcon;
-
-	public Transform m_contentParent;
-
+	public Transform m_intelContentParent;
 	private List<GameObject> m_intelIcons = new List<GameObject> ();
 
-	public void Initialize ()
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	public void Initialize()
 	{
 		GameController.instance.AddObserver (this);
+		UpdateBatteryLife ();
 		UpdateIntel ();
+	}
+
+	private void UpdateBatteryLife ()
+	{
+		
+//		float batteryLife = SystemInfo.
 	}
 
 	private void UpdateIntel ()
@@ -34,7 +47,7 @@ public class IntelPanel : MonoBehaviour, IObserver {
 
 		foreach (Player.IntelSlot iSlot in player.intel) {
 
-			GameObject go = (GameObject)Instantiate (m_intelIcon, m_contentParent);
+			GameObject go = (GameObject)Instantiate (m_intelIcon, m_intelContentParent);
 			RawImage ri = (RawImage)go.GetComponent<RawImage> ();
 			m_intelIcons.Add (go);
 
@@ -50,7 +63,7 @@ public class IntelPanel : MonoBehaviour, IObserver {
 				ri.texture = m_intelContested;
 
 				break;
-			
+
 			case Player.IntelSlot.IntelState.Stolen:
 
 				ri.texture = m_intelStolen;
@@ -58,6 +71,15 @@ public class IntelPanel : MonoBehaviour, IObserver {
 				break;
 			}
 		}
+	}
+
+	private void UpdateTurnNumber ()
+	{
+		int turnNumber = GameController.instance.game.currentTurn;
+
+		string s = "TURN " + turnNumber.ToString("000");
+
+		m_turnNumber.text = s;
 	}
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
@@ -69,7 +91,11 @@ public class IntelPanel : MonoBehaviour, IObserver {
 			UpdateIntel ();
 
 			break;
+		case GameEvent.Turn_PlayerPhaseStarted:
 
+			UpdateTurnNumber ();
+
+			break;
 		}
 	}
 }

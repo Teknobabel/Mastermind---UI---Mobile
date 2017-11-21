@@ -40,7 +40,7 @@ public class HomeScreenApp : BaseApp {
 
 		List<ScriptableObject> tempAppList = new List<ScriptableObject> (MobileUIEngine.instance.m_apps);
 		List<List<ScriptableObject>> appsByPage = new List<List<ScriptableObject>> ();
-		int maxAppsPerPage = 9;
+		int maxAppsPerPage = 6;
 
 		while (tempAppList.Count > 0) {
 

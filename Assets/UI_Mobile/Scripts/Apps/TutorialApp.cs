@@ -30,11 +30,11 @@ public class TutorialApp : BaseApp {
 //			PushMenu (ta);
 		}
 
-		GameObject overlayGO = (GameObject)GameObject.Instantiate (m_appUnlockOverlayGO, Vector3.zero, Quaternion.identity);
-		overlayGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
-		IMenu overlay = (IMenu)overlayGO.GetComponent<IMenu> ();
-		overlay.Initialize (this);
-		m_appUnlockOverlay = (Tutorial_AppUnlockOverlayMenu)overlay;
+//		GameObject overlayGO = (GameObject)GameObject.Instantiate (m_appUnlockOverlayGO, Vector3.zero, Quaternion.identity);
+//		overlayGO.transform.SetParent (MobileUIEngine.instance.m_mainCanvas, false);
+//		IMenu overlay = (IMenu)overlayGO.GetComponent<IMenu> ();
+//		overlay.Initialize (this);
+//		m_appUnlockOverlay = (Tutorial_AppUnlockOverlayMenu)overlay;
 
 		NextTutorialMenu ();
 
@@ -53,11 +53,8 @@ public class TutorialApp : BaseApp {
 			PushMenu (menu);
 		} else {
 			
-//			ExitApp ();
-			IApp home = (IApp)ScriptableObject.Instantiate(MobileUIEngine.instance.m_homeScreen);
-			home.InitializeApp ();
+			MobileUIEngine.instance.CreateLogInMenu ();
 
-			MobileUIEngine.instance.PushApp (home);
 		}
 	}
 
@@ -67,11 +64,7 @@ public class TutorialApp : BaseApp {
 
 		if (m_menuStack.Count == 0) {
 
-			// instantiate home screen
-			IApp home = (IApp)ScriptableObject.Instantiate(MobileUIEngine.instance.m_homeScreen);
-			home.InitializeApp ();
-
-			MobileUIEngine.instance.PushApp (home);
+			MobileUIEngine.instance.CreateLogInMenu ();
 		}
 	}
 

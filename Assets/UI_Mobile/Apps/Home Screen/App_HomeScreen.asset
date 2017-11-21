@@ -24,4 +24,6 @@ MonoBehaviour:
     type: 2}
   m_appScreen: {fileID: 1402771108206296, guid: ab290fa385d0849ffab6295606a0d6ea,
     type: 2}
+  m_logInMenu: {fileID: 1851575515598566, guid: c749d13b91f744d88a305f3129294afe,
+    type: 2}
   m_appIcon: {fileID: 1803322123867824, guid: ecfe7488e693e41bcb9185184a4d531d, type: 2}
