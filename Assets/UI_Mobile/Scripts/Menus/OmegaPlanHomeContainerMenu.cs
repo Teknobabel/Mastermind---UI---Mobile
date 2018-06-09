@@ -33,16 +33,16 @@ public class OmegaPlanHomeContainerMenu : BaseMenu, IUIObserver {
 
 		for (int i = 0; i < numPages; i++) {
 
-			GameObject go = (GameObject)GameObject.Instantiate (m_parentApp.MenuBank[1], m_contentParent);
-			LayoutElement le = go.GetComponent<LayoutElement> ();
-			le.preferredWidth = screenWidth;
-			le.preferredHeight = screenHeight;
-
-			OmegaPlanHomeMenu screen = go.GetComponent<OmegaPlanHomeMenu> ();
-			screen.phaseGoals = op.m_omegaPlan.phases [i];
-			screen.phaseNumber = i + 1;
-			screen.Initialize (m_parentApp);
-			m_childScreens.Add (screen);
+//			GameObject go = (GameObject)GameObject.Instantiate (m_parentApp.MenuBank[1], m_contentParent);
+//			LayoutElement le = go.GetComponent<LayoutElement> ();
+//			le.preferredWidth = screenWidth;
+//			le.preferredHeight = screenHeight;
+//
+//			OmegaPlanHomeMenu screen = go.GetComponent<OmegaPlanHomeMenu> ();
+//			screen.phaseGoals = op.m_omegaPlan.phases [i];
+//			screen.phaseNumber = i + 1;
+//			screen.Initialize (m_parentApp);
+//			m_childScreens.Add (screen);
 
 		}
 

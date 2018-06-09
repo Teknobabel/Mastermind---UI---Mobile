@@ -10,7 +10,11 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 	m_siteInfoCellGO,
 	m_siteAlertCellGO,
 	m_siteAssetCellGO,
-	m_siteTraitCellGO;
+	m_siteTraitCellGO,
+	m_spacer,
+	m_cellDetailPanel,
+	m_cellCostPanel,
+	m_siteAlertLevelPanel;
 
 	public Transform
 	m_contentParent;
@@ -51,19 +55,37 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 
 			// create header
 
-			GameObject header = (GameObject)Instantiate (m_regionHeaderCellGO, m_contentParent);
-			UICell headerCell = (UICell)header.GetComponent<UICell> ();
-			headerCell.m_headerText.text = r.m_regionName;
-			headerCell.m_headerText.color = Color.black;
-			m_cells.Add (headerCell);
+//			GameObject header = (GameObject)Instantiate (m_regionHeaderCellGO, m_contentParent);
+//			UICell headerCell = (UICell)header.GetComponent<UICell> ();
+//			headerCell.m_headerText.text = r.m_regionName;
+//			headerCell.m_headerText.color = Color.black;
+//			m_cells.Add (headerCell);
 
-			if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region) {
+//			if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Region) {
+//
+//				Button b = headerCell.m_buttons [0];
+//				b.interactable = true;
+//				b.onClick.AddListener (delegate {
+//					RegionSelected(r);
+//				});
+//			}
 
-				Button b = headerCell.m_buttons [0];
-				b.interactable = true;
-				b.onClick.AddListener (delegate {
-					RegionSelected(r);
-				});
+			// gather traits from currently assigned henchmen
+
+			List<Trait> currentHenchmenTraits = new List<Trait> ();
+
+			foreach (Player.ActorSlot aSlot in m_missionPlan.m_actorSlots) {
+
+				if (aSlot.m_actor != null)
+				{
+					foreach (Trait t in aSlot.m_actor.traits) {
+
+						if (!currentHenchmenTraits.Contains (t)) {
+
+							currentHenchmenTraits.Add (t);
+						}
+					}
+				}
 			}
 
 			foreach (Site s in r.sites) {
@@ -85,6 +107,10 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 							break;
 						}
 					}
+				} 
+				else if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site && s.visibility == Site.VisibilityState.Hidden) {
+
+					validSite = false;
 				}
 
 
@@ -97,6 +123,26 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 					siteCell.SetSite (s);
 					m_cells.Add (siteCell);
 
+					// create alert level panel
+
+					GameObject alertPanelGO = (GameObject)Instantiate (m_siteAlertLevelPanel, m_contentParent);
+					Cell_SiteAlertPanel alertPanel = (Cell_SiteAlertPanel)alertPanelGO.GetComponent<Cell_SiteAlertPanel> ();
+					alertPanel.SetAlertLevel (s, currentHenchmenTraits);
+					m_cells.Add (alertPanel);
+
+					// create site trait panel
+
+					if (s.traits.Count > 0) {
+
+						GameObject siteTraitPanelGO = (GameObject)Instantiate (m_cellDetailPanel, m_contentParent);
+						Cell_DetailPanel siteTraitPanel = (Cell_DetailPanel)siteTraitPanelGO.GetComponent<Cell_DetailPanel> ();
+						siteTraitPanel.SetSiteTraits (s, currentHenchmenTraits);
+						m_cells.Add (siteTraitPanel);
+
+					}
+
+					// enable button for site selection
+
 					if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Site) {
 
 						Button b = siteCell.m_buttons [0];
@@ -105,50 +151,74 @@ public class PlanMission_SelectSiteMenu : BaseMenu {
 							SiteSelected(s);
 						});
 
-						b = siteCell.m_buttons [1];
-						b.interactable = true;
-						b.onClick.AddListener (delegate {
-							SiteSelected(s);
-						});
+//						b = siteCell.m_buttons [1];
+//						b.interactable = true;
+//						b.onClick.AddListener (delegate {
+//							SiteSelected(s);
+//						});
+					} else {
+						siteCell.m_buttons [0].gameObject.SetActive (false);
+
 					}
+						
 
-					// create site trait cells
+					// create revealed asset cells
 
-					foreach (SiteTrait t in s.traits) {
-
-						GameObject siteTrait = (GameObject)Instantiate (m_siteTraitCellGO, m_contentParent);
-						Cell_Trait siteTraitCell = (Cell_Trait)siteTrait.GetComponent<Cell_Trait> ();
-						siteTraitCell.SetSiteTrait (t);
-						m_cells.Add (siteTraitCell);
-
-						if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.SiteTrait) {
-
-							Button b = siteTraitCell.m_buttons [0];
-							b.interactable = true;
-							b.onClick.AddListener (delegate {
-								SiteTraitSelected (t, s);
-							});
-						}
+					if (s.assets.Count > 0) {
+						GameObject spacerGO3 = (GameObject)Instantiate (m_spacer, m_contentParent);
+						Cell_Spacer spacer3 = (Cell_Spacer)spacerGO3.GetComponent<Cell_Spacer> ();
+						spacer3.SetHeight (10);
+						m_cells.Add (spacer3);
 					}
-
-					// create site asset cells
 
 					foreach (Site.AssetSlot aSlot in s.assets) {
 
-						GameObject siteAsset = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
-						Cell_Asset siteAssetCell = (Cell_Asset)siteAsset.GetComponent<Cell_Asset> ();
-						siteAssetCell.SetAsset (aSlot);
-						m_cells.Add (siteAssetCell);
-					
-						if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
+						if (aSlot.m_state != Site.AssetSlot.State.Hidden) {
+							GameObject siteAsset = (GameObject)Instantiate (m_siteAssetCellGO, m_contentParent);
+							Cell_Asset_Card siteAssetCell = (Cell_Asset_Card)siteAsset.GetComponent<Cell_Asset_Card> ();
+							siteAssetCell.SetAsset (aSlot);
+							m_cells.Add (siteAssetCell);
 
-							Button b = siteAssetCell.m_buttons [0];
-							b.interactable = true;
-							b.onClick.AddListener (delegate {
-								AssetSelected (aSlot, s);
-							});
+							if (m_missionPlan.m_currentMission.m_targetType == Mission.TargetType.Asset) {
+
+								Button b = siteAssetCell.m_buttons [0];
+								b.gameObject.SetActive (true);
+								b.interactable = true;
+								b.onClick.AddListener (delegate {
+									AssetSelected (aSlot, s);
+								});
+
+								// show linked traits if needed
+
+								if (aSlot.m_asset.m_requiredTraits.Length > 0) {
+
+									GameObject siteTraitPanelGO = (GameObject)Instantiate (m_cellDetailPanel, m_contentParent);
+									Cell_DetailPanel siteTraitPanel = (Cell_DetailPanel)siteTraitPanelGO.GetComponent<Cell_DetailPanel> ();
+									siteTraitPanel.SetTraits (aSlot.m_asset);
+									m_cells.Add (siteTraitPanel);
+
+									GameObject spacerGO5 = (GameObject)Instantiate (m_spacer, m_contentParent);
+									Cell_Spacer spacer5 = (Cell_Spacer)spacerGO5.GetComponent<Cell_Spacer> ();
+									spacer5.SetHeight (10);
+									m_cells.Add (spacer5);
+								}
+
+							} else {
+
+								siteAssetCell.m_buttons [0].gameObject.SetActive (false);
+							}
+
+							GameObject spacerGO4 = (GameObject)Instantiate (m_spacer, m_contentParent);
+							Cell_Spacer spacer4 = (Cell_Spacer)spacerGO4.GetComponent<Cell_Spacer> ();
+							spacer4.SetHeight (10);
+							m_cells.Add (spacer4);
 						}
 					}
+
+					GameObject spacerGO2 = (GameObject)Instantiate (m_spacer, m_contentParent);
+					Cell_Spacer spacer2 = (Cell_Spacer)spacerGO2.GetComponent<Cell_Spacer> ();
+					spacer2.SetHeight (150);
+					m_cells.Add (spacer2);
 				}
 			}
 		}

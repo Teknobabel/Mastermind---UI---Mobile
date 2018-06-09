@@ -97,7 +97,7 @@ public class SystemNavBar : MonoBehaviour, IObserver, IUIObserver {
 					RectTransform sysNavRT = GetComponent<RectTransform> ();
 					sysNavRT.anchoredPosition = new Vector2 (0, sysNavRT.rect.height * -1);
 					sysNavRT.gameObject.SetActive (true);
-					DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (0.35f);
+					DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, 0), 0.25f).SetDelay (0.15f);
 				}
 
 			} else {
@@ -105,7 +105,7 @@ public class SystemNavBar : MonoBehaviour, IObserver, IUIObserver {
 				if (m_isActive) {
 					
 					RectTransform sysNavRT = GetComponent<RectTransform> ();
-					DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, sysNavRT.rect.height * -1), 0.25f).SetDelay (0.35f).OnComplete (OnExitComplete);
+					DOTween.To (() => sysNavRT.anchoredPosition, x => sysNavRT.anchoredPosition = x, new Vector2 (0, sysNavRT.rect.height * -1), 0.25f).SetDelay (0.15f).OnComplete (OnExitComplete);
 				}
 			}
 

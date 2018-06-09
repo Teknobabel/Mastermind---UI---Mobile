@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LogInMenu : BaseMenu {
 
 	public Text m_organizationNameText;
+	public Tutorial_AppUnlockOverlayMenu m_alert;
 
 	private NewGamePrefs m_logInInfo;
 
@@ -19,7 +20,7 @@ public class LogInMenu : BaseMenu {
 	{
 		this.gameObject.SetActive (true);
 
-		base.OnEnter (animate);
+		base.OnEnter (false);
 
 		m_logInInfo = new NewGamePrefs ();
 
@@ -28,14 +29,30 @@ public class LogInMenu : BaseMenu {
 
 	public override void OnExit (bool animate)
 	{
-		base.OnExit (animate);
+		base.OnExit (false);
 
+	}
+
+	public void ProceedToGame ()
+	{
+		MobileUIEngine.instance.PlayerLoggingIn (m_logInInfo);
+		Destroy (this.gameObject);
 	}
 
 	public void LogInButtonPressed ()
 	{
-		MobileUIEngine.instance.PlayerLoggingIn (m_logInInfo);
-		Destroy (this.gameObject);
+		// show alert if first time play
+
+		int playTutorial = PlayerPrefs.GetInt ("PlayTutorial");
+
+		if (playTutorial == 1 || MobileUIEngine.instance.m_doTutorial) {
+
+			m_alert.gameObject.SetActive (true);
+
+		} else {
+
+			ProceedToGame ();
+		}
 	}
 
 	public void RandomNameButtonPressed ()

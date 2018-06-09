@@ -15,6 +15,9 @@ public class Alert_Generic : BaseMenu {
 	public Transform 
 	m_contentParent;
 
+	private bool
+		m_alertActive = false;
+
 	public override void Initialize (IApp parentApp)
 	{
 		base.Initialize (parentApp);
@@ -27,11 +30,13 @@ public class Alert_Generic : BaseMenu {
 //		base.OnEnter (animate);
 
 		this.gameObject.SetActive (true);
+
+		m_alertActive = true;
 	}
 
 	public override void OnExit (bool animate)
 	{
-		base.OnExit (animate);
+//		base.OnExit (animate);
 
 		while (m_cells.Count > 0) {
 
@@ -41,6 +46,8 @@ public class Alert_Generic : BaseMenu {
 		}
 
 		this.gameObject.SetActive (false);
+
+		m_alertActive = false;
 	}
 
 	public void SetAlert (string header, string body, IApp parentApp)
@@ -65,4 +72,6 @@ public class Alert_Generic : BaseMenu {
 	{
 		m_parentApp.PopMenu ();
 	}
+
+	public bool alertActive {get{ return m_alertActive; }}
 }

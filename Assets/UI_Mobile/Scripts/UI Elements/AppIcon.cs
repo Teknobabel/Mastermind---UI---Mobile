@@ -23,12 +23,18 @@ public class AppIcon : MonoBehaviour {
 		m_button.spriteState = ss;
 
 		m_app = app;
+
+		if (app.appState == BaseApp.AppState.Disabled) {
+
+			DisableButton ();
+		}
 	}
 
 	public void DisableButton ()
 	{
-		Button b = m_appIcon.GetComponent<Button> ();
-		b.interactable = false;
+		m_button.interactable = false;
+		m_appIcon.color = new Color (0.8f, 0.8f, 0.8f, 1.0f);
+		m_appName.color = new Color (0.8f, 0.8f, 0.8f, 1.0f);
 	}
 
 	public void SetAlerts (int num)

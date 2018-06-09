@@ -7,13 +7,15 @@ public class StatusBar : MonoBehaviour, IObserver {
 
 	public Text
 	m_turnNumber,
-	m_battleryLife;
+	m_battleryLife,
+	m_infamyNumber;
 
 	public Texture m_intelNormal;
 	public Texture m_intelContested;
 	public Texture m_intelStolen;
 	public GameObject m_intelIcon;
 	public Transform m_intelContentParent;
+	public RectTransform m_batteryIconFill;
 	private List<GameObject> m_intelIcons = new List<GameObject> ();
 
 	// Use this for initialization
@@ -25,13 +27,42 @@ public class StatusBar : MonoBehaviour, IObserver {
 	{
 		GameController.instance.AddObserver (this);
 		UpdateBatteryLife ();
-		UpdateIntel ();
+//		UpdateIntel ();
+		UpdateInfamy();
 	}
 
 	private void UpdateBatteryLife ()
 	{
 		
-//		float batteryLife = SystemInfo.
+		float batteryLife = SystemInfo.batteryLevel;
+		int batteryPercent = (int)(batteryLife * 100.0f);
+		m_battleryLife.text = batteryPercent + "%";
+
+		Vector3 scale = m_batteryIconFill.localScale;
+		scale.x = batteryLife;
+		m_batteryIconFill.localScale = scale;
+	}
+
+	private void UpdateInfamy ()
+	{
+		Player player = GameController.instance.game.playerList [0];
+		Director d = GameController.instance.game.director;
+		int inf = player.infamy;
+
+		string s = "INF: " + inf.ToString () + "/" + d.m_maxInfamy.ToString();
+		m_infamyNumber.text = s;
+
+		Color c = m_infamyNumber.color;
+
+		if (inf >= 75) {
+
+			c = Color.red;
+		} else if (inf >= 50) {
+
+			c = Color.yellow;
+		}
+
+		m_infamyNumber.color = c;
 	}
 
 	private void UpdateIntel ()
@@ -94,6 +125,12 @@ public class StatusBar : MonoBehaviour, IObserver {
 		case GameEvent.Turn_PlayerPhaseStarted:
 
 			UpdateTurnNumber ();
+
+			break;
+
+		case GameEvent.Player_InfamyChanged:
+
+			UpdateInfamy();
 
 			break;
 		}

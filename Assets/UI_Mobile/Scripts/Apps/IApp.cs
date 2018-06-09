@@ -11,6 +11,7 @@ public interface IApp {
 	bool WantsSystemNavBar { get; }
 	AppIcon AppIconInstance { set;}
 	BaseMenu homeMenu { get; }
+	BaseApp.AppState appState { get; }
 
 	void InitializeApp ();
 

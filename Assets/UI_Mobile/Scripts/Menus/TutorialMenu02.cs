@@ -29,10 +29,10 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 		m_skipButton.interactable = true;
 
 		m_parentMenu.anchoredPosition += new Vector2(MobileUIEngine.instance.m_mainCanvas.rect.width, 0);
-		Color c = m_backgroundImage.color;
-		c.a = 0.5f;
-
-		DOTween.To (() => m_backgroundImage.color, x => m_backgroundImage.color = x, c, 0.5f).SetEase (Ease.OutCirc).SetDelay (0.5f);
+//		Color c = m_backgroundImage.color;
+//		c.a = 0.5f;
+//
+//		DOTween.To (() => m_backgroundImage.color, x => m_backgroundImage.color = x, c, 0.5f).SetEase (Ease.OutCirc).SetDelay (0.5f);
 		DOTween.To (() => m_parentMenu.anchoredPosition, x => m_parentMenu.anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetEase (Ease.OutCirc).SetDelay (0.5f);
 	}
 
@@ -50,7 +50,7 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 	{
 		base.OnReturn ();
 
-		DismissButtonClicked ();
+//		DismissButtonClicked ();
 	}
 
 	void Update ()
@@ -66,12 +66,7 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 
 			if (m_currentHoldTime == m_holdTime) {
 
-				List<IApp> unlockedApps = new List<IApp> ();
-
-				foreach (ScriptableObject so in m_unlockedApps) {
-
-					unlockedApps.Add ((IApp)so);
-				}
+//				((TutorialApp)m_parentApp).NextTutorialMenu ();
 
 				if (m_alert != null) {
 					
@@ -79,7 +74,9 @@ public class TutorialMenu02 : Tutorial_BaseMenu {
 
 				} else {
 
-					DismissButtonClicked ();
+					((TutorialApp)m_parentApp).NextTutorialMenu ();
+//
+//					DismissButtonClicked ();
 				}
 
 			} else if (m_currentProgressText.Count > 0) {

@@ -18,7 +18,9 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 	m_statusBarGO,
 	m_toastGO,
 	m_alertDialogueGO,
-	m_logInMenuGO;
+	m_logInMenuGO,
+	m_gameOverMenuGO,
+	m_winMenuGO;
 
 	public ScriptableObject m_tutorial;
 
@@ -199,6 +201,7 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 
 	public void PushApp (IApp newApp)
 	{
+
 		Debug.Log ("Pushing App: " + newApp.Name);
 
 		if (m_appStack.Count > 0) {
@@ -296,8 +299,8 @@ public class MobileUIEngine : MonoBehaviour, IObserver {
 	{
 		Debug.Log ("Displaying Toast");
 
-		toast.m_toastCell.m_bodyText.text = notification.m_title + "\n";
-		toast.m_toastCell.m_bodyText.text += notification.m_message;
+		toast.m_toastCell.m_headerText.text = notification.m_title;
+		toast.m_toastCell.m_bodyText.text = notification.m_message;
 
 		IApp app = MobileUIEngine.instance.GetApp (notification.m_location);
 		if (app != null && app.Icon != null) {

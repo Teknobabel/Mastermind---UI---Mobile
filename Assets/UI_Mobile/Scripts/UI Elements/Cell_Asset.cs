@@ -25,7 +25,8 @@ public class Cell_Asset : UICell {
 
 		} else {
 
-			string s = "Asset: " + assetSlot.m_asset.m_name;
+//			string s = "Asset: " + assetSlot.m_asset.m_name;
+			string s = assetSlot.m_asset.m_name;
 			if (assetSlot.m_state == Site.AssetSlot.State.InUse) {
 				s += " - In Use";
 			}
@@ -43,6 +44,12 @@ public class Cell_Asset : UICell {
 //
 //				m_rectTransforms [2].gameObject.SetActive (true);
 //			}
+
+			if (assetSlot.m_asset.m_portrait != null) {
+
+				m_rawImages [0].texture = assetSlot.m_asset.m_portrait;
+			}
+					
 		}
 	}
 

@@ -8,12 +8,20 @@ public class AppScreen : BaseMenu, IObserver {
 	public RectTransform m_gridView;
 	public Text 
 	m_currentCommandPoolText,
-	m_CommandPoolUpkeepText;
+	m_CommandPoolUpkeepText,
+	m_maxCommandPoolText;
 
 	public override void Initialize (IApp parentApp)
 	{
 		base.Initialize (parentApp);
 	}
+		
+
+//	public override void OnReturn ()
+//	{
+//		base.OnReturn ();
+//		UpdateUpkeep ();
+//	}
 
 	private void SetGridCellSize ()
 	{
@@ -48,10 +56,15 @@ public class AppScreen : BaseMenu, IObserver {
 
 		// set grid cell size
 
-		Invoke("SetGridCellSize", 0.01f);
+		Invoke("SetGridCellSize", 0.02f);
 
-		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
-		m_currentCommandPoolText.text = cp.m_currentPool.ToString () + "/" + cp.m_basePool.ToString();
+//		Player.CommandPool cp = GameController.instance.GetCommandPool (0);
+//		m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+//		m_maxCommandPoolText.text = "/ " + cp.m_basePool.ToString () + " CP";
+
+		Player p = GameController.instance.game.playerList [0];
+		m_currentCommandPoolText.text = p.infamy.ToString ();
+		m_maxCommandPoolText.text = "INFAMY";
 
 		UpdateUpkeep ();
 
@@ -79,7 +92,7 @@ public class AppScreen : BaseMenu, IObserver {
 
 	public void CPBreakdownButtonPressed ()
 	{
-		m_parentApp.PushMenu (((HomeScreenApp)(m_parentApp)).cpBreakdownMenu);
+//		m_parentApp.PushMenu (((HomeScreenApp)(m_parentApp)).cpBreakdownMenu);
 	}
 
 //	private void UpdateUpkeep ()
@@ -119,7 +132,7 @@ public class AppScreen : BaseMenu, IObserver {
 		string upkeep = "";
 
 		int upkeepCost = 0;
-		int income = GameController.instance.game.playerList [0].commandPool.m_income;
+//		int income = GameController.instance.game.playerList [0].commandPool.m_income;
 
 		List<Player.ActorSlot> henchmen = GameController.instance.GetHiredHenchmen (0);
 
@@ -133,7 +146,7 @@ public class AppScreen : BaseMenu, IObserver {
 
 		// check for having too many assets
 
-		upkeepCost += GameController.instance.GetAssetUpkeep (0);
+//		upkeepCost += GameController.instance.GetAssetUpkeep (0);
 
 //		if (upkeepCost > 0) {
 //
@@ -144,7 +157,19 @@ public class AppScreen : BaseMenu, IObserver {
 //			upkeep = "";
 //		}
 
-		upkeep += (income - upkeepCost).ToString() + "/TURN";
+		Player player = GameController.instance.game.playerList [0];
+		List<MissionPlan> missions = GameController.instance.GetMissions (0);
+
+		upkeepCost += player.GetMaxAssetsPenalty ();
+		upkeepCost += player.GetMaxMissionPenalty ();
+		upkeepCost += player.GetMaxHenchmenPenalty ();
+
+		foreach (MissionPlan mp in missions) {
+
+			upkeepCost += mp.m_currentMission.m_cost;
+		}
+
+		upkeep += "+ " + (upkeepCost).ToString() + " Infamy Next Turn";
 
 		m_CommandPoolUpkeepText.text = upkeep;
 	}
@@ -153,14 +178,21 @@ public class AppScreen : BaseMenu, IObserver {
 	{
 		switch (thisGameEvent) {
 
-		case GameEvent.Player_CommandPoolChanged:
+		case GameEvent.Player_InfamyChanged:
+			Player p = GameController.instance.game.playerList [0];
+			m_currentCommandPoolText.text = p.infamy.ToString ();
+			m_maxCommandPoolText.text = "INFAMY";
 
-			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
-			m_currentCommandPoolText.text = cp.m_currentPool.ToString () + "/" + cp.m_basePool.ToString();
+//			Player.CommandPool cp = GameController.instance.GetCommandPool (0);
+//			m_currentCommandPoolText.text = cp.m_currentPool.ToString ();
+//			m_maxCommandPoolText.text = "/ " + cp.m_basePool.ToString () + " CP";
 
 			break;
+		case GameEvent.Player_NewMissionStarted:
+		case GameEvent.Player_MissionCompleted:
 		case GameEvent.Player_AssetsChanged:
 		case GameEvent.Player_HenchmenPoolChanged:
+		case GameEvent.Turn_PlayerPhaseStarted:
 
 			UpdateUpkeep ();
 

@@ -21,7 +21,7 @@ public class Alert_Toast : BaseMenu {
 		DOTween.Kill (0, false);
 
 		Sequence newSequence = DOTween.Sequence ();
-		newSequence.Append (DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, rt.rect.height), 0.35f).SetDelay (0.35f));
+		newSequence.Append (DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, 0), 0.35f).SetDelay (0.35f));
 		newSequence.Append (DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, rt.rect.height * -1), 0.25f).SetDelay (3.0f));
 		newSequence.SetId (0);
 		newSequence.Play ();
@@ -29,5 +29,15 @@ public class Alert_Toast : BaseMenu {
 //		DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, rt.rect.height), 0.35f).SetDelay (0.35f);
 
 //		DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, rt.rect.height * -1), 0.25f).SetDelay (3.0f);
+	}
+
+	public void DismissButtonPressed ()
+	{
+		DOTween.Kill (0, false);
+
+		RectTransform rt = gameObject.GetComponent<RectTransform> ();
+		Rect r = rt.rect;
+		rt.anchoredPosition = new Vector2 (0, rt.rect.height);
+		gameObject.SetActive (false);
 	}
 }

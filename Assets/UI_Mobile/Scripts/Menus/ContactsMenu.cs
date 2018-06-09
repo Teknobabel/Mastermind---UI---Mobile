@@ -13,14 +13,22 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 	}
 
 	public Text
-	m_appNameText;
+	m_appNameText,
+	m_capacityText;
 
 	public GameObject
 	m_henchmenCellGO,
-	m_headerCellGO;
+	m_costPanel,
+	m_cellDetailPanel,
+	m_newHeader,
+	m_spacer,
+	m_henchmenCell_Compact,
+	m_headerCellGO,
+	m_emptyListCellGO;
 
 	public Transform
-	m_contactsListParent;
+	m_contentParent_Horizontal,
+	m_contentParent_Vertical;
 
 	public SegmentedToggle m_infoPanelToggle;
 
@@ -41,57 +49,30 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 
 		base.OnEnter (animate);
 
-		// slide in animation
-		if (animate) {
-			
-			RectTransform rt = gameObject.GetComponent<RectTransform> ();
-			Rect r = rt.rect;
-			rt.anchoredPosition = new Vector2 (MobileUIEngine.instance.m_mainCanvas.rect.width, 0);
-
-			DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, 0), 0.5f);
-
-			for (int i = 0; i < m_cells.Count; i++) {
-
-				UICell c = m_cells [i];
-				c.m_rectTransforms[0].anchoredPosition = new Vector2 (MobileUIEngine.instance.m_mainCanvas.rect.width, 0);
-				DOTween.To (() => c.m_rectTransforms [0].anchoredPosition, x => c.m_rectTransforms [0].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetEase (Ease.OutCirc).SetDelay (0.25f + (i * 0.07f));
-
-				if (c.m_image != null) {
-					c.m_image.transform.localScale = Vector3.zero;
-					DOTween.To (() => c.m_image.transform.localScale, x => c.m_image.transform.localScale = x, new Vector3 (1, 1, 1), 0.5f).SetEase (Ease.OutCirc).SetDelay (0.75f + (i * 0.09f));
-				}
-			}
-		} 
-		else {
-
-			RectTransform rt = gameObject.GetComponent<RectTransform> ();
-			rt.anchoredPosition = Vector2.zero;
-
-		}
 
 		// display first time help popup if enabled
 
-		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
-		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts);
+//		int helpEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.HelpEnabled);
+//		int firstTimeEnabled = MobileUIEngine.instance.settingsManager.GetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts);
 
-		if (helpEnabled == 1 && firstTimeEnabled == 1) {
-
-			string header = "Contacts App";
-			string message = "Any Henchmen you've hired will be displayed here. You can check their Traits, see which Missions they're on, or remove them from service.";
-
-			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
-			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
-			b2.onClick.AddListener (delegate {
-				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
-			});
-			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
-
-			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts, 0);
-
-		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
-
-			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts, 0);
-		}
+//		if (helpEnabled == 1 && firstTimeEnabled == 1) {
+//
+//			string header = "Contacts App";
+//			string message = "Any Henchmen you've hired will be displayed here. You can check their Traits, see which Missions they're on, or remove them from service.";
+//
+//			MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+//			Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+//			b2.onClick.AddListener (delegate {
+//				MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+//			});
+//			m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+//
+//			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts, 0);
+//
+//		} else if (helpEnabled == 0 && firstTimeEnabled == 1) {
+//
+//			MobileUIEngine.instance.settingsManager.SetPref (SettingsManager.PlayerPrefKeys.FirstTime_Contacts, 0);
+//		}
 	}
 
 	public override void OnExit (bool animate)
@@ -198,9 +179,72 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 		m_parentApp.PushMenu (((HenchmenApp)(m_parentApp)).detailMenu);
 	}
 
+	public void FireButtonPressed (Player.ActorSlot aSlot)
+	{
+		Debug.Log ("Fire Henchmen Button Pressed");
+
+		string header = "Fire Henchmen?";
+		string message = "Fired Henchmen may return for hire in the future.";
+
+		MobileUIEngine.instance.alertDialogue.SetAlert (header, message, m_parentApp);
+		Button b = MobileUIEngine.instance.alertDialogue.AddButton ("Okay");
+		b.onClick.AddListener(delegate { FireHenchmen(aSlot);});
+		Button b2 = MobileUIEngine.instance.alertDialogue.AddButton ("Cancel");
+		b2.onClick.AddListener(delegate { MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();});
+		m_parentApp.PushMenu (MobileUIEngine.instance.alertDialogue);
+
+	}
+
+	public void FireHenchmen (Player.ActorSlot aSlot)
+	{
+		Action_FireAgent fireAgent = new Action_FireAgent ();
+		fireAgent.m_playerNumber = (0);
+		fireAgent.m_henchmenID = aSlot.m_actor.id;
+		GameController.instance.ProcessAction (fireAgent);
+
+		DisplayContent ();
+
+		if (MobileUIEngine.instance.alertDialogue.alertActive) {
+			MobileUIEngine.instance.alertDialogue.DismissButtonTapped ();
+		}
+	}
+
+	private void UpdateCapacity ()
+	{
+		Player player = GameController.instance.game.playerList [0];
+		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
+
+		int maxContacts = player.GetMaxHenchmen();
+		int currentlyHired = 0;
+
+		foreach (Player.ActorSlot aSlot in hiringPool) {
+
+			if (aSlot.m_state != Player.ActorSlot.ActorSlotState.Empty) {
+
+				currentlyHired++;
+			}
+		}
+
+		string s = "<b>Contacts Capacity: " + currentlyHired.ToString () + "/" + maxContacts.ToString () + "</b>";
+
+		if (currentlyHired > maxContacts) {
+
+			int infamyPenalty = player.GetMaxHenchmenPenalty ();
+			s += " (+" + infamyPenalty.ToString() + " Infamy each Turn)";
+			m_capacityText.color = Color.red;
+		} else {
+			Color c = new Color(0.2509f,0.2509f,0.2509f,1);
+			m_capacityText.color = c;
+		}
+
+		m_capacityText.text = s;
+	}
+
 	public override void DisplayContent ()
 	{
 		base.DisplayContent ();
+
+		UpdateCapacity ();
 
 		List<Player.ActorSlot> hiringPool = GameController.instance.GetHiredHenchmen (0);
 
@@ -220,40 +264,97 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 		{
 		case DisplayType.Alpha:
 
-				hList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
-					return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
+//			m_contentParent_Horizontal.parent.gameObject.SetActive (true);
+//			m_contentParent_Vertical.parent.gameObject.SetActive (false);
+
+			if (hList.Count == 0) {
+
+				// display empty list message
+
+				GameObject emptyCellGO = (GameObject)Instantiate (m_emptyListCellGO, m_contentParent_Vertical);
+				UICell c = (UICell)emptyCellGO.GetComponent<UICell> ();
+				m_cells.Add (c);
+
+			}
+
+			hList.Sort (delegate(Player.ActorSlot a, Player.ActorSlot b) {
+				return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 			});
 
-				foreach (Player.ActorSlot h in hList) {
+			GameObject spacerGO = (GameObject)Instantiate (m_spacer, m_contentParent_Vertical);
+			Cell_Spacer spacer = (Cell_Spacer)spacerGO.GetComponent<Cell_Spacer> ();
+			m_cells.Add (spacer);
 
-				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+			foreach (Player.ActorSlot h in hList) {
+
+				if (h.m_new) {
+					GameObject newCell = (GameObject)Instantiate (m_newHeader, m_contentParent_Vertical);
+					UICell nCell = (UICell)newCell.GetComponent<UICell> ();
+					m_cells.Add (nCell);
+				}
+
+//				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent_Horizontal);
+				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent_Vertical);
 				Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
 				m_cells.Add ((UICell)c);
 				c.SetActor (h);
 
-				hCell.GetComponent<Button> ().onClick.AddListener (delegate {
-						HenchmenCellClicked (h);
+				// set detail panel - traits
+
+				GameObject traitPanel = (GameObject)Instantiate (m_cellDetailPanel, m_contentParent_Vertical);
+				Cell_DetailPanel dPanel = (Cell_DetailPanel)traitPanel.GetComponent<Cell_DetailPanel> ();
+				dPanel.SetTraits (h);
+				m_cells.Add (dPanel);
+
+				// set cost panel
+
+				GameObject costPanel = (GameObject)Instantiate (m_costPanel, m_contentParent_Vertical);
+				Cell_CostPanel cPanel = (Cell_CostPanel)costPanel.GetComponent<Cell_CostPanel> ();
+				cPanel.SetCostPanel (h);
+				m_cells.Add (cPanel);
+
+				c.m_buttons [0].gameObject.SetActive (false);
+//				c.m_buttons[0].onClick.AddListener (delegate {
+//					HenchmenCellClicked (h);
+//				});
+
+				c.m_buttons[1].onClick.AddListener (delegate {
+					FireButtonPressed (h);
 				});
+
+				GameObject spacerGO2 = (GameObject)Instantiate (m_spacer, m_contentParent_Vertical);
+				Cell_Spacer spacer2 = (Cell_Spacer)spacerGO2.GetComponent<Cell_Spacer> ();
+				m_cells.Add (spacer2);
 			}
 
-			for (int i = 0; i < emptySlots; i++) {
+			GameObject spacerGO3 = (GameObject)Instantiate (m_spacer, m_contentParent_Vertical);
+			Cell_Spacer spacer3 = (Cell_Spacer)spacerGO3.GetComponent<Cell_Spacer> ();
+			spacer3.SetHeight (100);
+			m_cells.Add (spacer3);
 
-				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
-				UICell c = (UICell)hCell.GetComponent<UICell> ();
-				m_cells.Add (c);
+//			for (int i = 0; i < emptySlots; i++) {
+//
+//				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+//				UICell c = (UICell)hCell.GetComponent<UICell> ();
+//				m_cells.Add (c);
+//
+//				string nameString = "EMPTY";
+//				string statusString = "Recruit henchmen in the Hire app";
+//
+//				c.m_headerText.text = nameString;
+//				c.m_headerText.color = Color.gray;
+//				c.m_bodyText.text = statusString;
+//				c.m_bodyText.color = Color.gray;
+//			}
 
-				string nameString = "EMPTY";
-				string statusString = "Recruit henchmen in the Hire app";
 
-				c.m_headerText.text = nameString;
-				c.m_headerText.color = Color.gray;
-				c.m_bodyText.text = statusString;
-				c.m_bodyText.color = Color.gray;
-			}
 
 			break;
 
 		case DisplayType.Trait:
+
+//			m_contentParent_Horizontal.parent.gameObject.SetActive (false);
+//			m_contentParent_Vertical.parent.gameObject.SetActive (true);
 
 			Dictionary<string, List<Player.ActorSlot>> hListByTrait = new Dictionary<string, List<Player.ActorSlot>> ();
 
@@ -280,7 +381,7 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 
 				foreach(KeyValuePair<string, List<Player.ActorSlot>> entry in hListByTrait)
 				{
-					GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+					GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contentParent_Vertical);
 					UICell headerCell = (UICell)header.GetComponent<UICell> ();
 					headerCell.m_headerText.text = entry.Key.ToString ();
 					m_cells.Add (headerCell);
@@ -293,7 +394,7 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 
 					foreach (Player.ActorSlot aSlot in sortedList) {
 
-						GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+						GameObject hCell = (GameObject)Instantiate (m_henchmenCell_Compact, m_contentParent_Vertical);
 						Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
 						m_cells.Add ((UICell)c);
 						c.SetActor (aSlot);
@@ -309,11 +410,14 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 
 		case DisplayType.Mission:
 
+//			m_contentParent_Horizontal.parent.gameObject.SetActive (false);
+//			m_contentParent_Vertical.parent.gameObject.SetActive (true);
+
 			List<MissionPlan> missions = GameController.instance.GetMissions (0);
 
 			foreach (MissionPlan mp in missions) {
 
-				GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+				GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contentParent_Vertical);
 				UICell headerCell = (UICell)header.GetComponent<UICell> ();
 				headerCell.m_headerText.text = mp.m_currentMission.m_name;
 				m_cells.Add (headerCell);
@@ -325,7 +429,7 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 						hList.Remove (aSlot);
 					}
 
-					GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+					GameObject hCell = (GameObject)Instantiate (m_henchmenCell_Compact, m_contentParent_Vertical);
 					Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
 					m_cells.Add ((UICell)c);
 					c.SetActor (aSlot);
@@ -343,14 +447,14 @@ public class ContactsMenu : BaseMenu, IUIObserver {
 					return a.m_actor.m_actorName.CompareTo (b.m_actor.m_actorName);
 				});
 
-				GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contactsListParent);
+				GameObject header = (GameObject)Instantiate (m_headerCellGO, m_contentParent_Vertical);
 				UICell headerCell = (UICell)header.GetComponent<UICell> ();
 				headerCell.m_headerText.text = "Unassigned";
 				m_cells.Add (headerCell);
 
 				foreach (Player.ActorSlot aSlot in hList) {
 
-					GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contactsListParent);
+					GameObject hCell = (GameObject)Instantiate (m_henchmenCell_Compact, m_contentParent_Vertical);
 					Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
 					m_cells.Add ((UICell)c);
 					c.SetActor (aSlot);

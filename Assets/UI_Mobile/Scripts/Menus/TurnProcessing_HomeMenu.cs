@@ -17,7 +17,7 @@ public class TurnProcessing_HomeMenu : BaseMenu {
 	}
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
+		base.OnEnter (false);
 
 		this.gameObject.SetActive (true);
 
@@ -34,7 +34,7 @@ public class TurnProcessing_HomeMenu : BaseMenu {
 
 		if (m_thisTurnsAlerts.Count > 0) {
 			Vector3 v = this.gameObject.transform.position;
-			DOTween.To (() => this.gameObject.transform.position, x => this.gameObject.transform.position = x, new Vector3 (v.x,v.y,v.z), 0.25f).SetDelay (2.0f).OnComplete(ShowNextMissionSummary);
+			DOTween.To (() => this.gameObject.transform.position, x => this.gameObject.transform.position = x, new Vector3 (v.x,v.y,v.z), 0.25f).SetDelay (1.0f).OnComplete(ShowNextMissionSummary);
 
 		} else {
 			Vector3 v = this.gameObject.transform.position;
@@ -81,8 +81,10 @@ public class TurnProcessing_HomeMenu : BaseMenu {
 
 	public override void OnExit (bool animate)
 	{
-		base.OnExit (animate);
+		base.OnExit (false);
 
+		((HomeScreenApp)MobileUIEngine.instance.GetApp (EventLocation.Home)).isDirty = true;
+		MobileUIEngine.instance.PopApp ();
 		this.gameObject.SetActive (false);
 	}
 }

@@ -5,12 +5,19 @@ using DG.Tweening;
 
 public class BaseApp : ScriptableObject, IApp, IUISubject {
 
+	public enum AppState
+	{
+		Normal,
+		Disabled,
+	}
+
 	public string m_name;
 	public EventLocation m_appType = EventLocation.None;
 	public Sprite m_icon;
 	public Sprite m_icon_Pressed;
 	public bool m_wantsSystemNavBar = true;
 	public List<GameObject> m_menuBank;
+	public AppState m_appState = AppState.Normal;
 
 	protected List<IMenu> m_menuStack = new List<IMenu>();
 	protected AppIcon m_appIconInstance;
@@ -74,7 +81,7 @@ public class BaseApp : ScriptableObject, IApp, IUISubject {
 			Debug.Log ("Popping Menu: " + m);
 
 			m_menuStack.RemoveAt (m_menuStack.Count-1);
-			m.OnExit (false);
+			m.OnExit (true);
 
 			if (m_menuStack.Count > 0) {
 
@@ -195,6 +202,8 @@ public class BaseApp : ScriptableObject, IApp, IUISubject {
 			m_icon_Pressed = value;
 		}   
 	}
+
+	public AppState appState {get{ return m_appState; }}
 
 	public List<GameObject> MenuBank 
 	{ get { return m_menuBank; }}

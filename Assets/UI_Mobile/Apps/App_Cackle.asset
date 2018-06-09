@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: App_Cackle
   m_EditorClassIdentifier: 
   m_name: CACKLE
-  m_icon: {fileID: 21300000, guid: 526df69a208e64eb79d0a3a07cdb70ff, type: 3}
-  m_icon_Pressed: {fileID: 21300000, guid: bd44104e0962e4f2e97a8e9a556c4787, type: 3}
+  m_appType: 0
+  m_icon: {fileID: 21300000, guid: 4f4b96f753d8846639da3793bdd265c5, type: 3}
+  m_icon_Pressed: {fileID: 21300000, guid: 4f4b96f753d8846639da3793bdd265c5, type: 3}
+  m_wantsSystemNavBar: 1
   m_menuBank: []
+  m_appState: 1

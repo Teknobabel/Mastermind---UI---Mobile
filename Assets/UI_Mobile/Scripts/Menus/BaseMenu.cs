@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class BaseMenu : MonoBehaviour, IMenu {
 
@@ -18,11 +19,47 @@ public class BaseMenu : MonoBehaviour, IMenu {
 	public virtual void OnEnter (bool animate)
 	{
 		DisplayContent ();
+
+		// slide in animation
+		if (animate) {
+
+			RectTransform rt = gameObject.GetComponent<RectTransform> ();
+			Rect r = rt.rect;
+			rt.anchoredPosition = new Vector2 (MobileUIEngine.instance.m_mainCanvas.rect.width, 0);
+
+			DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2 (0, 0), 0.5f);
+		} 
+		else {
+
+			RectTransform rt = gameObject.GetComponent<RectTransform> ();
+			rt.anchoredPosition = Vector2.zero;
+
+		}
+	}
+
+	public void OnExitComplete ()
+	{
+		this.gameObject.SetActive (false);
 	}
 
 	public virtual void OnExit (bool animate)
 	{
 		m_isDirty = false;
+
+		// slide in animation
+		if (animate) {
+
+			RectTransform rt = gameObject.GetComponent<RectTransform> ();
+			Rect r = rt.rect;
+
+			DOTween.To (() => rt.anchoredPosition, x => rt.anchoredPosition = x, new Vector2(MobileUIEngine.instance.m_mainCanvas.rect.width, 0), 0.5f).OnComplete(OnExitComplete);
+		} 
+		else {
+
+			RectTransform rt = gameObject.GetComponent<RectTransform> ();
+			rt.anchoredPosition = Vector2.zero;
+
+		}
 	}
 
 	public virtual void OnHold (){}

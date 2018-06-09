@@ -41,7 +41,7 @@ public class TutorialMenu : Tutorial_BaseMenu {
 	{
 		base.Initialize (parentApp);
 
-		m_alert.Initialize (parentApp);
+//		m_alert.Initialize (parentApp);
 	}
 
 	void Update ()
@@ -57,10 +57,10 @@ public class TutorialMenu : Tutorial_BaseMenu {
 
 			if (m_currentHoldTime == m_holdTime) {
 
-				m_parentApp.PushMenu (m_alert);
+//				m_parentApp.PushMenu (m_alert);
 
+				((TutorialApp)m_parentApp).NextTutorialMenu ();
 
-//				DismissButtonClicked ();
 
 
 			} else if (m_currentProgressText.Count > 0) {
@@ -102,8 +102,11 @@ public class TutorialMenu : Tutorial_BaseMenu {
 //			m_rawImages [0].color = thumbColor;
 //			thumbColor.a = 1;
 
-			foreach (Text t in m_text) {
+			Color startColor = m_text [0].color;
+			Color startSkipColor = m_text [3].color;
 
+			foreach (Text t in m_text) {
+				
 				Color c = t.color;
 				c.a = 0;
 				t.color = c;
@@ -152,15 +155,15 @@ public class TutorialMenu : Tutorial_BaseMenu {
 			DOTween.To (() => m_panels [3].anchoredPosition, x => m_panels [3].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (6.5f);
 //			DOTween.To (() => m_panels [4].anchoredPosition, x => m_panels [4].anchoredPosition = x, new Vector2 (0, 0), 0.5f).SetDelay (9.5f);
 
-			DOTween.To (() => m_text[0].color, x => m_text[0].color = x, Color.black, 0.25f).SetDelay(1.0f);
-			DOTween.To (() => m_text[1].color, x => m_text[1].color = x, Color.black, 0.25f).SetDelay(2.5f);
-			DOTween.To (() => m_text[2].color, x => m_text[2].color = x, Color.black, 0.25f).SetDelay(4.5f);
-			DOTween.To (() => m_text[3].color, x => m_text[3].color = x, Color.black, 0.25f).SetDelay(6.5f);
-			DOTween.To (() => m_rawImages [0].color, x => m_rawImages [0].color = x, Color.black, 0.5f).SetDelay(8.5f);
-			DOTween.To (() => m_images [0].color, x => m_images [0].color = x, Color.black, 0.5f).SetDelay(8.5f);
-			DOTween.To (() => m_images [1].color, x => m_images [1].color = x, Color.grey, 0.5f).SetDelay(8.5f);
+			DOTween.To (() => m_text[0].color, x => m_text[0].color = x, startColor, 0.25f).SetDelay(1.0f);
+			DOTween.To (() => m_text[1].color, x => m_text[1].color = x, startColor, 0.25f).SetDelay(2.5f);
+			DOTween.To (() => m_text[2].color, x => m_text[2].color = x, startColor, 0.25f).SetDelay(4.5f);
+			DOTween.To (() => m_text [3].color, x => m_text [3].color = x, startSkipColor, 0.25f).SetDelay (1.0f).OnComplete(EnableSkipButton);
+			DOTween.To (() => m_rawImages [0].color, x => m_rawImages [0].color = x, startColor, 0.5f).SetDelay(7.5f);
+			DOTween.To (() => m_images [0].color, x => m_images [0].color = x, Color.black, 0.5f).SetDelay(7.5f);
+			DOTween.To (() => m_images [1].color, x => m_images [1].color = x, Color.grey, 0.5f).SetDelay(7.5f);
 
-			DOTween.To (() =>  m_text[4].color, x =>  m_text[4].color = x, Color.grey, 0.5f).SetDelay(8.5f).OnComplete(EnableSkipButton);
+//			DOTween.To (() =>  m_text[4].color, x =>  m_text[4].color = x, Color.grey, 0.5f).SetDelay(7.5f).OnComplete(EnableSkipButton);
 
 		} else {
 //
@@ -174,6 +177,7 @@ public class TutorialMenu : Tutorial_BaseMenu {
 
 	public void EnableSkipButton ()
 	{
+		Debug.Log ("Enabling Skip Button");
 		m_skipButton.interactable = true;
 	}
 

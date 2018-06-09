@@ -44,7 +44,7 @@ public class TutorialApp : BaseApp {
 	public void NextTutorialMenu ()
 	{
 //		PopMenu ();
-
+		Debug.Log("Next Tutorial Menu");
 		if (m_tutorialMenus.Count > 0) {
 
 			IMenu menu = m_tutorialMenus [0];

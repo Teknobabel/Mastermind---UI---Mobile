@@ -6,8 +6,9 @@ public class Cell_Notification : UICell {
 
 	public void SetNotification (NotificationCenter.Notification notification)
 	{
-		m_bodyText.text = notification.m_title + "\n";
-		m_bodyText.text += notification.m_message;
+		m_headerText.text = notification.m_title;
+//		m_bodyText.text = notification.m_title + "\n";
+		m_bodyText.text = notification.m_message;
 
 		IApp app = MobileUIEngine.instance.GetApp (notification.m_location);
 		if (app != null && app.Icon != null) {

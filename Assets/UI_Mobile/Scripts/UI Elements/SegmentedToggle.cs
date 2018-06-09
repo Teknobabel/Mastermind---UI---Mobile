@@ -10,19 +10,27 @@ public class SegmentedToggle : MonoBehaviour, IUISubject {
 	public UIEvent m_sentEvent = UIEvent.UI_ToggleButtonPressed;
 
 	public Color 
-	m_buttonActiveStateColor = Color.black,
-	m_buttonTextActiveStateColor = Color.white,
-	m_buttonInactiveStateColor = Color.white,
-	m_buttonTextInactiveStateColor = Color.black;
+	m_buttonTextActiveStateColor = Color.black,
+	m_buttonTextInactiveStateColor = Color.white;
 
 	private int
-	m_activeButton = -1;
+	m_activeButton = 0;
 
 	private List<IUIObserver>
 	m_observers = new List<IUIObserver> ();
 
 	// Use this for initialization
 	void Start () {
+
+		foreach (Button b in m_buttons) {
+			Text t = b.GetComponentInChildren<Text> ();
+			Image ri = b.GetComponentInChildren<Image> ();
+			t.color = m_buttonTextInactiveStateColor;
+			Color c = ri.color;
+			c.a = 0;
+			ri.color = c;
+		}
+
 		SetButtonActiveState (0);
 		m_activeButton = 0;
 	}
@@ -39,31 +47,46 @@ public class SegmentedToggle : MonoBehaviour, IUISubject {
 	private void SetButtonActiveState (int buttonNum)
 	{
 		// deactivate previous button
-		if (m_activeButton >= 0) {
+//		if (m_activeButton >= 0) {
 
 			Button b = m_buttons [m_activeButton];
-			ColorBlock colors = b.colors;
-			colors.normalColor = m_buttonInactiveStateColor;
-			colors.highlightedColor = m_buttonInactiveStateColor;
-			colors.pressedColor = m_buttonInactiveStateColor;
-			b.colors = colors;
+			Image ri = b.GetComponentInChildren<Image> ();
+//		ri.gameObject.SetActive (false);
+			if (ri != null) {
+				Color c = ri.color;
+				c.a = 0;
+				ri.color = c;
+			}
 
-			Text t = b.GetComponentInChildren<Text> ();
-			t.color = m_buttonTextInactiveStateColor;
-		}
+//			ColorBlock colors = b.colors;
+//			colors.normalColor = m_buttonInactiveStateColor;
+//			colors.highlightedColor = m_buttonInactiveStateColor;
+//			colors.pressedColor = m_buttonInactiveStateColor;
+//			b.colors = colors;
+//
+			Text t2 = b.GetComponentInChildren<Text> ();
+			t2.color = m_buttonTextInactiveStateColor;
+//		}
 
 		// activate new button
 
 		Button b1 = m_buttons [buttonNum];
-		ColorBlock colors1 = b1.colors;
-		colors1.normalColor = m_buttonActiveStateColor;
-		colors1.highlightedColor = m_buttonActiveStateColor;
-		colors1.pressedColor = m_buttonActiveStateColor;
-		b1.colors = colors1;
+//		ColorBlock colors1 = b1.colors;
+//		colors1.normalColor = m_buttonActiveStateColor;
+//		colors1.highlightedColor = m_buttonActiveStateColor;
+//		colors1.pressedColor = m_buttonActiveStateColor;
+//		b1.colors = colors1;
+//
+		Text t3 = b1.GetComponentInChildren<Text> ();
+		t3.color = m_buttonTextActiveStateColor;
 
-		Text t1 = b1.GetComponentInChildren<Text> ();
-		t1.color = m_buttonTextActiveStateColor;
-
+		Image ri2 = b1.GetComponentInChildren<Image> ();
+//		ri2.gameObject.SetActive (true);
+		if (ri2 != null) {
+			Color c1 = ri2.color;
+			c1.a = 1.0f;
+			ri2.color = c1;
+		}
 	}
 
 	public void AddObserver (IUIObserver observer)	

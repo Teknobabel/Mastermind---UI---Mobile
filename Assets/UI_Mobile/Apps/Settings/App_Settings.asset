@@ -18,3 +18,4 @@ MonoBehaviour:
   m_wantsSystemNavBar: 1
   m_menuBank:
   - {fileID: 1157526121899024, guid: a0f4cba1ba17a44e3ada8793a2741f56, type: 2}
+  m_appState: 1

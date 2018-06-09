@@ -51,7 +51,7 @@ public class ActivityCenterMenu : BaseMenu, IObserver {
 		{
 			GameObject header = (GameObject)Instantiate (m_activityHeader, m_scrollViewParent);
 			UICell headerCell = (UICell)header.GetComponent<UICell> ();
-			headerCell.m_headerText.text = "Turn " + entry.Key.ToString ();
+			headerCell.m_headerText.text = ("Turn " + entry.Key.ToString ()).ToUpper();
 			m_cells.Add (headerCell);
 
 			List<NotificationCenter.Notification> sList = entry.Value;
@@ -94,6 +94,8 @@ public class ActivityCenterMenu : BaseMenu, IObserver {
 				}
 			}
 		}
+
+//		LayoutRebuilder.ForceRebuildLayoutImmediate (m_scrollViewParent.GetComponent<RectTransform>());
 	}
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)

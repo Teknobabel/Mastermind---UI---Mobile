@@ -40,43 +40,43 @@ public class Alert_MissionReport : BaseMenu {
 
 			// create leader cell
 
-			if (missionSummary.m_participatingActors.Count > 0) {
-
-				Actor leader = missionSummary.m_participatingActors [0];
-
-				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent);
-				UICell c = (UICell)hCell.GetComponent<UICell> ();
-				m_cells.Add (c);
-
-				string nameString = leader.m_actorName;
-
-				string statusString = "";
-
-				switch (leader.m_rank) {
-
-				case 1:
-					statusString += "Novice ";
-					break;
-				case 2:
-					statusString += "Skilled ";
-					break;
-				case 3:
-					statusString += "Veteran ";
-					break;
-				case 4:
-					statusString += "Master ";
-					break;
-				}
-
-				if (leader.traits.Count > 0) {
-
-					Trait t = leader.traits [0];
-					statusString += t.m_name;
-				}
-
-				c.m_headerText.text = nameString;
-				c.m_bodyText.text = statusString;
-			}
+//			if (missionSummary.m_participatingActors.Count > 0) {
+//
+//				Actor leader = missionSummary.m_participatingActors [0];
+//
+//				GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent);
+//				UICell c = (UICell)hCell.GetComponent<UICell> ();
+//				m_cells.Add (c);
+//
+//				string nameString = leader.m_actorName;
+//
+//				string statusString = "";
+//
+//				switch (leader.m_rank) {
+//
+//				case 1:
+//					statusString += "Novice ";
+//					break;
+//				case 2:
+//					statusString += "Skilled ";
+//					break;
+//				case 3:
+//					statusString += "Veteran ";
+//					break;
+//				case 4:
+//					statusString += "Master ";
+//					break;
+//				}
+//
+//				if (leader.traits.Count > 0) {
+//
+//					Trait t = leader.traits [0];
+//					statusString += t.m_name;
+//				}
+//
+//				c.m_headerText.text = nameString;
+//				c.m_bodyText.text = statusString;
+//			}
 
 
 			// create notification cells
@@ -91,7 +91,7 @@ public class Alert_MissionReport : BaseMenu {
 				cell.m_bodyText.text += n.m_message;
 				m_cells.Add (cell);
 			}
-		} else if (m_eventSummary.m_eventType == Player.EventSummaryAlert.EventType.IntelStolen || m_eventSummary.m_eventType == Player.EventSummaryAlert.EventType.OPPhaseComplete) {
+		} else {
 
 			m_headerText.text = m_eventSummary.m_title;
 
@@ -100,6 +100,7 @@ public class Alert_MissionReport : BaseMenu {
 			cell.m_bodyText.text = "";
 			cell.m_bodyText.text += m_eventSummary.m_message;
 			m_cells.Add (cell);
+
 		}
 
 		LayoutRebuilder.ForceRebuildLayoutImmediate (m_contentParent.GetComponent<RectTransform>());
@@ -107,7 +108,7 @@ public class Alert_MissionReport : BaseMenu {
 
 	public override void OnEnter (bool animate)
 	{
-		base.OnEnter (animate);
+		base.OnEnter (false);
 
 		DisplayContent ();
 
@@ -115,7 +116,7 @@ public class Alert_MissionReport : BaseMenu {
 
 	public override void OnExit (bool animate)
 	{
-		base.OnExit (animate);
+		base.OnExit (false);
 
 //		m_notifications.Clear ();
 

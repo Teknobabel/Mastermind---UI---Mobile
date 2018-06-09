@@ -8,7 +8,10 @@ public class PlanMission_SelectHenchmenMenu : BaseMenu {
 	public GameObject
 	m_henchmenCellGO,
 	m_traitCellGO,
-	m_separatorCellGO;
+	m_separatorCellGO,
+	m_spacer,
+	m_cellDetailPanel,
+	m_cellCostPanel;
 
 	public Transform
 	m_contentParent;
@@ -82,62 +85,76 @@ public class PlanMission_SelectHenchmenMenu : BaseMenu {
 		foreach (Player.ActorSlot h in hList) {
 
 			GameObject hCell = (GameObject)Instantiate (m_henchmenCellGO, m_contentParent);
-			UICell c = (UICell)hCell.GetComponent<UICell> ();
-			m_cells.Add (c);
+			Cell_Actor c = (Cell_Actor)hCell.GetComponent<Cell_Actor> ();
+			m_cells.Add ((UICell)c);
+			c.SetActor (h);
 
-			string nameString = h.m_actor.m_actorName;
-			//			string statusString = "Status: " + h.m_actor.m_status.m_name;
+//			string nameString = h.m_actor.m_actorName;
+//			//			string statusString = "Status: " + h.m_actor.m_status.m_name;
+//
+//			string statusString = "";
+//
+//			switch (h.m_actor.m_rank) {
+//
+//			case 1:
+//				statusString += "Novice ";
+//				break;
+//			case 2:
+//				statusString += "Skilled ";
+//				break;
+//			case 3:
+//				statusString += "Veteran ";
+//				break;
+//			case 4:
+//				statusString += "Master ";
+//				break;
+//			}
+//
+//			if (h.m_actor.traits.Count > 0) {
+//
+//				Trait t = h.m_actor.traits [0];
+//				statusString += t.m_name;
+//			}
+//
+//			c.m_headerText.text = nameString;
+//			c.m_bodyText.text = statusString;
+//			c.m_image.texture = h.m_actor.m_portrait_Compact;
 
-			string statusString = "";
-
-			switch (h.m_actor.m_rank) {
-
-			case 1:
-				statusString += "Novice ";
-				break;
-			case 2:
-				statusString += "Skilled ";
-				break;
-			case 3:
-				statusString += "Veteran ";
-				break;
-			case 4:
-				statusString += "Master ";
-				break;
-			}
-
-			if (h.m_actor.traits.Count > 0) {
-
-				Trait t = h.m_actor.traits [0];
-				statusString += t.m_name;
-			}
-
-			c.m_headerText.text = nameString;
-			c.m_bodyText.text = statusString;
-			c.m_image.texture = h.m_actor.m_portrait_Compact;
-
-			hCell.GetComponent<Button> ().onClick.AddListener (delegate {
+			c.m_buttons [1].gameObject.SetActive (false);
+			c.m_buttons[0].onClick.AddListener (delegate {
 				HenchmenSelected (h);
 			});
 
-			foreach (Trait t in h.m_actor.traits) {
+			// set detail panel - traits
 
-				GameObject traitCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
-				UICell traitCell = (UICell)traitCellGO.GetComponent<UICell> ();
-				m_cells.Add (traitCell);
+			GameObject traitPanel = (GameObject)Instantiate (m_cellDetailPanel, m_contentParent);
+			Cell_DetailPanel dPanel = (Cell_DetailPanel)traitPanel.GetComponent<Cell_DetailPanel> ();
+			dPanel.SetTraits (h);
+			m_cells.Add (dPanel);
 
-				traitCell.m_headerText.text = "Trait: " + t.m_name;
+//			foreach (Trait t in h.m_actor.traits) {
+//
+//				GameObject traitCellGO = (GameObject)Instantiate (m_traitCellGO, m_contentParent);
+//				UICell traitCell = (UICell)traitCellGO.GetComponent<UICell> ();
+//				m_cells.Add (traitCell);
+//
+//				traitCell.m_headerText.text = "Trait: " + t.m_name;
+//
+//				if (m_missionPlan.m_requiredTraits.Contains (t)) {
+//
+//					traitCell.m_headerText.color = Color.green;
+//				}
+//			}
 
-				if (m_missionPlan.m_requiredTraits.Contains (t)) {
-
-					traitCell.m_headerText.color = Color.green;
-				}
-			}
-
-			GameObject separatorCellGO = (GameObject)Instantiate (m_separatorCellGO, m_contentParent);
-			UICell separatorCell = (UICell)separatorCellGO.GetComponent<UICell> ();
-			m_cells.Add (separatorCell);
+			GameObject spacerGO2 = (GameObject)Instantiate (m_spacer, m_contentParent);
+			Cell_Spacer spacer2 = (Cell_Spacer)spacerGO2.GetComponent<Cell_Spacer> ();
+			m_cells.Add (spacer2);
 		}
+
+		GameObject spacerGO3 = (GameObject)Instantiate (m_spacer, m_contentParent);
+		Cell_Spacer spacer3 = (Cell_Spacer)spacerGO3.GetComponent<Cell_Spacer> ();
+		spacer3.SetHeight (100);
+		m_cells.Add (spacer3);
 	}
 
 	public void HenchmenSelected (Player.ActorSlot aSlot)

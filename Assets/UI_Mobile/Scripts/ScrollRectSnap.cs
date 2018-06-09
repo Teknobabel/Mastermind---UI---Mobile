@@ -70,6 +70,7 @@ public class ScrollRectSnap : MonoBehaviour, IUISubject {
 
 	public void DragEnd()
 	{
+		Debug.Log ("Drag End" + Time.deltaTime);
 		int target = FindNearest(scroll.horizontalNormalizedPosition, points);
 
 		if (target == dragStartNearest && scroll.velocity.sqrMagnitude > inertiaCutoffMagnitude * inertiaCutoffMagnitude)
@@ -137,6 +138,7 @@ public class ScrollRectSnap : MonoBehaviour, IUISubject {
 
 	public void OnDrag()
 	{
+		Debug.Log (Time.deltaTime);
 		if (dragInit)
 		{
 			dragStartNearest = FindNearest(scroll.horizontalNormalizedPosition, points);

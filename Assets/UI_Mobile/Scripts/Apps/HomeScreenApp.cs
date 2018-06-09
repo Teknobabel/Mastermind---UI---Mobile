@@ -71,19 +71,17 @@ public class HomeScreenApp : BaseApp {
 		}
 
 		LayoutElement hsle = homeScreenMenu.m_contentParent.GetComponent<LayoutElement> ();
-		hsle.preferredWidth = screenWidth;
+		hsle.preferredWidth = screenWidth * (appsByPage.Count + 1);
 		hsle.preferredHeight = screenHeight;
+//		hsle.minWidth = screenWidth * 3;
+//		hsle.minHeight = screenHeight;
 
-		// add activity center menu
+		Vector2 size = homeScreenMenu.m_contentParent.GetComponent<RectTransform> ().sizeDelta;
+		size.x = hsle.preferredWidth;
+		size.y = hsle.preferredHeight;
+		homeScreenMenu.m_contentParent.GetComponent<RectTransform> ().sizeDelta = size;
 
-		GameObject ac = (GameObject)GameObject.Instantiate (m_activityCenter, homeScreenMenu.m_contentParent);
-		ActivityCenterMenu acMenu = (ActivityCenterMenu)ac.GetComponent<ActivityCenterMenu> ();
 
-		LayoutElement acle = ac.GetComponent<LayoutElement> ();
-		acle.preferredWidth = screenWidth;
-		acle.preferredHeight = screenHeight;
-
-		numPages++;
 
 		// add app screens
 
@@ -116,6 +114,17 @@ public class HomeScreenApp : BaseApp {
 
 			numPages++;
 		}
+
+		// add activity center menu
+
+		GameObject ac = (GameObject)GameObject.Instantiate (m_activityCenter, homeScreenMenu.m_contentParent);
+		ActivityCenterMenu acMenu = (ActivityCenterMenu)ac.GetComponent<ActivityCenterMenu> ();
+
+		LayoutElement acle = ac.GetComponent<LayoutElement> ();
+		acle.minWidth = screenWidth;
+		acle.minHeight = screenHeight;
+
+		numPages++;
 
 		acMenu.Initialize (this);
 
@@ -150,11 +159,14 @@ public class HomeScreenApp : BaseApp {
 			m_isDirty = false;
 
 			// reset to activity center page
-//			ScrollRectSnap srt = (ScrollRectSnap) m_homeScreenMenu.GetComponent<ScrollRectSnap> ();
-//			srt.GoToPage (0);
+			ScrollRectSnap srt = (ScrollRectSnap) m_homeScreenMenu.GetComponent<ScrollRectSnap> ();
+			srt.GoToPage (0);
 		} 
 
 		base.AppReturn ();
+
+//		ScrollRectSnap srt = (ScrollRectSnap) m_homeScreenMenu.GetComponent<ScrollRectSnap> ();
+//		srt.GoToPage (0);
 	}
 
 	public override void EnterApp ()
@@ -162,7 +174,9 @@ public class HomeScreenApp : BaseApp {
 		m_menuParent.gameObject.SetActive (true);
 
 		base.EnterApp ();
+
 	}
 
 	public HomeScreen_CPBreakdownMenu cpBreakdownMenu {get{ return m_cpBreakdownMenu; }}
+	public bool isDirty {get{ return m_isDirty; } set{ m_isDirty = value;}}
 }
